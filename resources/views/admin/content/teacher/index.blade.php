@@ -34,6 +34,7 @@
                             <th class="whitespace-nowrap w-8">STT</th>
                             <th class="whitespace-nowrap">Tên giáo viên</th>
                             <th class="whitespace-nowrap">Email</th>
+                            <th class="whitespace-nowrap w-32">Ngày tạo</th>
                             <th class="whitespace-nowrap text-center w-24">Thao Tác</th>
                         </tr>
                         </thead>
@@ -44,14 +45,18 @@
                                     <td class="text-center">{{ ($teachers->currentPage() - 1 ) * $teachers->perPage() + $loop->index + 1 }}</td>
                                     <td>{{$item -> name}}</td>
                                     <td>{{$item -> email}}</td>
+                                    <td>{{$item -> created_at}}</td>
                                     <td>
                                         <div class="flex gap-2 justify-center items-center">
                                             <form action="{{ route('admin.teacher.reset', $item->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn đặt lại mật khẩu giáo viên này không?')">
                                                 @csrf
                                                 @method('PUT')
-                                                <button type="submit" class="btn btn-outline-success p-1 w-8 h-8">
-                                                    <i class="fas fa-redo-alt mr-1"></i>
-                                                </button>
+                                                <div class="text-center"> <a href="javascript:;" data-theme="light" class="tooltip pt-2" title="Đặt lại mật khẩu">
+                                                        <button type="submit" class="btn btn-outline-success p-1 w-8 h-8">
+                                                            <i class="fas fa-redo-alt mr-1"></i>
+                                                        </button>
+                                                    </a>
+                                                </div>
                                             </form>
                                             <!-- Edit button -->
                                             @include('admin.common.editButton', [
