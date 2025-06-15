@@ -12,7 +12,7 @@
                     </div>
                     <div class="px-5 pb-4">
                         <div class="text-slate-500 mt-2">
-                            <p class="font-semibold">Bạn có muốn xóa <span id="del-object-name" class="font-bold text-red-600">xxxx</span> khỏi bảng?</p>
+                            <p class="font-semibold">Bạn có muốn xóa <span id="del-object-name" class="font-bold text-red-600">xxxx</span>?</p>
                             <p class="text-gray-500 text-xs mt-1">Hành động này sẽ không thể hoàn tác.</p>
                         </div>
                         <input type="hidden" id="del-object-id" name="del-object-id">

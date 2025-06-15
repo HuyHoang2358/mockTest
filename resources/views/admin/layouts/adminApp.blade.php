@@ -36,7 +36,7 @@
 
     <div class="flex overflow-hidden">
         <!-- Side Menu -->
-        @include('admin.partials.sideMenu')
+        @include('admin.partials.sideMenu', ['page' => $page ?? null])
 
         <!-- Content -->
         <div class="content">

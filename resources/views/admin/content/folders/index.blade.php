@@ -9,12 +9,15 @@
     </nav>
 @endsection
 @section('content')
+    <!-- Define route for delete action -->
+    @php($routeDelete = route('admin.folder.destroy'))
+
     <div class="grid grid-cols-12 gap-6 mt-8">
         <div class="col-span-12 lg:col-span-4 2xl:col-span-4">
             <h2 class="intro-y text-lg font-medium mr-auto mt-2">
                 Quản lý Folders
             </h2>
-            <!-- BEGIN: File Manager Menu -->
+            <!-- BEGIN: Folder Tree -->
             <div class="intro-y box p-5 mt-6">
                 <div class="mt-1">
                     <ul class="folder-tree">
@@ -36,10 +39,10 @@
 
                 </div>
             </div>
-            <!-- END: File Manager Menu -->
+            <!-- END: Folder Tree -->
         </div>
         <div class="col-span-12 lg:col-span-8 2xl:col-span-8">
-            <!-- BEGIN: File Manager Filter -->
+            <!-- BEGIN: Folder Detail -->
             <div class="intro-y flex justify-start items-center">
                 <div class="flex justify-start items-center gap-1 text-md mt-4">
                     <a href="{{route('admin.folder.index')}}" class="font-normal ">Thư mục gốc/</a>
@@ -52,7 +55,7 @@
                     @endforeach
                 </div>
             </div>
-            <!-- END: File Manager Filter -->
+            <!-- END: Folder Detail -->
 
             <!-- BEGIN: Directory & Files -->
             <div class="intro-y grid grid-cols-4 gap-3 sm:gap-6 mt-6">
@@ -70,17 +73,42 @@
                             </a>
                             <div class="dropdown-menu w-40">
                                 <ul class="dropdown-content">
+                                    <!-- Sửa tên folder -->
                                     <li>
-                                        <a href="" class="dropdown-item">
+                                        <button type="button"
+                                                class="dropdown-item edit-folder-btn"
+                                                data-id="{{ $subFolder->id }}"
+                                                data-name="{{ $subFolder->name }}"
+                                                data-tw-toggle="modal"
+                                                data-tw-target="#edit-folder-modal"
+                                        >
                                             <i class="fa-solid fa-pen-to-square mr-2"></i>
                                             Sửa tên folder
-                                        </a>
+                                        </button>
+
                                     </li>
+
+                                    <!-- Copy folder -->
                                     <li>
-                                        <a href="#" class="dropdown-item ">
-                                            <i class="fa-solid fa-trash-can mr-2"></i>
-                                            Xóa folder
+                                        <a class="dropdown-item copy-folder-btn"
+                                           href="{{route('admin.folder.copy', ['id' => $folder->id])}}"
+                                        >
+                                            <i class="fa fa-copy mr-2"></i>
+                                            Copy folder
                                         </a>
+
+                                    </li>
+
+                                    <!-- Xoá folder -->
+                                    <li>
+                                        <button type="button" data-tw-toggle="modal"
+                                                data-tw-target="#delete-object-confirm-form"
+                                                class="dropdown-item"
+                                                onclick='openConfirmDeleteObjectForm("{{ $subFolder->name}}", {{ $subFolder->id }})'
+                                        >
+                                            <i class="fa-solid fa-trash-can mr-2" ></i>
+                                            Xóa folder
+                                        </button>
                                     </li>
                                 </ul>
                             </div>
@@ -98,6 +126,7 @@
 
 @endsection
 @section('custom-modal')
+    <!-- BEGIN: Modal Add Folder -->
     <div id="add-folder-modal" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -138,6 +167,46 @@
             </div>
         </div>
     </div>
+    <!-- END: Modal Add Folder -->
+
+    <!-- BEGIN: Modal Edit Folder -->
+    <div id="edit-folder-modal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- BEGIN: Modal Header -->
+                <div class="modal-header">
+                    <h2 class="font-medium text-base mr-auto">
+                        Sửa tên folder
+                    </h2>
+                </div>
+                <!-- END: Modal Header -->
+                <!-- BEGIN: Modal Body -->
+                <form action="{{route('admin.folder.update')}}" method="POST">
+                    @csrf
+                    <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+
+                        <div class="col-span-12 sm:col-span-12 ">
+                            <label for="modal-folder-id" class="form-label">ID thư mục </label>
+                            <input id="modal-folder-id" type="text" class="form-control" name="folder_id" readonly>
+                        </div>
+
+                        <div class="col-span-12 sm:col-span-12">
+                            <label for="modal-folder-name" class="form-label">Tên thư mục</label>
+                            <input id="modal-folder-name" type="text" name="name" class="form-control" placeholder="Nhập tên thư mục mới" required>
+                        </div>
+                    </div>
+                    <!-- END: Modal Body -->
+                    <!-- BEGIN: Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    </div>
+                </form>
+                <!-- END: Modal Footer -->
+            </div>
+        </div>
+    </div>
+    <!-- END: Modal Edit Folder -->
 @endsection
 @section('customJs')
     <script>
@@ -162,6 +231,37 @@
                     // Đưa thông tin vào modal
                     document.getElementById('modal-parent-folder-name').value = button.getAttribute('data-name');
                     document.getElementById('modal-parent-folder-id').value = button.getAttribute('data-id');
+                });
+            });
+
+            // Thêm thông tin thư mục vào modal khi nhấn nút edit folder
+            document.querySelectorAll('.edit-folder-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    // Đưa thông tin vào modal
+                    document.getElementById('modal-folder-name').value = button.getAttribute('data-name');
+                    document.getElementById('modal-folder-id').value = button.getAttribute('data-id');
+                });
+            });
+
+            // Xử lý sự kiện khi nhấn nút copy folder nhiều lần trong thời gian ngắn
+            document.querySelectorAll('.copy-folder-btn').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    // Ngăn bấm nhiều lần
+                    if (this.classList.contains('disabled')) {
+                        e.preventDefault(); // Chặn nếu đã disabled
+                        return false;
+                    }
+
+                    this.classList.add('disabled');
+                    this.style.pointerEvents = 'none';
+                    this.style.opacity = 0.5;
+
+                    // Optional: cho phép lại sau vài giây nếu không redirect
+                    setTimeout(() => {
+                        this.classList.remove('disabled');
+                        this.style.pointerEvents = '';
+                        this.style.opacity = '';
+                    }, 5000);
                 });
             });
         });

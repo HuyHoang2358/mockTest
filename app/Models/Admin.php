@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 
 /**
  * @method static updateOrCreate(string[] $array, array $array1)
+ * @method static find(mixed $input)
+ * @method static create(array $array)
  */
 class Admin extends Authenticatable
 {

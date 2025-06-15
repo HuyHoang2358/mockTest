@@ -15,7 +15,7 @@
             <a href="{{route('admin.folder.index').'?folder_id='.$folder->id}}" class="folder-name {{ $isActive ? 'text-primary font-semibold' : '' }}">{{ $folder->name }}</a>
         </div>
         <div class="flex justify-end gap-1 items-center">
-            <!-- Nút thêm con -->
+            <!-- Thêm mới folder -->
             <button type="button"
                     class="text-green-200 hover:text-green-500 text-xs add-subfolder-btn tooltip"
                     data-id="{{ $folder->id }}"
@@ -27,11 +27,16 @@
             >
                 <i class="fa fa-plus-circle"></i>
             </button>
-            <button type="button"
+
+            <!-- Xóa folder -->
+            <button type="button" data-tw-toggle="modal" data-tw-target="#delete-object-confirm-form"
                     class="text-red-200 hover:text-red-500 text-xs add-subfolder-btn tooltip"
                     data-theme="light"
                     title="Xóa thư mục"
+                    onclick='openConfirmDeleteObjectForm("{{ $folder->name}}", {{ $folder->id }})'
             ><i class="fa-solid fa-trash-can"></i></button>
+
+
         </div>
     </div>
 
