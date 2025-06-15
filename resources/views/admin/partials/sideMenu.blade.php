@@ -9,6 +9,29 @@
         </li>
         <li class="side-nav__devider my-6"></li>
         <!--Nhóm người dùng-->
-
+        @include('admin.partials.common.sideMenuItems', [
+                    'page' => $page,
+                    'pageTags' => [
+                        [
+                            'manage-users' => [
+                                'display' => 'Quản lý người dùng',
+                                'icon' => 'users',
+                            ],
+                        ],
+                        [
+                            'manage-user' => [
+                                'display' => 'Quản lý học sinh',
+                                'icon' => 'user',
+                            ],
+                        ],
+                        [
+                            'manage-teacher' => [
+                                'display' => 'Quản lý giáo viên',
+                                'icon' => 'pen-tool',
+                                'route' => 'admin.teacher.index',
+                            ],
+                        ],
+                    ],
+                ])
     </ul>
 </nav>
