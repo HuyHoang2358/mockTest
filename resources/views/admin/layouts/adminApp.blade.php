@@ -53,8 +53,12 @@
     <!-- Confirm Form delete -->
     @include('admin.components.confirmDeleteModal')
 
+    <!-- Custom Modal -->
+    @yield('custom-modal')
+
     <!-- JS Assets-->
     @include('admin.components.bodyJs')
+
 
     <!-- Custom JS -->
     @yield('customJs')
