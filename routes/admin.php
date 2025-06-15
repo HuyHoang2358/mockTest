@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Auth\AuthenController;
+use App\Http\Controllers\Admin\FolderController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\UserController;
@@ -19,6 +20,15 @@ Route::prefix('admin')->group(function () {
 
         // Admin dashboard
         Route::get('/', [HomeController::class, 'index'])->name('admin.dashboard');
+
+        // Quản lý folder bài tập, đề thi
+        Route::prefix('folders')->group(function () {
+            Route::get('/', [FolderController::class, 'index'])->name('admin.folder.index');
+            Route::post('/', [FolderController::class, 'store'])->name('admin.folder.store');
+            Route::post('/update', [FolderController::class, 'update'])->name('admin.folder.update');
+            Route::post('/delete', [FolderController::class, 'destroy'])->name('admin.folder.destroy');
+            Route::get('/copy/{id}', [FolderController::class, 'copy'])->name('admin.folder.copy');
+        });
 
     });
 

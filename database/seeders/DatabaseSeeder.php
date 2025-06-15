@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('123456789'),
             ]
         );
-
+        $this->call(FolderSeeder::class);
         $this->call(AdminSeeder::class);
     }
 }
