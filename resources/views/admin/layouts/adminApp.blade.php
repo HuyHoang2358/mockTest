@@ -25,7 +25,7 @@
     <!-- BEGIN: Javascript Assets-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- TinyMCE -->
-    <script src="https://cdn.tiny.cloud/1/gg1e9n4g1buqmn8sl1h7l4l1q35tdtxjb9lv09mqfxwb7i7v/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    {{--<script src="https://cdn.tiny.cloud/1/gg1e9n4g1buqmn8sl1h7l4l1q35tdtxjb9lv09mqfxwb7i7v/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>--}}
 
     @yield('head')
 </head>
@@ -53,8 +53,12 @@
     <!-- Confirm Form delete -->
     @include('admin.components.confirmDeleteModal')
 
+    <!-- Custom Modal -->
+    @yield('custom-modal')
+
     <!-- JS Assets-->
     @include('admin.components.bodyJs')
+
 
     <!-- Custom JS -->
     @yield('customJs')
