@@ -13,9 +13,6 @@
 @endsection
 @section('content')
 
-    <!-- View validate form error -->
-    @include('admin.partials.validateFormError')
-    <!-- End view validate form error -->
 
     <!-- Title page -->
     <div class="intro-y box flex items-center mt-8">
@@ -65,7 +62,7 @@
                             </div>
                         </div>
                         <div class="w-full mt-3 xl:mt-0 flex-1">
-                            <input name="email" value="{{old('email')}}" class="form-control p-3" placeholder="Nhập địa chỉ email" required>
+                            <input name="email"  type="email" value="{{old('email')}}" class="form-control p-3" placeholder="Nhập địa chỉ email" required>
                         </div>
                     </div>
 
@@ -95,25 +92,6 @@
                             </span>
                         </div>
                     </div>
-
-                    <!-- Google ID -->
-                    <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
-                        <div class="form-label xl:w-64 xl:!mr-10">
-                            <div class="text-left">
-                                <div class="flex items-center">
-                                    <div class="font-medium">Google Id</div>
-                                    <div
-                                        class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">
-                                        Bắt buộc
-                                    </div>
-                                </div>
-                                <div class="leading-relaxed text-slate-500 text-xs mt-3">Cung cấp Google Id của học sinh</div>
-                            </div>
-                        </div>
-                        <div class="w-full mt-3 xl:mt-0 flex-1">
-                            <input name="google_id" value="{{old('google_id')}}" class="form-control p-3" placeholder="Nhập Google Id của học sinh" required>
-                        </div>
-                    </div>
                 </div>
 
             </div>
@@ -122,13 +100,12 @@
         <!-- Buttons cancel and save -->
         <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
             <a href="{{route('admin.user.index')}}">
-                <button type="button" id="btn-cancle-form" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Hủy</button>
+                <button type="button" id="btn-cancel-form" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Hủy</button>
             </a>
             <button type="submit" id="btn-submit-form" class="btn py-3 btn-primary w-full md:w-52 ">Lưu thông tin</button>
         </div>
     </form>
 
-    @include('admin.partials.stand_alone_lfm_js')
 
     <script>
         function togglePassword() {

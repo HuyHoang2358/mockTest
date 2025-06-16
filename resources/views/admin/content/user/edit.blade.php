@@ -13,10 +13,6 @@
 @endsection
 @section('content')
 
-    <!-- View validate form error -->
-    @include('admin.partials.validateFormError')
-    <!-- End view validate form error -->
-
     <!-- Title page -->
     <div class="intro-y box flex items-center mt-8">
         <h2 class="p-5 text-lg font-medium mr-auto">
@@ -81,23 +77,4 @@
             <button type="submit" id="btn-submit-form" class="btn py-3 btn-primary w-full md:w-52 ">Lưu thông tin</button>
         </div>
     </form>
-
-    @include('admin.partials.stand_alone_lfm_js')
-
-    <script>
-        function togglePassword() {
-            const input = document.getElementById("password");
-            const icon = document.getElementById("eyeIcon");
-
-            if (input.type === "password") {
-                input.type = "text";
-                icon.classList.remove("fa-eye");
-                icon.classList.add("fa-eye-slash");
-            } else {
-                input.type = "password";
-                icon.classList.remove("fa-eye-slash");
-                icon.classList.add("fa-eye");
-            }
-        }
-    </script>
 @endsection

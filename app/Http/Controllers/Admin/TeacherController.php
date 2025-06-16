@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
-use App\Models\User;
+
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Validator;
+use Illuminate\View\View;
 use Vtiful\Kernel\Excel;
 
 class TeacherController extends Controller
@@ -34,7 +35,7 @@ class TeacherController extends Controller
         ]);
     }
 
-    public function create()
+    public function create() :View
     {
         return view('admin.content.teacher.create', [
             'page' => 'manage-teacher',
@@ -43,6 +44,7 @@ class TeacherController extends Controller
 
     public function store(Request $request)
     {
+
         // Validate dữ liệu đầu vào, lỗi validation sẽ tự động trả về trang trước đó với thông báo lỗi
         $credentials = $request->validate([
             // các rule
