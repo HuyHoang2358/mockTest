@@ -56,6 +56,10 @@
     </div>--}}
     <!-- END: Dark Mode Switcher-->
 
+    <!-- Action Alerts -->
+    @include('admin.components.alert')
+    <!-- End Action Alerts -->
+
     <!-- BEGIN: JS Assets-->
     <script src="{{ asset('assets/dist/js/app.js') }}"></script>
     <!-- END: JS Assets-->

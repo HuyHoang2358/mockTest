@@ -44,16 +44,18 @@
         document.getElementById('del-object-name').textContent = name;
         document.getElementById('del-object-id').value = id;
     }
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('deleteButton')?.addEventListener('click', function (e) {
+            const btn = e.currentTarget;
 
-    document.getElementById('deleteButton').addEventListener('click', function (e) {
-        const btn = e.currentTarget;
+            // Disable button
+            btn.disabled = true;
+            btn.classList.add('cursor-not-allowed', 'opacity-70', 'hidden');
 
-        // Disable button
-        btn.disabled = true;
-        btn.classList.add('cursor-not-allowed', 'opacity-70', 'hidden');
-
-        document.getElementById('deletingButton').classList.remove('hidden');
-        // submit the form
-        document.getElementById('delete-object-confirm-form').submit();
+            document.getElementById('deletingButton').classList.remove('hidden');
+            // submit the form
+            document.getElementById('delete-object-confirm-form').submit();
+        });
     });
+
 </script>

@@ -34,7 +34,6 @@
                             <th class="whitespace-nowrap w-8">STT</th>
                             <th class="whitespace-nowrap">Tên học sinh</th>
                             <th class="whitespace-nowrap">Email</th>
-                            <th class="whitespace-nowrap">Google Id</th>
                             <th class="whitespace-nowrap w-32">Ngày tạo</th>
                             <th class="whitespace-nowrap text-center w-24">Thao Tác</th>
                         </tr>
@@ -46,7 +45,6 @@
                                     <td class="text-center">{{ ($users->currentPage() - 1 ) * $users->perPage() + $loop->index + 1 }}</td>
                                     <td>{{$item -> name}}</td>
                                     <td>{{$item -> email}}</td>
-                                    <td>{{$item -> google_id}}</td>
                                     <td>{{$item -> created_at}}</td>
                                     <td>
                                         <div class="flex gap-2 justify-center items-center">

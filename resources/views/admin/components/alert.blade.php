@@ -5,6 +5,11 @@
         setTimeout(function() {
             document.querySelector('.success-msg').style.display = 'none';
         }, 3000); // 3 seconds
+
+        // handle click close button
+        document.querySelector('.toast-close').addEventListener('click', function() {
+            document.querySelector('.toastify').style.display = 'none';
+        });
     </script>
 
     <div class="toastify on  toastify-right toastify-top success-msg" style="transform: translate(0px, 0px); top: 100px;">
@@ -34,7 +39,38 @@
         <span class="toast-close">✖</span>
     </div>
 
+    <script>
+        // handle click close button
+        document.querySelector('.toast-close').addEventListener('click', function() {
+            document.querySelector('.toastify').style.display = 'none';
+        });
+    </script>
+@endif
 
+@if (isset($errors) && $errors->any())
+    <div class="toastify on  toastify-right toastify-top" style="transform: translate(0px, 0px); top: 100px;">
+        <div id="error-notification-content" class="toastify-content flex text-red-500" style="border:1px solid red">
+            <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
+            <div class="ml-4 mr-4">
+                <div class="font-medium">Thất bại</div>
+                <div class="text-red-500 mt-1">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>- {{$error}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <span class="toast-close">✖</span>
+    </div>
+
+    <script>
+        // handle click close button
+        document.querySelector('.toast-close').addEventListener('click', function() {
+            document.querySelector('.toastify').style.display = 'none';
+        });
+    </script>
 @endif
 
 <!-- Thông báo cảnh báo với key info  -->
@@ -51,9 +87,4 @@
     </div>
 @endif
 
-<script>
-    // handle click close button
-    document.querySelector('.toast-close').addEventListener('click', function() {
-        document.querySelector('.toastify').style.display = 'none';
-    });
-</script>
+
