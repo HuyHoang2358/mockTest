@@ -29,7 +29,10 @@
 
                     <div class="px-5 pb-8 text-center flex justify-end items-center">
                         <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-24 mr-1">Hủy</button>
-                        <button type="submit" class="btn btn-danger w-24">Xóa</button>
+                        <button type="submit" id="deleteButton" class="btn btn-danger">Xóa </button>
+                        <button type="button" id="deletingButton" class="btn btn-danger hidden" disabled>
+                            Deleting <i data-loading-icon="puff" data-color="white" class="w-4 h-4 ml-2"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -41,4 +44,16 @@
         document.getElementById('del-object-name').textContent = name;
         document.getElementById('del-object-id').value = id;
     }
+
+    document.getElementById('deleteButton').addEventListener('click', function (e) {
+        const btn = e.currentTarget;
+
+        // Disable button
+        btn.disabled = true;
+        btn.classList.add('cursor-not-allowed', 'opacity-70', 'hidden');
+
+        document.getElementById('deletingButton').classList.remove('hidden');
+        // submit the form
+        document.getElementById('delete-object-confirm-form').submit();
+    });
 </script>

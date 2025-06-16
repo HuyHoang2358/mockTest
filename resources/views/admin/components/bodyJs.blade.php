@@ -84,28 +84,6 @@
 
 
     // Init TinyCME
-    tinymce.init({
-        selector: 'textarea.my-editor',
-        height: 700,
-        plugins: 'image code link media wordcount lists',
-        toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | code | link image media',
-        // callback function for file picker
-        file_picker_callback: function(callback, value, meta) {
-            let cmsURL = '/admin/laravel-filemanager?editor=' + meta.fieldname;
-            if (meta.filetype === 'image') {
-                cmsURL += '&type=Images';
-            } else {
-                cmsURL += '&type=Files';
-            }
 
-            tinymce.activeEditor.windowManager.openUrl({
-                title: 'File Manager',
-                url: cmsURL,
-                onMessage: function(api, message) {
-                    callback(message.content);
-                }
-            });
-        }
-    });
 
 </script>

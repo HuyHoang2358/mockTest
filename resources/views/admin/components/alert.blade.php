@@ -17,12 +17,9 @@
         </div>
         <span class="toast-close">✖</span>
     </div>
-
-
-
 @endif
 
->
+
 
 <!-- Thông báo thất bai với key error  -->
 @if (Session::has('error'))
@@ -35,7 +32,9 @@
             </div>
         </div>
         <span class="toast-close">✖</span>
-    </div
+    </div>
+
+
 @endif
 
 <!-- Thông báo cảnh báo với key info  -->
@@ -52,3 +51,9 @@
     </div>
 @endif
 
+<script>
+    // handle click close button
+    document.querySelector('.toast-close').addEventListener('click', function() {
+        document.querySelector('.toastify').style.display = 'none';
+    });
+</script>

@@ -48,6 +48,7 @@ class FolderController extends Controller
             $data["subFolders"] = Folder::whereNull('parent_id')->get();
         }
         $data['paths'] = array_reverse($data['paths']);
+        $data['page'] = 'manage-folder';
         return view('admin.content.folders.index', $data);
     }
     public function store(Request $request): RedirectResponse
