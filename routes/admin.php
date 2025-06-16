@@ -41,17 +41,21 @@ Route::prefix('admin')->group(function () {
         });
 
 
-        // Quản lý tài khoản
-        Route::prefix('accounts')->group(function () {
-            //users
-            Route::prefix('users')->group(function () {
-                Route::get('/', [UserController::class, 'index'])->name('admin.user.index');
-                Route::get('/add', [UserController::class, 'create'])->name('admin.user.create');
-                Route::post('/store', [UserController::class, 'store'])->name('admin.user.store');
-                Route::get('/edit/{id}', [UserController::class, 'edit'])->name('admin.user.edit');
-                Route::post('/update/{id}', [UserController::class, 'update'])->name('admin.user.update');
-                Route::post('/delete', [UserController::class, 'destroy'])->name('admin.user.destroy');
-            });
+    // Quản lý tài khoản
+    Route::prefix('accounts')->group(function () {
+        //users
+        Route::prefix('users')->group(function () {
+            Route::get('/', [UserController::class, 'index'])->name('admin.user.index');
+            Route::get('/add', [UserController::class, 'create'])->name('admin.user.create');
+            Route::post('/store', [UserController::class, 'store'])->name('admin.user.store');
+            Route::get('/edit/{id}', [UserController::class, 'edit'])->name('admin.user.edit');
+            Route::post('/update/{id}', [UserController::class, 'update'])->name('admin.user.update');
+            Route::post('/delete', [UserController::class, 'destroy'])->name('admin.user.destroy');
+            Route::put('/reset-password/{id}', [UserController::class, 'resetPassword'])->name('admin.user.reset');
+            Route::get('/export', [UserController::class, 'export'])->name('admin.user.export');
+            Route::get('user/{id}/profile', [UserController::class, 'showProfileForm'])->name('admin.user.profile.form');
+            Route::post('user/{id}/profile', [UserController::class, 'storeProfile'])->name('admin.user.profile.store');
+        });
 
             // admin
             Route::prefix('teacher')->group(function () {

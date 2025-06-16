@@ -23,6 +23,7 @@
                     'manage-user' => [
                         'display' => 'Tài khoản học sinh',
                         'icon' => 'user',
+                        'route' => 'admin.user.index',
                     ],
                 ],
                 [
