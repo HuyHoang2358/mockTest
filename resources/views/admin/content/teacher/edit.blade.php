@@ -13,10 +13,6 @@
 @endsection
 @section('content')
 
-    <!-- View validate form error -->
-    @include('admin.partials.validateFormError')
-    <!-- End view validate form error -->
-
     <!-- Title page -->
     <div class="intro-y box flex items-center mt-8">
         <h2 class="p-5 text-lg font-medium mr-auto">

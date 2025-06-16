@@ -12,7 +12,7 @@
     $firstValue = $firstElement[$firstKey];
     //dd($firstValue);
 @endphp
-{{--{{$pageExists ? '1' : '0'}}--}}
+
 <li>
     <a href="{{ !array_key_exists('route', $firstValue) || ($firstValue['route'] == '') ? '#' : route($firstValue['route']) }}" class="side-menu {{($firstElement && $pageExists) ? 'side-menu--active' : ''}}">
         <div class="side-menu__icon"> <i data-lucide="{{ $firstValue['icon'] }}"></i> </div>

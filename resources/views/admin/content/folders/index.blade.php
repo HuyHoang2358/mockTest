@@ -1,5 +1,5 @@
 @extends('admin.layouts.adminApp')
-@section('title', 'Trang quản trị')
+@section('title', 'Quản lý folders')
 @section('breadcrumb')
     <nav aria-label="breadcrumb" class="-intro-x h-[45px] mr-auto">
         <ol class="breadcrumb breadcrumb-light">
