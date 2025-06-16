@@ -1,26 +1,26 @@
 @extends('admin.layouts.adminApp')
-@section('title', 'Quản lý giáo viên')
+@section('title', 'Quản lý học sinh')
 @section('breadcrumb')
     <nav aria-label="breadcrumb" class="-intro-x h-[45px] mr-auto">
         <ol class="breadcrumb breadcrumb-light">
             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Trang Quản trị viên</a></li>
-            <li class="breadcrumb-item active" aria-current="page"><a href="#">Quản lý giáo viên</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="#">Quản lý học sinh</a></li>
         </ol>
     </nav>
 @endsection
 
 
 <!-- Define route for delete action -->
-@php($routeDelete = route('admin.teacher.destroy'))
+@php($routeDelete = route('admin.user.destroy'))
 
 @section('content')
 
     <div class="intro-y box">
         <!-- Table title -->
         @include('admin.common.titleTable', [
-            'title' => 'Danh sách giáo viên',
-            'routeAdd' => route('admin.teacher.create'),
-            'titleButton' => 'Thêm mới giáo viên',
+            'title' => 'Danh sách học sinh',
+            'routeAdd' => route('admin.user.create'),
+            'titleButton' => 'Thêm mới học sinh',
         ])
         <!-- End Table title -->
 
@@ -32,23 +32,25 @@
                         <thead class="table-dark">
                         <tr class=" text-center">
                             <th class="whitespace-nowrap w-8">STT</th>
-                            <th class="whitespace-nowrap">Tên giáo viên</th>
+                            <th class="whitespace-nowrap">Tên học sinh</th>
                             <th class="whitespace-nowrap">Email</th>
+                            <th class="whitespace-nowrap">Google Id</th>
                             <th class="whitespace-nowrap w-32">Ngày tạo</th>
                             <th class="whitespace-nowrap text-center w-24">Thao Tác</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @if(count($teachers) > 0)
-                            @foreach ($teachers as $item)
+                        @if(count($users) > 0)
+                            @foreach ($users as $item)
                                 <tr>
-                                    <td class="text-center">{{ ($teachers->currentPage() - 1 ) * $teachers->perPage() + $loop->index + 1 }}</td>
+                                    <td class="text-center">{{ ($users->currentPage() - 1 ) * $users->perPage() + $loop->index + 1 }}</td>
                                     <td>{{$item -> name}}</td>
                                     <td>{{$item -> email}}</td>
+                                    <td>{{$item -> google_id}}</td>
                                     <td>{{$item -> created_at}}</td>
                                     <td>
                                         <div class="flex gap-2 justify-center items-center">
-                                            <form action="{{ route('admin.teacher.reset', $item->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn đặt lại mật khẩu giáo viên này không?')">
+                                            <form action="{{ route('admin.user.reset', $item->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn đặt lại mật khẩu học sinh này không?')">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="text-center"> <a href="javascript:;" data-theme="light" class="tooltip pt-2" title="Đặt lại mật khẩu">
@@ -60,7 +62,7 @@
                                             </form>
                                             <!-- Edit button -->
                                             @include('admin.common.editButton', [
-                                                'routeEdit' => route('admin.teacher.edit', ['id' => $item->id])
+                                                'routeEdit' => route('admin.user.edit', ['id' => $item->id])
                                             ])
 
                                             <!-- Delete button -->
@@ -74,15 +76,15 @@
                             @endforeach
                         @else
                             <tr>
-                                <td class="text-center" colspan="6">Hiện tại không có giáo viên nào trong hệ thống. <span class="font-semibold">Vui lòng thêm mới giáo viên</span></td>
+                                <td class="text-center" colspan="6">Hiện tại không có học sinh nào trong hệ thống. <span class="font-semibold">Vui lòng thêm mới học sinh</span></td>
                             </tr>
                         @endif
                         </tbody>
                     </table>
                 </div>
                 <!-- Pagination -->
-                @if($teachers->lastPage() > 1)
-                    <div class="rounded-b bg-gray-100 p-2 pl-4 border">{{ $teachers->appends(request()->query())->links() }}</div>
+                @if($users->lastPage() > 1)
+                    <div class="rounded-b bg-gray-100 p-2 pl-4 border">{{ $users->appends(request()->query())->links() }}</div>
                 @endif
             </div>
         </div>

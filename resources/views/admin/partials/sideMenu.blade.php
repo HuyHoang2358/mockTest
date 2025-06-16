@@ -22,6 +22,7 @@
                             'manage-user' => [
                                 'display' => 'Quản lý học sinh',
                                 'icon' => 'user',
+                                'route' => 'admin.user.index',
                             ],
                         ],
                         [
