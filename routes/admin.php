@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\FolderController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\ProfileAdminController;
 use App\Http\Controllers\Admin\Question\QuestionTypeController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
@@ -21,13 +22,11 @@ Route::prefix('admin')->group(function () {
         Route::get('/logout', [AuthenController::class, 'logout'])->name('admin.logout');
 
         Route::prefix('profile')->group(function () {
-            Route::prefix('admin')->group(function () {
-                Route::get('/', [ProfileAdminController::class, 'show'])->name('admin.show');
-                Route::put('/update', [ProfileAdminController::class, 'update'])->name('admin.update');
-                Route::put('/reset-password', [ProfileAdminController::class, 'changePassword'])->name('admin.changePassword');
-                Route::post('/delete', [ProfileAdminController::class, 'destroy'])->name('admin.destroy');
-                Route::post('/update-image', [ProfileAdminController::class, 'personal_change_image'])->name('admin.personal.change-image');
-            });
+            Route::get('/', [ProfileAdminController::class, 'show'])->name('admin.show');
+            Route::put('/update', [ProfileAdminController::class, 'update'])->name('admin.update');
+            Route::put('/reset-password', [ProfileAdminController::class, 'changePassword'])->name('admin.changePassword');
+            Route::post('/delete', [ProfileAdminController::class, 'destroy'])->name('admin.destroy');
+            Route::post('/update-image', [ProfileAdminController::class, 'personal_change_image'])->name('admin.personal.change-image');
         });
 
         // Admin dashboard
@@ -78,15 +77,15 @@ Route::prefix('admin')->group(function () {
         });
 
             // admin
-            Route::prefix('admin')->group(function () {
-                Route::get('/', [AdminController::class, 'index'])->name('admin.admin.index');
-                Route::get('/create', [AdminController::class, 'create'])->name('admin.admin.create');
-                Route::post('/store', [AdminController::class, 'store'])->name('admin.admin.store');
-                Route::get('/edit/{id}', [AdminController::class, 'edit'])->name('admin.admin.edit');
-                Route::post('/update/{id}', [AdminController::class, 'update'])->name('admin.admin.update');
-                Route::post('/delete', [AdminController::class, 'destroy'])->name('admin.admin.destroy');
-                Route::put('/reset-password/{id}', [AdminController::class, 'resetPassword'])->name('admin.admin.reset');
-                Route::get('/export', [AdminController::class, 'export'])->name('admin.admin.export');
+            Route::prefix('teacher')->group(function () {
+                Route::get('/', [AdminController::class, 'index'])->name('teacher.index');
+                Route::get('/create', [AdminController::class, 'create'])->name('teacher.create');
+                Route::post('/store', [AdminController::class, 'store'])->name('teacher.store');
+                Route::get('/edit/{id}', [AdminController::class, 'edit'])->name('teacher.edit');
+                Route::post('/update/{id}', [AdminController::class, 'update'])->name('teacher.update');
+                Route::post('/delete', [AdminController::class, 'destroy'])->name('teacher.destroy');
+                Route::put('/reset-password/{id}', [AdminController::class, 'resetPassword'])->name('teacher.reset');
+                Route::get('/export', [AdminController::class, 'export'])->name('teacher.export');
             });
         });
     });

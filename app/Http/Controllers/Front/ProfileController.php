@@ -92,7 +92,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Delete the user's account.
+     * Delete the user's admin.
      */
     public function destroy($id): RedirectResponse
     {

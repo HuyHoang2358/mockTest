@@ -11,7 +11,7 @@
 
 
 <!-- Define route for delete action -->
-@php($routeDelete = route('admin.admin.destroy'))
+@php($routeDelete = route('teacher.destroy'))
 
 @section('content')
 
@@ -19,7 +19,7 @@
         <!-- Table title -->
         @include('admin.common.titleTable', [
             'title' => 'Danh sách giáo viên',
-            'routeAdd' => route('admin.admin.create'),
+            'routeAdd' => route('teacher.create'),
             'titleButton' => 'Thêm mới giáo viên',
         ])
         <!-- End Table title -->
@@ -48,7 +48,7 @@
                                     <td>{{$item -> created_at}}</td>
                                     <td>
                                         <div class="flex gap-2 justify-center items-center">
-                                            <form action="{{ route('admin.admin.reset', $item->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn đặt lại mật khẩu giáo viên này không?')">
+                                            <form action="{{ route('teacher.reset', $item->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn đặt lại mật khẩu giáo viên này không?')">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="text-center"> <a href="javascript:;" data-theme="light" class="tooltip pt-2" title="Đặt lại mật khẩu">
@@ -60,7 +60,7 @@
                                             </form>
                                             <!-- Edit button -->
                                             @include('admin.common.editButton', [
-                                                'routeEdit' => route('admin.admin.edit', ['id' => $item->id])
+                                                'routeEdit' => route('teacher.edit', ['id' => $item->id])
                                             ])
 
                                             <!-- Delete button -->

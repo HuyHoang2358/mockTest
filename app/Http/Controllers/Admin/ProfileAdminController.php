@@ -18,7 +18,7 @@ class ProfileAdminController extends Controller
     {
         $user = Auth::user()->load('profile');
 
-        return view('admin.content.admin.profileAdmin', [
+        return view('admin.content.account.profileAdmin', [
             'user' => $user,
             'profile' => $user->profile,
         ]);
@@ -27,10 +27,6 @@ class ProfileAdminController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $user = Auth::user()->load('profile');
-        echo '<pre>';
-        print_r($user->profile);
-        echo '</pre>';
-        exit;
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -83,9 +79,9 @@ class ProfileAdminController extends Controller
 
         try {
             $user->delete();
-            return redirect()->route('/')->with('success', 'Xóa tài khoản thành công!');
+            return redirect('/')->with('success', 'Xóa tài khoản thành công!');
         } catch (\Exception $e) {
-            return redirect()->route('/')->with('error', 'Xóa tài khoản thất bại: ' . $e->getMessage());
+            return redirect('/')->with('error', 'Xóa tài khoản thất bại: ' . $e->getMessage());
         }
     }
 

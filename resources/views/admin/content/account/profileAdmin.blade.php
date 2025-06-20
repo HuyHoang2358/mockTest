@@ -18,7 +18,7 @@
             <div class="intro-y box mt-5">
                 <div class="relative flex items-center p-5">
                     <div class="w-12 h-12 image-fit">
-                        <img alt="Avatar-mocktest" class="rounded-full" src="{{ asset(Auth::user()->profile->avatar) ?? asset('/assets/dist/images/avatar/default/Avatar-1.png') }}">
+                        <img alt="Avatar-mocktest" class="rounded-full" src="{{ asset(Auth::user()->profile->avatar ?? '/assets/dist/images/avatar/default/Avatar-1.png') }}">
                     </div>
                     <div class="ml-4 mr-auto">
                         <div class="font-medium text-base">{{$user->name}}</div>
@@ -90,9 +90,9 @@
 
                             <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
                                 <div class="border-2 border-dashed shadow-sm border-slate-200/60 dark:border-darkmode-400 rounded-md p-5">
-                                    <div class="h-36 relative image-fit cursor-pointer mx-auto">
+                                    <div class="h-36 relative image-fit cursor-pointer hover:scale-110 ease-in-out duration-500 transition-all mx-auto">
                                         <div class="overflow-hidden flex justify-center">
-                                            <img class="rounded-md w-36" src="{{ asset(Auth::user()->profile->avatar) ?? asset('/assets/dist/images/avatar/default/Avatar-1.png') }}" alt="">
+                                            <img class="w-36" src="{{ asset(Auth::user()->profile->avatar ?? '/assets/dist/images/avatar/default/Avatar-1.png') }}" alt="Avatar">
                                         </div>
                                     </div>
                                     <div class="mx-auto cursor-pointer relative mt-5">

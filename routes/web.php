@@ -1,5 +1,7 @@
 <?php
 
+
+use App\Http\Controllers\Front\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\ProfileUserController;
 use Illuminate\Support\Facades\Route;
@@ -9,6 +11,8 @@ require __DIR__.'/auth.php';
 
 /* Khai báo các route cho người dùng user */
 Route::middleware('auth:web')->group(function () {
+    Route::get('/logout', [AuthenticatedSessionController::class, 'userLogout'])->name('user.logout');
+
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
     Route::prefix('profile')->group(function () {

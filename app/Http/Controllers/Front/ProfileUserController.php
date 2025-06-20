@@ -122,7 +122,7 @@ class ProfileUserController extends Controller
                 'avatar' => $request->avatar,
             ]);
 
-            return redirect()->route('admin.show')->with('success', 'Cập nhật ảnh đại diện thành công! ');
+            return redirect()->route('user.show')->with('success', 'Cập nhật ảnh đại diện thành công! ');
         }
     }
 }
