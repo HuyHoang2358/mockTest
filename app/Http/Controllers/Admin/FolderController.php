@@ -114,6 +114,14 @@ class FolderController extends Controller
         $folder = Folder::find($request->input('del-object-id'));
         try {
             $folder->delete();
+
+            // Tìm folder cha
+            $parentFolder = $folder->parent;
+
+            // Nếu có folder cha, chuyển hướng về folder cha
+            if ($parentFolder) return redirect()->route('admin.folder.index', ['folder_id' => $parentFolder->id])
+                ->with('success', 'Xóa thư mục "'.$folder->name.'" thành công!');
+            // Nếu không có folder cha, chuyển hướng về danh sách thư mục gốc
             return redirect()->route('admin.folder.index')->with('success', 'Xóa thư mục "'.$folder->name.'" thành công!');
         } catch (\Exception $e) {
             return redirect()->route('admin.folder.index')->with('error', 'Xóa thư mục thất bại: ' . $e->getMessage());

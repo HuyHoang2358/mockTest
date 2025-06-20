@@ -89,9 +89,12 @@
                         </div>
 
                         <div class="accordion accordion-boxed p-5">
+                            <h3 class="font-semibold"> Mô tả ngắn</h3>
+                            <div class="my-2 text-gray-400 text-sm pl-5">
+                                {{$question_type->description}}
+                            </div>
                             <div class="flex justify-between items-center">
                                 <h3 class="font-semibold"> Thông số cấu hình</h3>
-
                             </div>
 
                             @foreach($question_type->configKeys as $configKey)
@@ -133,9 +136,9 @@
                         </h2>
                     </div>
                     <div class="accordion accordion-boxed p-5">
-                        <form action="{{route('admin.question-type.store')}}" method="POST">
+                        <form action="{{route('admin.exam.store')}}" method="POST">
                             @csrf
-                            <!-- Tên loại câu hỏi -->
+
                             <div>
                                 <label for="question-type-name-input" class="form-label">Tên loại câu hỏi</label>
                                 <input id="question-type-name-input" type="text" class="form-control" placeholder="Nhập tên loại câu hỏi" name="question_type_name" required>

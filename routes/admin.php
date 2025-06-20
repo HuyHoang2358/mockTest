@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Auth\AuthenController;
+use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\FolderController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\ProfileAdminController;
@@ -39,6 +40,15 @@ Route::prefix('admin')->group(function () {
             Route::post('/update', [FolderController::class, 'update'])->name('admin.folder.update');
             Route::post('/delete', [FolderController::class, 'destroy'])->name('admin.folder.destroy');
             Route::get('/copy/{id}', [FolderController::class, 'copy'])->name('admin.folder.copy');
+        });
+
+        // Quản lý  bài tập, đề thi
+        Route::prefix('exams')->group(function () {
+            Route::get('/', [ExamController::class, 'index'])->name('admin.exam.index');
+            Route::post('/store', [ExamController::class, 'store'])->name('admin.exam.store');
+            Route::get('/edit/{id}', [ExamController::class, 'edit'])->name('admin.exam.edit');
+            Route::post('/update/{id}', [ExamController::class, 'update'])->name('admin.exam.update');
+            Route::post('/delete', [QuestionTypeController::class, 'destroy'])->name('admin.exam.destroy');
         });
 
         // Quản lý danh mục
