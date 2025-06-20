@@ -1,0 +1,220 @@
+@extends('front.layouts.frontApp')
+@section('title', 'Thông tin học sinh'))
+@section('breadcrumb')
+    <nav aria-label="breadcrumb" class="-intro-x h-[45px] mr-auto">
+        <ol class="breadcrumb breadcrumb-light">
+            <li class="breadcrumb-item active"><a href="{{ route('admin.dashboard') }}">Trang Chủ</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="#">Thông tin Học sinh</a></li>
+        </ol>
+    </nav>
+@endsection
+
+@php($routeDelete = route('user.destroy'))
+
+@section('content')
+    <div class="grid grid-cols-12 gap-6 md:px-80">
+        <!-- BEGIN: ProfileUser Menu -->
+        <div class="col-span-12 lg:col-span-4 2xl:col-span-3 flex lg:block flex-col-reverse">
+            <div class="intro-y box mt-5">
+                <div class="relative flex items-center p-5">
+                    <div class="w-12 h-12 image-fit">
+                        <img alt="Avatar-mocktest" class="rounded-full" src="{{ asset(Auth::user()->profile->avatar) ?? asset('/assets/dist/images/avatar/default/Avatar-1.png') }}">
+                    </div>
+                    <div class="ml-4 mr-auto">
+                        <div class="font-medium text-base">{{$user->name}}</div>
+                        <div class="text-slate-500">Học sinh</div>
+                    </div>
+                </div>
+                <div class="p-5 border-t border-slate-200/60 dark:border-darkmode-400">
+                    <a class="flex items-center text-primary font-medium" href=""> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="activity" data-lucide="activity" class="lucide lucide-activity w-4 h-4 mr-2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Personal Information </a>
+                    <a class="flex items-center mt-5" href=""> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="box" data-lucide="box" class="lucide lucide-box w-4 h-4 mr-2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg> Account Settings </a>
+                    <a class="flex items-center mt-5" href=""> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="lock" data-lucide="lock" class="lucide lucide-lock w-4 h-4 mr-2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg> Change Password </a>
+                    <a class="flex items-center mt-5" href=""> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="settings" data-lucide="settings" class="lucide lucide-settings w-4 h-4 mr-2"><path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg> User Settings </a>
+                </div>
+                <div class="p-5 border-t border-slate-200/60 dark:border-darkmode-400">
+                    <a class="flex items-center" href=""> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="activity" data-lucide="activity" class="lucide lucide-activity w-4 h-4 mr-2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Email Settings </a>
+                    <a class="flex items-center mt-5" href=""> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="box" data-lucide="box" class="lucide lucide-box w-4 h-4 mr-2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg> Saved Credit Cards </a>
+                    <a class="flex items-center mt-5" href=""> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="lock" data-lucide="lock" class="lucide lucide-lock w-4 h-4 mr-2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg> Social Networks </a>
+                    <a class="flex items-center mt-5" href=""> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="settings" data-lucide="settings" class="lucide lucide-settings w-4 h-4 mr-2"><path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg> Tax Information </a>
+                </div>
+                <div class="p-5 border-t border-slate-200/60 dark:border-darkmode-400 flex">
+                    <button type="button" class="btn btn-primary py-1 px-2">New Group</button>
+                    <button type="button" class="btn btn-outline-secondary py-1 px-2 ml-auto">New Quick Link</button>
+                </div>
+            </div>
+        </div>
+        <!-- END: ProfileUser Menu -->
+
+        <div class="col-span-12 lg:col-span-8 2xl:col-span-9">
+            <!-- BEGIN: Display Information -->
+            <div class="intro-y box lg:mt-5">
+                <div class="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                    <h2 class="font-medium text-base mr-auto">
+                        Thông tin hiển thị
+                    </h2>
+                </div>
+                <div class="p-5">
+                    <form method="POST" action="{{ route('user.update') }}" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="flex xl:flex-row flex-col">
+                            <div class="flex-1 mt-6 xl:mt-0">
+                                <div class="flex justify-between gap-12">
+                                    <div class="w-full">
+                                        <label class="form-label">Tên được hiển thị</label>
+                                        <input id="name" name="name" type="text" class="form-control" placeholder="Tên không được để trống" value="{{$user->name}}" required>
+                                    </div>
+                                    <div class="w-full">
+                                        <label class="form-label">Số điện thoại</label>
+                                        <input id="phone" name="phone" type="tel" class="form-control" placeholder="Số điện thoại không được để trống" value="{{$profile->phone}}" required>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between mt-3 gap-12">
+                                    <div class="w-full">
+                                        <label class="form-label">Google ID</label>
+                                        <input id="google_id" name="google_id" type="text" class="form-control" placeholder="Không có Google ID" value="{{$profile->google_id}}" readonly>
+                                    </div>
+                                    <div class="w-full">
+                                        <label class="form-label">Ngày sinh</label>
+                                        <input id="birthday" name="birthday" type="date" class="form-control"
+                                               value="{{ $profile->birthday ? \Carbon\Carbon::parse($profile->birthday)->format('Y-m-d') : '' }}">
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="mt-3">
+                                        <label class="form-label">Email</label>
+                                        <input id="email" name="email" type="email" class="form-control p-3" placeholder="Email không được để trống" value="{{$user->email}}" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
+                                <div class="border-2 border-dashed shadow-sm border-slate-200/60 dark:border-darkmode-400 rounded-md p-5">
+                                    <div class="h-36 relative image-fit cursor-pointer mx-auto">
+                                        <div class="overflow-hidden flex justify-center">
+                                            <img class="rounded-md w-36" src="{{ asset(Auth::user()->profile->avatar) ?? asset('/assets/dist/images/avatar/default/Avatar-1.png') }}" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="mx-auto cursor-pointer relative mt-5">
+                                        <div onclick="toggleModal(true, 'avatar_modal')" class="btn btn-primary w-full">Đổi ảnh đại diện</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label">Địa chỉ</label>
+                            <input id="address" name="address" type="text" class="form-control p-3" placeholder="Địa chỉ không được để trống" value="{{$profile->address}}" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-fit mt-3 px-4 py-2 text-base">Chỉnh sửa</button>
+                    </form>
+                </div>
+            </div>
+            <!-- END: Display Information -->
+
+            <!-- BEGIN: Change Password -->
+            <div class="intro-y box lg:mt-5">
+                <div class="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                    <h2 class="font-medium text-base mr-auto">
+                        Thay đổi mật khẩu
+                    </h2>
+                </div>
+                <form method="POST" action="{{ route('user.changePassword' )}}">
+                    @csrf
+                    @method('PUT')
+                    <div class="p-5">
+                        <div class="relative">
+                            <label class="form-label">Mật khẩu cũ</label>
+                            <input type="password" name="old_password" class="form-control" placeholder="Vui lòng nhập mật khẩu cũ">
+                            <i class="fa-solid fa-eye toggle-password absolute top-12 right-3 -translate-y-1/2 text-gray-500 cursor-pointer"></i>
+                        </div>
+                        <div class="mt-3 relative">
+                            <label class="form-label">Mật khẩu mới</label>
+                            <input type="password" name="new_password" class="form-control" placeholder="Vui lòng nhập mật khẩu mới">
+                            <i class="fa-solid fa-eye toggle-password absolute top-12 right-3 -translate-y-1/2 text-gray-500 cursor-pointer"></i>
+                        </div>
+                        <div class="mt-3 relative">
+                            <label class="form-label">Xác nhân mật khẩu mới</label>
+                            <input type="password" name="new_password_confirmation" class="form-control" placeholder="Vui lòng xác nhận mật khẩu mới">
+                            <i class="fa-solid fa-eye toggle-password absolute top-12 right-3 -translate-y-1/2 text-gray-500 cursor-pointer"></i>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3 px-4 py-2 text-base">Thay đổi</button>
+                    </div>
+                </form>
+            </div>
+            <!-- END: Change Password -->
+
+            <!-- BEGIN: Delete Account -->
+            <div class="intro-y box mt-5">
+                <div class="pt-4 pb-1 px-5">
+                    <div class="flex justify-between items-center">
+                        <p class="form-label text-[15px]">Lưu ý: Xóa toàn bộ thông tin tài khoản của bạn, bao gồm cả bài thi, quá trình thi, xếp hạng,...</p>
+                        <form action="{{ route('user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản không?')">
+                            @csrf
+                            @method('DELETE')
+                            <button data-tw-toggle="modal" data-tw-target="#delete-object-confirm-form" type="button" class="text-danger flex items-center"
+                                    onclick='openConfirmDeleteObjectForm("{{ $user->name }}", {{ $user->id }})'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="trash-2" data-lucide="trash-2" class="lucide lucide-trash-2 w-4 h-4 mr-1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                Delete Account
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- END: Delete Account -->
+        </div>
+    </div>
+
+    @include('components.select_avatar')
+
+    <script>
+        document.querySelectorAll('.toggle-password').forEach(function (icon) {
+            icon.addEventListener('click', function () {
+                const input = this.previousElementSibling;
+                const isPassword = input.type === 'password';
+
+                input.type = isPassword ? 'text' : 'password';
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            imageSelection('avatar_modal');
+        });
+
+        function toggleModal(show, modal_id) {
+            document.getElementById(modal_id).classList.toggle("hidden");
+            const body = document.body;
+            if(show){
+                body.style.overflow = "hidden";
+            }else{
+                body.style.overflow = "";
+            }
+        }
+
+        function imageSelection(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+
+            const images = modal.querySelectorAll(".image-selection");
+            const inputField = modal.querySelector(".choosen-image"); // Select input inside the modal
+
+            images.forEach(image => {
+                image.addEventListener("click", function () {
+                    // Remove selection from all images in this modal only
+                    images.forEach(img => {
+                        img.classList.remove("border-2");
+                        img.querySelector(".choose-icon").classList.add("hidden");
+                    });
+
+                    // Add selection to the clicked image
+                    this.classList.add("border-2");
+                    this.querySelector(".choose-icon").classList.remove("hidden");
+
+                    // Update the input field inside this modal
+                    inputField.value = this.querySelector("img").getAttribute("value");
+                });
+            });
+        }
+    </script>
+@endsection
