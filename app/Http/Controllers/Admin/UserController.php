@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Profile;
+use App\Models\ProfileUser;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -67,7 +67,7 @@ class UserController extends Controller
             $user = User::create([
                 'name' => $credentials['name'],
                 'email' => $credentials['email'],
-                'password' => bcrypt($credentials['password']),
+                'password' => Hash::make($credentials['password']),
                 'google_id' => $credentials['google_id'] ?? null,
             ]);
 
@@ -155,5 +155,4 @@ class UserController extends Controller
         $user->save();
         return redirect()->route('admin.user.index')->with('success', 'Đặt lại mật khẩu cho tài khoản "'.$user->name.'" thành công!');
     }
-
 }
