@@ -28,16 +28,16 @@ class AdminController extends Controller
             ->orderBy('name', 'ASC')
             ->paginate(10);
 
-        return view('admin.content.admin.index', [
+        return view('admin.content.account.index', [
             'page' => 'manage-admin',
             'teachers' => $teachers,
-            'routeSearch' => route('admin.admin.index'),
+            'routeSearch' => route('teacher.index'),
         ]);
     }
 
     public function create() :View
     {
-        return view('admin.content.admin.create', [
+        return view('admin.content.account.create', [
             'page' => 'manage-admin',
         ]);
     }
@@ -78,16 +78,16 @@ class AdminController extends Controller
                 'address' => null,
             ]);
 
-            return redirect()->route('admin.admin.index')->with('success', 'Thêm mới giáo viên thành công!');
+            return redirect()->route('teacher.index')->with('success', 'Thêm mới giáo viên thành công!');
         } catch (\Exception $e) {
-            return redirect()->route('admin.admin.index')->with('error', 'Thêm mới giáo viên thất bại: ' . $e->getMessage());
+            return redirect()->route('teacher.index')->with('error', 'Thêm mới giáo viên thất bại: ' . $e->getMessage());
         }
     }
 
     public function edit($id)
     {
         $teacher = Admin::findOrFail($id);
-        return view('admin.content.admin.edit', [
+        return view('admin.content.account.edit', [
             'page' => 'manage-admin',
             'admin' => $teacher,
         ]);
@@ -114,9 +114,9 @@ class AdminController extends Controller
                 'name' => $credentials['name'],
                 'email' => $credentials['email'],
             ]);
-            return redirect()->route('admin.admin.index')->with('success', 'Cập nhật thông tin giáo viên thành công!');
+            return redirect()->route('teacher.index')->with('success', 'Cập nhật thông tin giáo viên thành công!');
         } catch (\Exception $e) {
-            return redirect()->route('admin.admin.index')->with('error', 'Cập nhật thông tin giáo viên thất bại: ' . $e->getMessage());
+            return redirect()->route('teacher.index')->with('error', 'Cập nhật thông tin giáo viên thất bại: ' . $e->getMessage());
         }
     }
 
@@ -125,9 +125,9 @@ class AdminController extends Controller
         $admin = Admin::find($request->input('del-object-id'));
         try {
             $admin->delete();
-            return redirect()->route('admin.admin.index')->with('success', 'Xóa giáo viên thành công!');
+            return redirect()->route('teacher.index')->with('success', 'Xóa giáo viên thành công!');
         } catch (\Exception $e) {
-            return redirect()->route('admin.admin.index')->with('error', 'Xóa giáo viên thất bại: ' . $e->getMessage());
+            return redirect()->route('teacher.index')->with('error', 'Xóa giáo viên thất bại: ' . $e->getMessage());
         }
     }
 
@@ -141,7 +141,7 @@ class AdminController extends Controller
 
         // Save the changes to the database
         $admin->save();
-        return redirect()->route('admin.admin.index')->with('success', 'Đặt lại mật khẩu thành công!');
+        return redirect()->route('teacher.index')->with('success', 'Đặt lại mật khẩu thành công!');
     }
 
     public function export(Request $request){

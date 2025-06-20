@@ -30,7 +30,7 @@
                     'manage-admin' => [
                         'display' => 'Tài khoản giáo viên',
                         'icon' => 'pen-tool',
-                        'route' => 'admin.admin.index',
+                        'route' => 'teacher.index',
                     ],
                 ],
             ],
