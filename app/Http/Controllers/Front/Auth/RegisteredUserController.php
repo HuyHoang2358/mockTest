@@ -45,6 +45,15 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Tao mới profile cho user
+        $user->profile()->create([
+            'avatar' => null,
+            'phone' => null,
+            'birthday' => null,
+            'address' => null,
+        ]);
+
+
         event(new Registered($user));
 
         Auth::login($user);

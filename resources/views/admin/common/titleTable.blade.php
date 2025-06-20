@@ -5,7 +5,7 @@
     <div class="w-full sm:w-auto flex items-center gap-2 mt-4 sm:mt-0">
         <!-- BEGIN: Search -->
         <div class="intro-x relative mr-3 sm:mr-6">
-            <form method="GET" action="{{ route('admin.teacher.index') }}" class="search hidden sm:block">
+            <form method="GET" action="{{ route('admin.admin.index') }}" class="search hidden sm:block">
                 <input
                     value="{{ request('search') }}"
                     name="search"
@@ -34,7 +34,7 @@
 
         @if (isset($routeAdd))
             @if (request()->has('search'))
-                <a href="{{ route('admin.teacher.index') }}">
+                <a href="{{ route('admin.admin.index') }}">
                     <button type="button" class="btn btn-primary w-fit h-12">
                         Xem toàn bộ
                     </button>
@@ -55,7 +55,7 @@
             <div class="dropdown-menu w-40">
                 <ul class="dropdown-content">
                     <li><a href="#" class="dropdown-item"> In </a></li>
-                    <li><a href="{{ route('admin.teacher.export', request()->query()) }}" class="dropdown-item"> Xuất file excel</a></li>
+                    <li><a href="{{ route('admin.admin.export', request()->query()) }}" class="dropdown-item"> Xuất file excel</a></li>
                 </ul>
             </div>
         </div>

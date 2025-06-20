@@ -27,10 +27,10 @@
                     ],
                 ],
                 [
-                    'manage-teacher' => [
+                    'manage-admin' => [
                         'display' => 'Tài khoản giáo viên',
                         'icon' => 'pen-tool',
-                        'route' => 'admin.teacher.index',
+                        'route' => 'admin.admin.index',
                     ],
                 ],
             ],

@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Front\HomeController;
-use App\Http\Controllers\Front\ProfileController;
+use App\Http\Controllers\Front\ProfileUserController;
 use Illuminate\Support\Facades\Route;
 
 /* Import routes for authentication in role user*/
@@ -9,11 +9,14 @@ require __DIR__.'/auth.php';
 
 /* Khai báo các route cho người dùng user */
 Route::middleware('auth:web')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
+
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileUserController::class, 'show'])->name('user.show');
+        Route::put('/update', [ProfileUserController::class, 'update'])->name('user.update');
+        Route::put('/reset-password', [ProfileUserController::class, 'changePassword'])->name('user.changePassword');
+        Route::post('/delete', [ProfileUserController::class, 'destroy'])->name('user.destroy');
+        Route::post('/update-image', [ProfileUserController::class, 'personal_change_image'])->name('profile.personal.change-image');
+    });
 });
 
