@@ -68,7 +68,7 @@
                         <a href="{{route('admin.folder.index').'?folder_id='.$subFolder->id}}"   class="block font-medium mt-4 text-center truncate">{{$subFolder->name}}</a>
                         <div class="text-slate-500 text-xs text-center mt-0.5">{{count($subFolder->children)}} thư mục con</div>
                         <div class="absolute top-0 right-0 mr-2 mt-3 dropdown ml-auto">
-                            <a class="dropdown-toggle w-5 h-5 block" href="javascript:;" aria-expanded="false" data-tw-toggle="dropdown">
+                            <a class="dropdown-toggle w-5 h-5 block" aria-expanded="false" data-tw-toggle="dropdown">
                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                             </a>
                             <div class="dropdown-menu w-40">
@@ -115,14 +115,164 @@
                         </div>
                     </div>
                 @endforeach
-
             </div>
+
+
             <!-- END: Directory & Files -->
 
-            <!-- BEGIN: Pagination -->
-            <!-- END: Pagination -->
+            <!-- BEGIN: Add exam form -->
+            <div  id="exam-add-form" class="leading-relaxed">
+                <div class="intro-y box ">
+                    <div class="p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                        <h2 class="font-medium text-base mr-auto text-primary">
+                            Thêm mới bài tập/đề thi
+                        </h2>
+                    </div>
+                    <div class="accordion accordion-boxed p-5">
+                        <form action="{{route('admin.question-type.store')}}" method="POST">
+                            @csrf
+                            <!-- Tên folder -->
+                            <div>
+                                <label for="exam-folder-id-input" class="form-label">Tên Folder </label>
+                                <input id="exam-folder-id-input" type="text" class="form-control" placeholder="Nhập id folder" name="exam_folder_id" required>
+                            </div>
+
+                            <!-- Tên bài tập, bài thi -->
+                            <div class="mt-2">
+                                <label for="exam-name-input" class="form-label">Tên bài tập/đề thi</label>
+                                <input id="exam-name-input" type="text" class="form-control" placeholder="Nhập tên bài thi" name="exam_name" required>
+                            </div>
+
+                            <!-- Cấu hình thời gian thi -->
+                            <div class="mt-2">
+                                <!-- Title -->
+                                <div class="flex justify-between items-center">
+                                    <p class="form-label">Thông tin cấu hình thời gian</p>
+                                </div>
+                                <div id="exam-time-container">
+                                    <div class="config-item border p-3 rounded-lg">
+                                        <div class="grid grid-cols-3 gap-4">
+                                            <!-- Tổng thời gian thi -->
+                                            <div class="col-span-1">
+                                                <label for="exam-total-time-input" class="form-label">Tổng thời gian</label>
+                                                <input id="exam-total-time-input" type="number" class="form-control" placeholder="Nhập tổng thời gian (phút)" name="exam_total_time" required>
+                                            </div>
+
+                                            <!-- Thời gian bắt đầu mở thi -->
+                                            <div class="col-span-1">
+                                                <label for="exam-start-time-input" class="form-label">Thời gian bắt đầu mở</label>
+                                                <input id="exam-start-time-input" type="datetime-local" class="form-control" name="exam_start_time" required>
+                                            </div>
+
+                                            <!-- Thời gian đóng bài thi -->
+                                            <div class="col-span-1">
+                                                <label for="exam-end-time-input" class="form-label">Thời gian đóng</label>
+                                                <input id="exam-end-time-input" type="datetime-local" class="form-control" name="exam_end_time" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+
+
+                            <!-- Mật khẩu bài thi -->
+                            <!-- Giá tiền -->
+                            <!-- Phải thanh toán -->
+                            <!-- Số lần thi tối đa  -->
+
+                            <!-- Tên loại câu hỏi -->
+                            <div>
+                                <label for="question-type-name-input" class="form-label">Tên loại câu hỏi</label>
+                                <input id="question-type-name-input" type="text" class="form-control" placeholder="Nhập tên loại câu hỏi" name="question_type_name" required>
+                            </div>
+
+                            <!-- Mô tả loại câu hỏi -->
+                            <div class="mt-2">
+                                <label for="question-type-description-input" class="form-label">Mô tả loại câu hỏi</label>
+                                <textarea id="question-type-description-input" type="text" class="form-control"  rows=2 placeholder="Nhập tên loại câu hỏi" name="question_type_description"></textarea>
+                            </div>
+
+                            <!-- Cấu hình -->
+                            <div class="mt-2">
+                                <!-- Title -->
+                                <div class="flex justify-between items-center">
+                                    <p class="form-label">Thông tin cấu hình</p>
+                                    <button id="add-config-btn" class="text-white px-2 py-1 text-xs rounded bg-primary tooltip"
+                                            type="button"
+                                            data-theme="light"
+                                            title="Thêm mới cấu hình">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+
+                                <div id="config-container" class="mt-2">
+                                    <!-- Cấu hình 1 -->
+                                    <div class="config-item border p-3 rounded-lg my-3 relative">
+                                        <!-- Tên cấu hình -->
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div class="col-span-1">
+                                                <label for="question_type_config_key_1" class="form-label">Tên cấu hình</label>
+                                                <input id="question_type_config_key_1" type="text" class="form-control" placeholder="Nhập tên loại câu hỏi" name="question_type_config_key[]" required>
+                                            </div>
+
+                                            <div class="col-span-1">
+                                                <label class="form-label">Bắt buộc</label>
+                                                <div class="flex flex-col sm:flex-row mt-2 gap-4">
+                                                    <div class="form-check mr-2">
+                                                        <input id="question_type_config_is_require_1_1" class="form-check-input" type="radio" name="question_type_config_is_require[]" value="1" checked>
+                                                        <label class="form-check-label" for="question_type_config_is_require_1_1">Bắt buộc</label>
+                                                    </div>
+                                                    <div class="form-check mr-2 mt-2 sm:mt-0">
+                                                        <input id="question_type_config_is_require_1_2" class="form-check-input" type="radio" name="question_type_config_is_require[]" value="0">
+                                                        <label class="form-check-label" for="question_type_config_is_require_1_2">Không bắt buộc</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Mô tả cấu hình -->
+                                        <div class="mt-2">
+                                            <label for="question_type_config_description_1" class="form-label">Mô tả thông tin cấu hình</label>
+                                            <textarea id="question_type_config_description_1" type="text" class="form-control"  rows=2 placeholder="Nhập tên loại câu hỏi" name="question_type_config_description[]"></textarea>
+                                        </div>
+
+                                        <!-- Giá trị cấu hình -->
+                                        <div class="mt-2">
+                                            <label for="question_type_config_value_1" class="form-label">Giá trị cấu hình <span class="text-gray-400 text-xs italic ml-4">Các giá trị cách nhau bởi dấu ",". Bỏ trống nếu giá trị đó người dùng tự điền</span></label>
+                                            <input id="question_type_config_value_1" type="text" class="form-control" placeholder="Nhập giá trị của cấu hình" name="question_type_config_value[]">
+                                        </div>
+                                        <button class="absolute top-0 right-0 mt-[-10px] mr-[-10px] bg-white border border-red-500 rounded-full w-6 h-6 text-xs text-red-500 tooltip delete-config"
+                                                data-theme="light"
+                                                title="Xóa cấu hình này"
+                                                type="button"
+                                        >
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- Cấu hình 2 -->
+                                </div>
+
+
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
+                                <button type="button" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Hủy</button>
+                                <button type="submit" id="btn-submit-form" class="btn py-3 btn-primary w-full md:w-52">Thêm mới</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- END: Add exam form -->
         </div>
     </div>
+
 
 @endsection
 @section('custom-modal')
