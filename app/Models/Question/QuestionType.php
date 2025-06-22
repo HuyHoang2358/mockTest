@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static create(array $array)
  * @method static orderBy(string $string, string $string1)
  * @method static find(mixed $input)
+ * @method static get()
  */
 class QuestionType extends Model
 {

@@ -45,6 +45,7 @@ Route::prefix('admin')->group(function () {
         // Quản lý  bài tập, đề thi
         Route::prefix('exams')->group(function () {
             Route::get('/', [ExamController::class, 'index'])->name('admin.exam.index');
+            Route::get('/{id}', [ExamController::class, 'detail'])->name('admin.exam.detail');
             Route::post('/store', [ExamController::class, 'store'])->name('admin.exam.store');
             Route::get('/edit/{id}', [ExamController::class, 'edit'])->name('admin.exam.edit');
             Route::post('/update/{id}', [ExamController::class, 'update'])->name('admin.exam.update');

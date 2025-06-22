@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Exam;
 use App\Models\Folder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class FolderController extends Controller
         $data['subFolders'] = collect();
         $data['active_ids'] = [];
         $data['paths'] = [];
-
+        $data['exams'] = [];
         // Nếu có folder_id được chọn
         if ($request->has('folder_id')) {
             $selected = Folder::find($request->folder_id);
@@ -42,10 +43,18 @@ class FolderController extends Controller
 
                 $data['active_ids'] = $activeIds;
 
+                // Lấy tất cả các exams của folder
+                if (count( $data['subFolders']) == 0){
+                    $data['exams'] = Exam::where('folder_id', $selected->id)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+                }
+
             }
         } else {
             $data["selectedFolder"] = null;
             $data["subFolders"] = Folder::whereNull('parent_id')->get();
+
         }
         $data['paths'] = array_reverse($data['paths']);
         $data['page'] = 'manage-folder';

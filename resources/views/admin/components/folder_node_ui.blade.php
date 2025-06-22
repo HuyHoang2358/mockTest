@@ -15,6 +15,17 @@
             <a href="{{route('admin.folder.index').'?folder_id='.$folder->id}}" class="folder-name {{ $isActive ? 'text-primary font-semibold' : '' }}">{{ $folder->name }}</a>
         </div>
         <div class="flex justify-end gap-1 items-center">
+            <!-- Thêm mới file -->
+            @if ($folder->childrenRecursive->isEmpty())
+                <button type="button"
+                        class="text-orange-200 hover:text-orange-500 text-xs tooltip"
+                        title="Thêm bài tập/đề thi"
+                        onclick="{{ $onAddExam }}({{ $folder->id }})"
+                >
+                    <i class="fa-regular fa-file"></i>
+                </button>
+            @endif
+
             <!-- Thêm mới folder -->
             <button type="button"
                     class="text-green-200 hover:text-green-500 text-xs add-subfolder-btn tooltip"
