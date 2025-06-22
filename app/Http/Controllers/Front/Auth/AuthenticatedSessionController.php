@@ -44,4 +44,10 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
+
+    public function userLogout(): RedirectResponse
+    {
+        Auth::guard('web')->logout();
+        return redirect()->route('dashboard');
+    }
 }
