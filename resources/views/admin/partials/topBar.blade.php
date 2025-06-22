@@ -72,7 +72,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route($routeName) }}" class="dropdown-item hover:bg-white/5"> <i data-lucide="lock" class="w-4 h-4 mr-2"></i> Thay mật khẩu </a>
+                        <a href="{{ route($routeName, ['scroll' => 'password']) }}" class="dropdown-item hover:bg-white/5"><i data-lucide="lock" class="w-4 h-4 mr-2"></i> Thay mật khẩu</a>
                     </li>
                     <li>
                         <a href="#" class="dropdown-item hover:bg-white/5"> <i data-lucide="help-circle" class="w-4 h-4 mr-2"></i> Hướng dẫn </a>
@@ -93,3 +93,4 @@
         <!-- END: Account Menu -->
     </div>
 </div>
+
