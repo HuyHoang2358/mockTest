@@ -4,7 +4,7 @@
     <nav aria-label="breadcrumb" class="-intro-x h-[45px] mr-auto">
         <ol class="breadcrumb breadcrumb-light">
             <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Trang quản trị viên</a></li>
-            <li class="breadcrumb-item"><a href="{{route('admin.admin.index')}}">Quản lý giáo viên</a></li>
+            <li class="breadcrumb-item"><a href="{{route('teacher.index')}}">Quản lý giáo viên</a></li>
             <li class="breadcrumb-item active" aria-current="page">
                 <a href="#"> Chỉnh sửa </a>
             </li>
@@ -21,7 +21,7 @@
     </div>
 
     <!-- Form update information -->
-    <form action="{{ route('admin.admin.update', ["id" => $teacher->id]) }}" method="POST">
+    <form action="{{ route('teacher.update', ["id" => $teacher->id]) }}" method="POST">
         @csrf
         <div class="intro-y box p-5 mt-2">
             <div class="border border-slate-200/60 dark:border-darkmode-400 rounded-md p-5">
@@ -71,7 +71,7 @@
 
         <!-- Buttons cancel and save -->
         <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
-            <a href="{{route('admin.admin.index')}}">
+            <a href="{{route('teacher.index')}}">
                 <button type="button" id="btn-cancle-form" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Hủy</button>
             </a>
             <button type="submit" id="btn-submit-form" class="btn py-3 btn-primary w-full md:w-52 ">Lưu thông tin</button>
