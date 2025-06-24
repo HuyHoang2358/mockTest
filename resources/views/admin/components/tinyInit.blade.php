@@ -5,6 +5,7 @@
         toolbar: 'undo redo | blocks | bold italic underline strikethrough | image table | align numlist bullist',
         menubar: false,
         height: 300, // chiều cao ban đầu ~2 dòng
-        content_style: "body { line-height: 0.5; }"
+        content_style: "body { line-height: 0.5; }",
+        branding: false
     });
 </script>

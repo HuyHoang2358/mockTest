@@ -33,10 +33,42 @@
             </div>
             <input name="avatar" class="choosen-image" value="{{ $selectedAvatar }}" type="text" hidden>
             <div class="flex justify-center gap-5">
-                <button type="button" onclick="toggleModal(false, 'avatar_modal')" class="text-light-gray border border-light-gray bg-transparent rounded-full py-2 px-12 hover:scale-x-105 transition-transform">Thoát</button>
-                <button type="submit" class="text-white rounded-full py-2 px-10 btn btn-primary hover:scale-x-105 transition-transform">Xác nhận</button>
+                <button type="button" onclick="toggleModal(false, 'avatar_modal')" class="text-light-gray border border-light-gray bg-transparent rounded-full py-3 px-12 hover:scale-x-105 transition-transform">Thoát</button>
+                <div class="action-button-wrapper">
+                    <button type="submit" class="text-white rounded-full py-3 px-10 btn btn-primary hover:scale-x-105 transition-transform change-btn">Xác nhận</button>
+                    <button type="button" class="btn btn-danger rounded-full py-3 px-10 hidden changing-btn" disabled>
+                        Xác nhận <i data-loading-icon="puff" data-color="white" class="w-4 h-4 ml-2"></i>
+                    </button>
+                </div>
             </div>
         </form>
 
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('.change-btn');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                const wrapper = btn.closest('.action-button-wrapper');
+                const form = btn.closest('form');
+                const loadingBtn = wrapper.querySelector('.changing-btn');
+
+                // Ẩn nút gốc, hiện loading
+                btn.disabled = true;
+                btn.classList.add('cursor-not-allowed', 'opacity-70', 'hidden');
+
+                if (loadingBtn) {
+                    loadingBtn.classList.remove('hidden');
+                }
+
+                // Submit form tương ứng
+                if (form) {
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>

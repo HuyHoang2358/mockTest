@@ -16,8 +16,7 @@ class ProfileAdminController extends Controller
 {
     public function show(): RedirectResponse|View
     {
-        $user = Auth::user()->load('profile');
-
+        $user = Auth::user()?->load('profile');
         return view('admin.content.account.profileAdmin', [
             'user' => $user,
             'profile' => $user->profile,
@@ -92,7 +91,14 @@ class ProfileAdminController extends Controller
         $request->validate([
             'old_password' => ['required'],
             'new_password' => ['required', 'min:8', 'confirmed'],
-        ]);
+        ],
+            [
+                'old_password.required' => 'Vui lòng nhập mật khẩu cũ',
+                'new_password.required' => 'Vui lòng nhập mật khẩu mới',
+                'new_password.min' => 'Mật khẩu mới phải có ít nhất 8 ký tự',
+                'new_password.confirmed' => 'Mật khẩu xác nhận không khớp',
+            ]
+        );
 
         // Kiểm tra mật khẩu cũ
         if (!Hash::check($request->old_password, $user->password)) {

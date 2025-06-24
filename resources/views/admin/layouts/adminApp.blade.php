@@ -7,7 +7,7 @@
     <link href="{{asset('assets/dist/images/logo.svg')}}" rel="admin icon">
 
     <!-- NO SEO -->
-    <meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="noindex, nofollow" />
     <meta name="googlebot" content="noindex, nofollow" />
     <meta name="bingbot" content="noindex, nofollow" />
     <meta name="robots" content="noindex, nofollow" />

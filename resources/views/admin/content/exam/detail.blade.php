@@ -174,19 +174,57 @@
                                                     <label for="part-1-total-score-input" class="font-bold text-xl tooltip" data-theme="light" title="Loại câu hỏi">
                                                         <i class="fa-solid fa-bars-staggered"></i>
                                                     </label>
-                                                    <select class="form-select">
+                                                    <select class="form-select" onchange="handleQuestionTypeChange(this)">
                                                         @foreach($questionTypes as $questionType)
-                                                            <option value="{{$questionType->id}}">{{$questionType->name}}</option>
+                                                            <option value="{{$questionType->id}}"
+                                                                    data-config='@json($questionType->configKeys)'
+                                                            >{{$questionType->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
 
                                                 <!-- Cấu hình câu hỏi -->
                                                 <div class="flex justify-start items-center gap-1">
-                                                    <label class="font-bold text-xl tooltip" data-theme="light" title="Cấu hình câu hỏi">
-                                                        <i class="fa-solid fa-screwdriver-wrench"></i>
-                                                    </label>
-                                                    <input type="text" value="{{count($questionType->configKeys)}}" class="form-control w-12" readonly />
+                                                    <div class="text-center">
+                                                        <div class="dropdown inline-block" data-tw-placement="bottom-end">
+                                                            <button type="button" class="dropdown-toggle btn btn-secondary tooltip text-lg"
+                                                                    aria-expanded="false" data-tw-toggle="dropdown"
+                                                                    title="Cấu hình câu hỏi"
+                                                            >
+                                                                <i class="fa-solid fa-screwdriver-wrench"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu w-80">
+                                                                <div class="dropdown-content">
+                                                                    <div id="question-config-container">
+                                                                        <div class="mb-4">
+                                                                            <h5 class="font-semibold text-lg text-primary">Cấu hình câu hỏi</h5>
+                                                                            @foreach($questionTypes[0]->configKeys as $configKey)
+                                                                                <div class="form-control mt-2">
+                                                                                    <label class="form-label">{{$configKey->description}}</label>
+                                                                                    @if($configKey->value)
+                                                                                        <select name="config[is_shuffle]" class="form-select mt-1">
+                                                                                            @php
+                                                                                                $configKeyValues = json_decode($configKey->value, true);
+                                                                                            @endphp
+                                                                                            @foreach($configKeyValues as $configKeyValue)
+                                                                                                <option value="{{$configKeyValue}}">{{$configKeyValue}}</option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    @else
+                                                                                        <input type="text" class="form-control" />
+                                                                                    @endif
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+                                                                        <div class="flex items-center mt-3">
+                                                                            <button data-dismiss="dropdown" class="btn btn-secondary ml-auto">Đóng</button>
+                                                                            <button class="btn btn-primary ml-2" onclick="applyConfig()">Lưu</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
 
@@ -198,6 +236,71 @@
                                                     <input id="part-1-total-score-input" name="total_score" type="number" min=0 max= 100 class="w-16 form-control" value="1"/>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <!-- Đáp án trả lời -->
+                                        <div class="p-5">
+                                            @php
+                                                $answerLabels = ['A', 'B', 'C', 'D'];
+                                            @endphp
+                                            @for($i=0; $i<4; $i++)
+                                                <div class="flex justify-between items-center gap-4 my-1">
+                                                    <label for="answer-{{$i}}" class="font-semibold text-xl">{{$answerLabels[$i]}}</label>
+                                                    <input id="answer-{{$i}}" type="text" class="form-control" placeholder="Nhập đáp án" name="answers[]">
+                                                    <input type="radio" class="form-check-input" name="is_correct[]" value="{{$i}}"  {{$i==3 ? 'checked' : ''}}/>
+                                                </div>
+                                            @endfor
+
+
+
+                                            <div> --- </div>
+                                            @php
+                                                $answerLabels = ['True', 'False'];
+                                            @endphp
+                                            @for($i=0; $i<1; $i++)
+                                                <div class="flex justify-left  items-center gap-4 my-1">
+                                                    <label for="answer-{{$i}}" class="font-semibold text-xl">{{$i+1}}</label>
+                                                    <div class="flex justify-start items-center gap-8 my-1">
+                                                        @foreach($answerLabels as $label)
+                                                            <div class="flex justify-start items-center gap-2">
+                                                                <input type="radio" class="form-check-input" name="is_correct_{{$i}}_[]" value="{{$i}}"  {{$i==1 || $i==2 || $i==3 ? 'checked' : ''}}/>
+                                                                <div>
+                                                                    {{$label}}
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endfor
+
+                                            <div> --- </div>
+                                            @php
+                                                $answerLabels = ['True', 'False', 'Not Given'];
+                                            @endphp
+                                            @for($i=0; $i<1; $i++)
+                                                <div class="flex justify-left items-center gap-4 my-1">
+                                                    <label for="answer-{{$i}}" class="font-semibold text-xl">{{$i+1}}</label>
+                                                    <div class="flex justify-start items-center gap-8 my-1">
+                                                        @foreach($answerLabels as $label)
+                                                            <div class="flex justify-start items-center gap-2">
+                                                                <input type="radio" class="form-check-input" name="is_correct_{{$i}}_[]" value="{{$i}}"  {{$i==1 || $i==2 || $i==3 ? 'checked' : ''}}/>
+                                                                <div>
+                                                                    {{$label}}
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endfor
+
+
+                                            <div> --- </div>
+                                            @for($i=0; $i<6; $i++)
+                                                <div class="flex justify-between items-center gap-4 my-1">
+                                                    <label for="answer-{{$i}}" class="font-semibold text-xl">{{$i+1}}</label>
+                                                    <input id="answer-{{$i}}" type="text" class="form-control" placeholder="Nhập đáp án" name="answers[]">
+                                                    <input type="checkbox" class="form-check-input" name="is_correct[]" value="{{$i}}"  {{$i==1 || $i==2 || $i==3 ? 'checked' : ''}}/>
+                                                </div>
+                                            @endfor
                                         </div>
                                     </div>
                                 </div>
@@ -523,6 +626,70 @@
 
             // Optional: Nếu muốn cập nhật lại nội dung vào TinyMCE (sau khi thêm name[])
             editor.setContent(tempDiv.innerHTML);
+        }
+
+        function handleQuestionTypeChange(select) {
+            const selectedOption = select.options[select.selectedIndex];
+            const rawConfig = selectedOption.dataset.config;
+            const configContainer = document.getElementById('question-config-container');
+
+            console.log(rawConfig)
+            console.log('type rawConfig:', typeof rawConfig);
+
+            try {
+                const configs = JSON.parse(rawConfig);
+                console.log('Parsed configs:', configs);
+                configContainer.innerHTML = ''; // clear cũ
+
+                configs.forEach(conf => {
+                    console.log('Config:', conf);
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'mb-4';
+
+                    const label = document.createElement('label');
+                    label.className = 'form-label font-semibold';
+                    label.textContent = conf.description || conf.key;
+
+                    // Check nếu value là JSON array hợp lệ → select
+                    let inputEl;
+
+                    console.log('Config value:', conf.value);
+                    if(conf.value){
+
+                        const values = JSON.parse(conf.value);
+                        console.log('Parsed values:', values);
+                        if (Array.isArray(values) && values.length > 0) {
+                            // Nếu là mảng, tạo select
+                            console.log('Creating select input for values:', values);
+                            inputEl = document.createElement('select');
+                            inputEl.name = `config[${conf.key}]`;
+                            inputEl.className = 'form-select mt-1';
+
+                            values.forEach(val => {
+                                const option = document.createElement('option');
+                                option.value = val;
+                                option.textContent = val;
+                                inputEl.appendChild(option);
+                            });
+                        }
+                    }
+
+                    if (!inputEl) {
+                        console.log("X")
+                        inputEl = document.createElement('input');
+                        inputEl.name = `config[${conf.key}]`;
+                        inputEl.type = 'text';
+                        inputEl.className = 'form-control mt-1';
+                    }
+
+                    wrapper.appendChild(label);
+                    wrapper.appendChild(inputEl);
+                    configContainer.appendChild(wrapper);
+                });
+
+            } catch (e) {
+                console.error('Lỗi phân tích config JSON:', e);
+            }
         }
     </script>
 @endsection

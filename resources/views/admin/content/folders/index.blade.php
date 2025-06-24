@@ -70,7 +70,7 @@
             <!-- END: Folder Detail -->
 
             <!-- BEGIN: Directory & Files -->
-            <div class="intro-y grid grid-cols-4 gap-3 sm:gap-6 mt-6">
+            <div class="intro-y grid grid-cols-4 gap-3 sm:gap-6 mt-2">
                 @foreach($subFolders as $subFolder)
                     <div class="file box rounded-md px-5 pt-8 pb-5 sm:px-5 relative zoom-in">
                         <div class="absolute left-0 top-0 mt-3 ml-3">
