@@ -33,7 +33,7 @@
         <!-- END: Search -->
 
         @if (isset($routeAdd))
-            @if (request()->has('search'))
+            @if (request()->filled('search'))
                 <a href="{{ route('teacher.index') }}">
                     <button type="button" class="btn btn-primary w-fit h-12">
                         Xem toàn bộ
