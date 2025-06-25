@@ -36,7 +36,7 @@
                 <button type="button" onclick="toggleModal(false, 'avatar_modal')" class="text-light-gray border border-light-gray bg-transparent rounded-full py-3 px-12 hover:scale-x-105 transition-transform">Thoát</button>
                 <div class="action-button-wrapper">
                     <button type="submit" class="text-white rounded-full py-3 px-10 btn btn-primary hover:scale-x-105 transition-transform change-btn">Xác nhận</button>
-                    <button type="button" class="btn btn-danger rounded-full py-3 px-10 hidden changing-btn" disabled>
+                    <button type="button" class="btn btn-primary rounded-full py-3 px-10 hidden changing-btn" disabled>
                         Xác nhận <i data-loading-icon="puff" data-color="white" class="w-4 h-4 ml-2"></i>
                     </button>
                 </div>
