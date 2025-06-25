@@ -26,15 +26,13 @@
                     </div>
                 </div>
                 <div class="p-5 border-t border-slate-200/60 dark:border-darkmode-400">
-                    <a class="flex items-center text-primary font-medium" href=""> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="activity" data-lucide="activity" class="lucide lucide-activity w-4 h-4 mr-2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>Kết quả học tập</a>
-                    <a class="flex items-center mt-5" href=""> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="box" data-lucide="box" class="lucide lucide-box w-4 h-4 mr-2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg> Cài đặt tài khoản </a>
+                    <a class="flex items-center text-primary font-medium" href="#"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="activity" data-lucide="activity" class="lucide lucide-activity w-4 h-4 mr-2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>Thông tin cá nhân</a>
+                    <a class="flex items-center mt-5" href="#"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="box" data-lucide="box" class="lucide lucide-box w-4 h-4 mr-2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg> Cấu hình tài khoản </a>
                 </div>
                 <div class="p-5 border-t border-slate-200/60 dark:border-darkmode-400">
-                    <a class="flex items-center" href=""> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="activity" data-lucide="list" class="lucide lucide-activity w-4 h-4 mr-2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Các lớp học </a>
-                    <a class="flex items-center mt-5" href=""> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="box" data-lucide="rotate-ccw" class="lucide lucide-box w-4 h-4 mr-2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg> Lịch sử làm bài </a>
-                </div>
-                <div class="p-5 border-t border-slate-200/60 dark:border-darkmode-400 flex">
-                    <button type="button" class="btn btn-primary py-1 px-2">Kết quả</button>
+                    <a class="flex items-center" href="#"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="edit" data-lucide="edit" class="lucide lucide-edit w-4 h-4 mr-2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Danh sách bài chưa chấm </a>
+                    <a class="flex items-center mt-5" href="#"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="archive" data-lucide="archive" class="lucide lucide-archive w-4 h-4 mr-2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Danh sách bài đã chấm </a>
+                    <a class="flex items-center mt-5" href="#"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="git-branch" data-lucide="git-branch" class="lucide lucide-git-branch w-4 h-4 mr-2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg> Danh sách lớp học </a>
                 </div>
             </div>
         </div>
@@ -102,8 +100,8 @@
                         </div>
                         <div class="mt-3 action-button-wrapper">
                             <button type="submit" class="btn btn-primary w-fit mt-3 px-4 py-2 text-base change-btn">Cập nhật</button>
-                            <button type="button" class="btn btn-danger py-2 hidden changing-btn" disabled>
-                                Changing <i data-loading-icon="puff" data-color="white" class="w-4 h-4 ml-2"></i>
+                            <button type="button" class="btn btn-primary py-2 hidden changing-btn" disabled>
+                                Cập nhật <i data-loading-icon="puff" data-color="white" class="w-4 h-4 ml-2"></i>
                             </button>
                         </div>
                     </form>
@@ -124,23 +122,23 @@
                     <div class="p-5">
                         <div class="relative">
                             <label class="form-label">Mật khẩu cũ</label>
-                            <input type="password" name="old_password" class="form-control" placeholder="Vui lòng nhập mật khẩu cũ">
+                            <input type="password" name="old_password" class="form-control" placeholder="Vui lòng nhập mật khẩu cũ" required>
                             <i class="fa-solid fa-eye toggle-password absolute top-12 right-3 -translate-y-1/2 text-gray-500 cursor-pointer"></i>
                         </div>
                         <div class="mt-3 relative">
                             <label class="form-label">Mật khẩu mới</label>
-                            <input type="password" name="new_password" class="form-control" placeholder="Vui lòng nhập mật khẩu mới">
+                            <input type="password" name="new_password" class="form-control" placeholder="Vui lòng nhập mật khẩu mới" required>
                             <i class="fa-solid fa-eye toggle-password absolute top-12 right-3 -translate-y-1/2 text-gray-500 cursor-pointer"></i>
                         </div>
                         <div class="mt-3 relative">
                             <label class="form-label">Xác nhân mật khẩu mới</label>
-                            <input type="password" name="new_password_confirmation" class="form-control" placeholder="Vui lòng xác nhận mật khẩu mới">
+                            <input type="password" name="new_password_confirmation" class="form-control" placeholder="Vui lòng xác nhận mật khẩu mới" required>
                             <i class="fa-solid fa-eye toggle-password absolute top-12 right-3 -translate-y-1/2 text-gray-500 cursor-pointer"></i>
                         </div>
                         <div class="mt-3 action-button-wrapper">
                             <button type="submit" class="btn btn-primary px-4 py-2 text-base change-btn">Thay đổi</button>
-                            <button type="button" class="btn btn-danger py-2 hidden changing-btn" disabled>
-                                Changing <i data-loading-icon="puff" data-color="white" class="w-4 h-4 ml-2"></i>
+                            <button type="button" class="btn btn-primary py-2 hidden changing-btn" disabled>
+                                Thay đổi <i data-loading-icon="puff" data-color="white" class="w-4 h-4 ml-2"></i>
                             </button>
                         </div>
                     </div>

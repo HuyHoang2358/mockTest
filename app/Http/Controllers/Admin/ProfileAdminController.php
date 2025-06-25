@@ -18,6 +18,7 @@ class ProfileAdminController extends Controller
     {
         $user = Auth::user()?->load('profile');
         return view('admin.content.account.profileAdmin', [
+            'page' => 'manage-profile',
             'user' => $user,
             'profile' => $user->profile,
         ]);
