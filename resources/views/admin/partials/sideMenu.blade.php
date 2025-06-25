@@ -33,6 +33,13 @@
                         'route' => 'teacher.index',
                     ],
                 ],
+                [
+                    'manage-profile' => [
+                        'display' => 'Tài khoản cá nhân',
+                        'icon' => 'gitlab',
+                        'route' => 'admin.show',
+                    ],
+                ],
             ],
         ])
         <!--Quản lý danh mục -->
