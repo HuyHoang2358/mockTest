@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Models\Question;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Question extends Model
+{
+    protected $table = 'questions';
+
+    protected $fillable = [
+        'question_group_id',
+        'number',
+        'name',
+        'score',
+        'content',
+        'input_type',
+        'question_type_id',
+        'attached_file',
+    ];
+
+    public function questionGroup() :BelongsTo
+    {
+        return $this->belongsTo(QuestionGroup::class, 'question_group_id');
+    }
+
+    public function answers() :HasMany
+    {
+        return $this->hasMany(Answer::class, 'question_id');
+    }
+
+}

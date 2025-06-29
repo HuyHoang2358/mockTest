@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('parts', function (Blueprint $table) {
+            $table->id();
+            $table->foreign('exam_id')
+                ->references('id')
+                ->on('exams')
+                ->onDelete('cascade');
+            $table->unsignedBigInteger('exam_id')->index();
+            $table->string('name');
+            $table->integer('number');
+            $table->integer('time')->nullable()->default(0)->comment('Thời gian làm bài của phần, tính bằng phút');
+            $table->longText('content')->nullable();
+            $table->longText('attached_file')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('parts');
+    }
+};

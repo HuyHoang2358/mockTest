@@ -31,3 +31,8 @@ Route::middleware('auth:web')->group(function () {
     });
 });
 
+
+Route::prefix('exam/{code}')->group(function () {
+    Route::get('/', [ProfileUserController::class, 'show'])->name('user.show');
+});
+

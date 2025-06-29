@@ -136,7 +136,7 @@
                         </h2>
                     </div>
                     <div class="accordion accordion-boxed p-5">
-                        <form action="{{route('admin.exam.store')}}" method="POST">
+                        <form action="{{route('admin.question-type.store')}}" method="POST">
                             @csrf
 
                             <div>

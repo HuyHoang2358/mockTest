@@ -1,5 +1,5 @@
 @extends('admin.layouts.adminApp')
-@section('title', 'Thông tin giáo viên'))
+@section('title', 'Thông tin giáo viên')
 @section('breadcrumb')
     <nav aria-label="breadcrumb" class="-intro-x h-[45px] mr-auto">
         <ol class="breadcrumb breadcrumb-light">
@@ -12,7 +12,7 @@
 @php($routeDelete = route('admin.destroy'))
 
 @section('content')
-    <div class="grid grid-cols-12 gap-6 md:px-32">
+    <div class="grid grid-cols-12 gap-6">
         <!-- BEGIN: ProfileUser Menu -->
         <div class="col-span-12 lg:col-span-4 2xl:col-span-3 flex lg:block flex-col-reverse">
             <div class="intro-y box mt-5">

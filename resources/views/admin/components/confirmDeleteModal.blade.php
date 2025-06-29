@@ -31,6 +31,7 @@
 @endif
 <script>
     function openConfirmDeleteObjectForm(name, id) {
+         console.log("name", name, "id", id);
         document.getElementById('del-object-name').textContent = name;
         document.getElementById('del-object-id').value = id;
     }

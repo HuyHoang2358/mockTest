@@ -16,8 +16,7 @@ class ProfileAdminController extends Controller
 {
     public function show(): RedirectResponse|View
     {
-        $user = Auth::user()->load('profile');
-
+        $user = Auth::user()?->load('profile');
         return view('admin.content.account.profileAdmin', [
             'page' => 'manage-profile',
             'user' => $user,

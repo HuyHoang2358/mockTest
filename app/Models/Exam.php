@@ -3,8 +3,36 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @method static create(array $array)
+ * @method static pluck(string $string)
+ * @method static find($id)
+ * @method static where(string $string, $id)
+ */
 class Exam extends Model
 {
-    //
+    protected $table = 'exams';
+    protected $fillable = [
+        'folder_id',
+        'name',
+        'code',
+        'total_time',
+        'start_time',
+        'end_time',
+        'password',
+        'price',
+        'is_payment',
+        'number_of_todo'
+    ];
+    public function folder() :HasOne
+    {
+        return $this->hasOne(Folder::class, 'id', 'folder_id');
+    }
+    public function parts() :HasMany
+    {
+        return $this->hasMany(Part::class, 'exam_id', 'id');
+    }
 }

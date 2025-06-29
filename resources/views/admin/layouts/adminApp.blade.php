@@ -7,7 +7,7 @@
     <link href="{{asset('assets/dist/images/logo.svg')}}" rel="admin icon">
 
     <!-- NO SEO -->
-    <meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="noindex, nofollow" />
     <meta name="googlebot" content="noindex, nofollow" />
     <meta name="bingbot" content="noindex, nofollow" />
     <meta name="robots" content="noindex, nofollow" />
@@ -24,8 +24,9 @@
 
     <!-- BEGIN: Javascript Assets-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <!-- TinyMCE -->
-    {{--<script src="https://cdn.tiny.cloud/1/gg1e9n4g1buqmn8sl1h7l4l1q35tdtxjb9lv09mqfxwb7i7v/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>--}}
+    <script src="https://cdn.tiny.cloud/1/1l7tptjp3azrw5y6acx8umwaz9ogye1zzex1pfl188bawzfo/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 
     @yield('head')
 </head>

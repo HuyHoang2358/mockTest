@@ -5,8 +5,10 @@ use App\Http\Controllers\Admin\Auth\AuthenController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\FolderController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\PartController;
 use App\Http\Controllers\Admin\ProfileAdminController;
 use App\Http\Controllers\Admin\Question\QuestionTypeController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,10 +46,19 @@ Route::prefix('admin')->group(function () {
         // Quản lý  bài tập, đề thi
         Route::prefix('exams')->group(function () {
             Route::get('/', [ExamController::class, 'index'])->name('admin.exam.index');
+            Route::get('/{id}', [ExamController::class, 'detail'])->name('admin.exam.detail');
             Route::post('/store', [ExamController::class, 'store'])->name('admin.exam.store');
-            Route::get('/edit/{id}', [ExamController::class, 'edit'])->name('admin.exam.edit');
             Route::post('/update/{id}', [ExamController::class, 'update'])->name('admin.exam.update');
-            Route::post('/delete', [QuestionTypeController::class, 'destroy'])->name('admin.exam.destroy');
+            Route::post('/delete', [ExamController::class, 'destroy'])->name('admin.exam.destroy');
+
+            Route::prefix('{exam_id}/part')->group(function () {
+                Route::get('/', [PartController::class, 'index'])->name('admin.part.index');
+                Route::get('/add', [PartController::class, 'add'])->name('admin.part.add');
+                Route::post('/store', [PartController::class, 'store'])->name('admin.part.store');
+                Route::get('/edit/{id}', [PartController::class, 'edit'])->name('admin.part.edit');
+                Route::post('/update/{id}', [PartController::class, 'update'])->name('admin.part.update');
+                Route::post('/delete', [PartController::class, 'destroy'])->name('admin.part.destroy');
+            });
         });
 
         // Quản lý danh mục
@@ -60,7 +71,14 @@ Route::prefix('admin')->group(function () {
         });
 
 
-    // Quản lý tài khoản
+        // Cấu hình hệ thống
+        Route::prefix('settings')->group(function () {
+            Route::get('/', [SettingController::class, 'index'])->name('admin.setting.index');
+            Route::get('/media', [SettingController::class, 'media'])->name('admin.setting.media');
+        });
+
+
+        // Quản lý tài khoản
     Route::prefix('accounts')->group(function () {
         //users
         Route::prefix('users')->group(function () {
@@ -89,4 +107,9 @@ Route::prefix('admin')->group(function () {
             });
         });
     });
+});
+
+// Quản lý file
+Route::group(['prefix' => 'admin/laravel-filemanager', 'middleware' => ['auth:admin']], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
 });

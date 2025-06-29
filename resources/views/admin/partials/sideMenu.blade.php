@@ -73,9 +73,42 @@
                ],
                [
                    'manage-folder' => [
-                       'display' => 'Thư mục',
+                       'display' => 'Thư mục đề thi',
                        'icon' => 'folder',
                        'route' => 'admin.folder.index',
+                   ],
+               ],
+               [
+                   'manage-exam' => [
+                       'display' => 'Đề thi',
+                       'icon' => 'file-text',
+                       'route' => 'admin.folder.index',
+                   ],
+               ]
+           ],
+       ])
+        <!-- Cấu hình hệ thống -->
+        @include('admin.partials.common.sideMenuItems', [
+           'page' => $page,
+           'pageTags' => [
+               [
+                   'manage-data' => [
+                       'display' => 'Cấu hình hệ thống',
+                       'icon' => 'settings',
+                   ],
+               ],
+               [
+                   'manage-config' => [
+                       'display' => 'Cấu hình thông tin',
+                       'icon' => 'command',
+                       'route' => 'admin.folder.index',
+                   ],
+               ],
+               [
+                   'manage-media' => [
+                       'display' => 'Quản lý media',
+                       'icon' => 'codesandbox',
+                       'route' => 'admin.setting.media',
                    ],
                ]
            ],
