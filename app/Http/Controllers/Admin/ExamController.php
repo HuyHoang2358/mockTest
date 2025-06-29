@@ -104,20 +104,4 @@ class ExamController extends Controller
     }
 
 
-    public function listen() :View
-    {
-        return view('front.content.exam.listen',
-            [
-                'page' => 'exam.listen',
-            ]
-        );
-    }
-    public function read() :View
-    {
-    return view('front.content.exam.read',
-        [
-            'page' => 'exam.read',
-        ]
-    );
-}
 }

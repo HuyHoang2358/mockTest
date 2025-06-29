@@ -5,33 +5,6 @@
     <div class="flex transition-all duration-300 ease-in-out">
         <!-- Nội dung chính -->
         <div id="mainContent" class="flex-1 transition-all duration-300 ease-in-out">
-            <div class="fixed bottom-0 left-0 w-full p-4 z-50 grid grid-cols-3 gap-5 text-[12px] bg-white border-t-2 border-green-700">
-                <div class="partQuestion grid-cols-1 flex justify-center items-center border border-gray-300 py-3 rounded-xl border-green-700 cursor-pointer">
-                    <h3 class="text-lg font-medium mr-3">Part 1:</h3>
-                    <div class="info italic text-base hidden">
-                        <span>0</span> trong số <span class="numQuestion">13</span> câu hỏi đã hoàn thành
-                    </div>
-                    <div class="questionContainer flex gap-1">
-                    </div>
-                </div>
-                <div class="partQuestion rid-cols-1 flex justify-center items-center border border-gray-300 py-3 rounded-xl cursor-pointer">
-                    <h3 class="text-lg font-medium mr-3">Part 2:</h3>
-                    <div class="info italic text-base">
-                        <span>0</span> trong số <span class="numQuestion">13</span> câu hỏi đã hoàn thành
-                    </div>
-                    <div class="questionContainer flex gap-1 hidden">
-                    </div>
-                </div>
-                <div class="partQuestion rid-cols-1 flex justify-center items-center border border-gray-300 py-3 rounded-xl cursor-pointer">
-                    <h3 class="text-lg font-medium mr-3">Part 3:</h3>
-                    <div class="info italic text-base">
-                        <span>0</span> trong số <span class="numQuestion">14</span> câu hỏi đã hoàn thành
-                    </div>
-                    <div class="questionContainer flex gap-1 hidden">
-                    </div>
-                </div>
-            </div>
-
             <div class="flex h-screen overflow-hidden">
                 <!-- Left pane -->
                 <div id="leftPane" class="bg-green-50 w-1/2 min-w-[100px] max-w-[90%] overflow-auto px-10 pt-24">
@@ -49,7 +22,6 @@
             </div>
         </div>
     </div>
-
 
     <script>
         // Tạo số lượng câu hỏi cho từng Part

@@ -16,7 +16,8 @@ class Part extends Model
 {
 
     protected $table = 'parts';
-    protected $fillable = ['exam_id', 'name', 'number', 'time', 'content', 'attached_file'];
+    protected $fillable = ['exam_id', 'name', 'number', 'time', 'content', 'attached_file', 'part_type'];
+
 
     public function exam() :BelongsTo
     {
