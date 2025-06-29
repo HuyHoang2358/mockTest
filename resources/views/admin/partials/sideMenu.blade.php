@@ -98,17 +98,17 @@
                    ],
                ],
                [
-                   'manage-folder' => [
+                   'manage-config' => [
                        'display' => 'Cấu hình thông tin',
                        'icon' => 'command',
                        'route' => 'admin.folder.index',
                    ],
                ],
                [
-                   'manage-exam' => [
+                   'manage-media' => [
                        'display' => 'Quản lý media',
                        'icon' => 'codesandbox',
-                       'route' => 'admin.folder.index',
+                       'route' => 'admin.setting.media',
                    ],
                ]
            ],

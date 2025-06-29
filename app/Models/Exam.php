@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -29,5 +30,9 @@ class Exam extends Model
     public function folder() :HasOne
     {
         return $this->hasOne(Folder::class, 'id', 'folder_id');
+    }
+    public function parts() :HasMany
+    {
+        return $this->hasMany(Part::class, 'exam_id', 'id');
     }
 }

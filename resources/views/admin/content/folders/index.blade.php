@@ -70,7 +70,7 @@
             <!-- END: Folder Detail -->
 
             <!-- BEGIN: Directory & Files -->
-            <div class="intro-y grid grid-cols-4 gap-3 sm:gap-6 mt-2">
+            <div class="intro-y grid grid-cols-4 gap-3 sm:gap-6 mt-2" id="folder-file-detail">
                 @foreach($subFolders as $subFolder)
                     <div class="file box rounded-md px-5 pt-8 pb-5 sm:px-5 relative zoom-in">
                         <div class="absolute left-0 top-0 mt-3 ml-3">
@@ -146,6 +146,7 @@
                                     <li>
                                         <button type="button"
                                                 class="dropdown-item edit-folder-btn"
+                                                onclick="openEditExamForm({{ $exam->id }})"
                                         >
                                             <i class="fa-solid fa-pen-to-square mr-2"></i>
                                             Chỉnh sửa thông tin
@@ -155,9 +156,11 @@
 
                                     <!-- Xoá folder -->
                                     <li>
-                                        <button type="button" data-tw-toggle="modal"
-                                                data-tw-target="#delete-object-confirm-form"
+                                        <button type="button"
+                                                data-tw-toggle="modal"
+                                                data-tw-target="#delete-exam-confirm-form"
                                                 class="dropdown-item"
+                                                onclick='openConfirmDeleteExamForm("{{ $exam->name}}", {{ $exam->id }})'
                                         >
                                             <i class="fa-solid fa-trash-can mr-2" ></i>
                                             Xóa bài tập
@@ -166,17 +169,15 @@
                                 </ul>
                             </div>
                         </div>
-
                     </div>
                 @endforeach
-
             </div>
 
 
             <!-- END: Directory & Files -->
 
             <!-- BEGIN: Add exam form -->
-            <div id="exam-add-form" class="leading-relaxed hidden">
+            <div id="exam-add-form" class="leading-relaxed hidden mt-6">
                 <div class="intro-y box ">
                     <div class="p-5 border-b border-slate-200/60 dark:border-darkmode-400">
                         <h2 class="font-medium text-base mr-auto text-primary">
@@ -295,6 +296,131 @@
                 </div>
             </div>
             <!-- END: Add exam form -->
+
+
+            <!-- BEGIN: Edit exam form -->
+            @foreach($exams as $exam)
+                <div id="exam-{{$exam->id}}-edit-form" class="leading-relaxed hidden mt-6">
+                    <div class="intro-y box ">
+                        <div class="p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                            <h2 class="font-medium text-base mr-auto text-primary">
+                                Chỉnh sửa thông tin bài tập/đề thi: {{$exam->name}}
+                            </h2>
+                        </div>
+                        <div class="accordion accordion-boxed p-5">
+                            <form action="{{route('admin.exam.update', $exam->id)}}" method="POST">
+                                @csrf
+                                <!-- Tên folder -->
+                                <div class="hidden">
+                                    <label for="exam-folder-id-input" class="form-label">Tên Folder </label>
+                                    <input id="exam-folder-id-input" type="text" class="form-control" placeholder="Nhập id folder" name="exam_folder_id" value="{{$exam->folder_id}}" required>
+                                </div>
+
+                                <!-- Tên bài tập, bài thi -->
+                                <div class="mt-4">
+                                    <label for="exam-name-input" class="form-label">Tên bài tập/đề thi <span class="text-red-500">*</span></label>
+                                    <input id="exam-name-input" type="text" class="form-control" placeholder="Nhập tên bài thi" name="exam_name" value="{{$exam->name}}" required>
+                                </div>
+
+                                <!-- Cấu hình thời gian thi -->
+                                <div class="mt-4">
+                                    <!-- Title -->
+                                    <div class="flex justify-between items-center">
+                                        <p class="form-label">Thông tin cấu hình thời gian</p>
+                                    </div>
+
+                                    <div >
+                                        <div class="config-item border p-3 rounded-lg">
+                                            <div class="grid grid-cols-3 gap-4">
+                                                <!-- Tổng thời gian thi -->
+                                                <div class="col-span-1">
+                                                    <div class="flex justify-start items-center gap-2 form-label">
+                                                        <label for="exam-total-time-input">Tổng thời gian</label>
+                                                        <button type="button" class="tooltip" data-theme="light" title="Nếu để trống hệ thống sẽ tự cộng tổng các bài con"><i class="fa-regular fa-circle-question"></i></button>
+                                                    </div>
+                                                    <input id="exam-total-time-input" type="number" class="form-control" placeholder="Nhập tổng thời gian (phút)" name="exam_total_time" value="{{$exam->total_time}}">
+                                                </div>
+
+                                                <!-- Thời gian bắt đầu mở thi -->
+                                                <div class="col-span-1">
+                                                    <div class="flex justify-start items-center gap-2 form-label">
+                                                        <label for="exam-start-time-input">Thời gian bắt đầu mở</label>
+                                                        <button type="button" class="tooltip" data-theme="light" title="Thời gian bắt đầu có thể truy cập vào đề thi, bài tập"><i class="fa-regular fa-circle-question"></i></button>
+                                                    </div>
+
+                                                    <input id="exam-start-time-input" type="datetime-local" class="form-control" name="exam_start_time" value="{{$exam->start_time}}">
+                                                </div>
+
+                                                <!-- Thời gian đóng bài thi -->
+                                                <div class="col-span-1">
+                                                    <div class="flex justify-start items-center gap-2 form-label">
+                                                        <label for="exam-end-time-input">Thời gian đóng</label>
+                                                        <button type="button" class="tooltip" data-theme="light" title="Thời gian cuối cùng có thể truy cập vào đề thi, bài tập"><i class="fa-regular fa-circle-question"></i></button>
+                                                    </div>
+                                                    <input id="exam-end-time-input" type="datetime-local" class="form-control" name="exam_end_time" value="{{$exam->end_time}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Mật khẩu bài thi vs Giá tiền -->
+                                <div class="mt-4">
+                                    <!-- Title -->
+                                    <div class="flex justify-between items-center">
+                                        <p class="form-label">Cấu hình nâng cao</p>
+                                    </div>
+
+                                    <div >
+                                        <div class="config-item border p-3 rounded-lg">
+                                            <div class="grid grid-cols-3 gap-4">
+                                                <!-- Mật khẩu bài thi -->
+                                                <div class="col-span-1">
+                                                    <div class="flex justify-start items-center gap-2 form-label">
+                                                        <label for="exam-password-input">Mật khẩu bài thi</label>
+                                                        <button type="button" class="tooltip" data-theme="light" title="Mật khẩu bài thi có 8 ký tự. Bỏ trống nếu muốn không xác thực"><i class="fa-regular fa-circle-question"></i></button>
+                                                    </div>
+                                                    <input id="exam-password-input" type="text" class="form-control" placeholder="Nhập mật khẩu cho bài thi" name="exam_password" maxlength="8" minlength="8" value="{{$exam->password}}">
+                                                </div>
+
+                                                <!-- Giá tiền -->
+                                                <div class="col-span-1">
+                                                    <div class="flex justify-start items-center gap-2 form-label">
+                                                        <label for="exam-price-input" >Giá tiền bài thi</label>
+                                                        <button type="button" class="tooltip" data-theme="light" title="Để 0 nếu miễn phí."><i class="fa-regular fa-circle-question"></i></button>
+                                                    </div>
+
+                                                    <input id="exam-price-input" type="number" class="form-control" placeholder="Nhập giá tiền cho bài thi" name="exam_price" min="0" value="{{$exam->price}}" required>
+                                                </div>
+
+
+                                                <!-- Số lần thi tối đa  -->
+                                                <div class="col-span-1">
+                                                    <div class="flex justify-start items-center gap-2 form-label">
+                                                        <label for="exam-try-todo-input" >Số lần thi tối đa</label>
+                                                        <button type="button" class="tooltip" data-theme="light" title="Số lần tối đa một học sinh có thể thi"><i class="fa-regular fa-circle-question"></i></button>
+                                                    </div>
+
+                                                    <input id="exam-try-todo-input" type="number" class="form-control" placeholder="Nhập số lần thi tối đa" name="exam_number_of_todo" value="{{$exam->number_of_todo}}" min="1" max="1000" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
+                                    <button type="button" onclick="cancelEditExamForm('{{$exam->id}}')"
+                                            class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52"
+                                    >Hủy</button>
+                                    <button type="submit" id="btn-submit-form" class="btn py-3 btn-primary w-full md:w-52">Cập nhật thông tin</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+            <!-- END: Add exam form -->
         </div>
     </div>
 
@@ -381,7 +507,39 @@
             </div>
         </div>
     </div>
-    <!-- END: Modal Edit Folder -->
+    <!-- END: Modal Edit Folder -->\
+
+    <!-- BEGIN: Modal delete exam -->
+    <form method="POST" action="{{ route('admin.exam.destroy') }}" id="delete-exam-confirm-form" class="modal" tabindex="-1" aria-hidden="true">
+        @csrf
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <div class="px-5 pt-4 py-2  text-center flex justify-between items-center">
+                        <p class="font-bold text-lg">Xác nhận xóa</p>
+                        <button type="button" data-tw-dismiss="modal" class="p-2 ">
+                            <i data-lucide="x-circle" class="w-6 h-6 text-danger"></i>
+                        </button>
+                    </div>
+                    <div class="px-5 pb-4">
+                        <div class="text-slate-500 mt-2">
+                            <p class="font-semibold">Bạn có muốn xóa đề thi <span id="del-exam-name" class="font-bold text-red-600">xxxx</span>?</p>
+                            <p class="text-gray-500 text-xs mt-1">Hành động này sẽ không thể hoàn tác.</p>
+                        </div>
+                        <input type="hidden" id="del-exam-id" name="del-object-id">
+                    </div>
+                    <div class="px-5 pb-8 text-center flex justify-end items-center">
+                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-24 mr-1">Hủy</button>
+                        <button type="submit" id="deleteExamButton" class="btn btn-danger">Xóa </button>
+                        <button type="button" id="deletingExamButton" class="btn btn-danger hidden" disabled>
+                            Deleting <i data-loading-icon="puff" data-color="white" class="w-4 h-4 ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- END: Modal delete exam -->
 @endsection
 @section('customJs')
     <script>
@@ -446,6 +604,7 @@
             document.getElementById('exam-add-form').classList.remove('hidden');
 
             document.getElementById('btn-add-exam').classList.add('hidden');
+            document.getElementById('folder-file-detail').classList.add('hidden');
             // Cập nhật ID folder vào input
             document.getElementById('exam-folder-id-input').value = folderId;
         }
@@ -454,6 +613,7 @@
         function cancelAddExamForm() {
             document.getElementById('exam-add-form')?.classList.add('hidden');
             document.getElementById('btn-add-exam').classList.remove('hidden');
+            document.getElementById('folder-file-detail').classList.remove('hidden');
 
             // Reset các input
             document.getElementById('exam-folder-id-input').value = '';
@@ -464,6 +624,41 @@
             document.getElementById('exam-password-input').value = '';
             document.getElementById('exam-price-input').value = '0';
             document.getElementById('exam-try-todo-input').value = '1';
+        }
+
+        // Xử lý sự kiện khi nhấn nút xóa exam
+        function openConfirmDeleteExamForm(name, id) {
+            document.getElementById('del-exam-name').textContent = name;
+            document.getElementById('del-exam-id').value = id;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('deleteExamButton')?.addEventListener('click', function (e) {
+                const btn = e.currentTarget;
+
+                // Disable button
+                btn.disabled = true;
+                btn.classList.add('cursor-not-allowed', 'opacity-70', 'hidden');
+
+                document.getElementById('deletingExamButton').classList.remove('hidden');
+                // submit the form
+                document.getElementById('delete-exam-confirm-form').submit();
+            });
+        });
+
+        // Mở form chỉnh sửa bài thi
+        function openEditExamForm(examId) {
+            // Hiển thị form chỉnh sửa
+            document.getElementById(`exam-${examId}-edit-form`).classList.remove('hidden');
+
+            // Ẩn nút thêm bài thi
+            document.getElementById('btn-add-exam').classList.add('hidden');
+            document.getElementById('folder-file-detail').classList.add('hidden');
+        }
+        function cancelEditExamForm(examId) {
+            document.getElementById(`exam-${examId}-edit-form`)?.classList.add('hidden');
+            document.getElementById('btn-add-exam').classList.remove('hidden');
+            document.getElementById('folder-file-detail').classList.remove('hidden');
         }
     </script>
 @endsection
