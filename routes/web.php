@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Front\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\ProfileUserController;
@@ -21,6 +22,12 @@ Route::middleware('auth:web')->group(function () {
         Route::put('/reset-password', [ProfileUserController::class, 'changePassword'])->name('user.changePassword');
         Route::post('/delete', [ProfileUserController::class, 'destroy'])->name('user.destroy');
         Route::post('/update-image', [ProfileUserController::class, 'personal_change_image'])->name('profile.personal.change-image');
+    });
+
+    Route::prefix('exam')->group(function () {
+        Route::get('/listening', [ExamController::class, 'listen'])->name('exam.listen');
+        Route::get('/reading', [ExamController::class, 'read'])->name('exam.read');
+
     });
 });
 
