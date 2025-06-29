@@ -27,6 +27,8 @@ class Exam extends Model
         'is_payment',
         'number_of_todo'
     ];
+
+    protected $appends = ['time'];
     public function folder() :HasOne
     {
         return $this->hasOne(Folder::class, 'id', 'folder_id');
@@ -34,5 +36,13 @@ class Exam extends Model
     public function parts() :HasMany
     {
         return $this->hasMany(Part::class, 'exam_id', 'id');
+    }
+
+    public function getTimeAttribute()
+    {
+        $parts = $this->parts()->get();
+        $num = 0;
+        foreach ($parts as $part) $num = $num + $part->time;
+        return $num;
     }
 }

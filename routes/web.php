@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Http\Controllers\Admin\ExamController;
+use App\Http\Controllers\Front\ExamController;
 use App\Http\Controllers\Front\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\ProfileUserController;
@@ -23,16 +23,13 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/delete', [ProfileUserController::class, 'destroy'])->name('user.destroy');
         Route::post('/update-image', [ProfileUserController::class, 'personal_change_image'])->name('profile.personal.change-image');
     });
-
-    Route::prefix('exam')->group(function () {
-        Route::get('/listening', [ExamController::class, 'listen'])->name('exam.listen');
-        Route::get('/reading', [ExamController::class, 'read'])->name('exam.read');
-
-    });
 });
 
 
 Route::prefix('exam/{code}')->group(function () {
-    Route::get('/', [ProfileUserController::class, 'show'])->name('user.show');
+    Route::get('/exercise', [ExamController::class, 'exercise'])->name('user.exam.exercise'); // Chế độ kiểm tra
+    Route::get('/todo', [ExamController::class, 'todo'])->name('user.exam.todo'); // Chế độ tự luyện
+    Route::get('/listening', [ExamController::class, 'listen'])->name('exam.listen');
+    Route::get('/reading', [ExamController::class, 'read'])->name('exam.read');
 });
 
