@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
+
 class ExamController extends Controller
 {
     private function generateExamCode(): string
@@ -102,4 +103,21 @@ class ExamController extends Controller
             ->with('error', 'Đề thi không tồn tại, hoặc đã bị xóa trước đó.');
     }
 
+
+    public function listen() :View
+    {
+        return view('front.content.exam.listen',
+            [
+                'page' => 'exam.listen',
+            ]
+        );
+    }
+    public function read() :View
+    {
+    return view('front.content.exam.read',
+        [
+            'page' => 'exam.read',
+        ]
+    );
+}
 }
