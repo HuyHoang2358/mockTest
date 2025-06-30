@@ -6,7 +6,7 @@
             <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Trang Quản trị viên</a></li>
             <li class="breadcrumb-item"><a href="{{route('admin.folder.index').'?folder_id='.$exam->folder->id}}">{{$exam->folder->name}}</a></li>
             <li class="breadcrumb-item"><a  href="{{route('admin.exam.detail',$exam->id)}}">{{$exam->name}}</a></li>
-            <li class="breadcrumb-item active" aria-current="page"><a href="#">Thêm mới part</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="#">Chỉnh sửa thông tin part {{$part->name}}</a></li>
         </ol>
     </nav>
 @endsection
@@ -24,7 +24,7 @@
     <div class="grid grid-cols-12 gap-2 mt-4">
         <!-- Left side: Exam information -->
         <div class="col-span-9 border-l border-r border-b bg-white rounded-bl-lg rounded-br-lg p-5">
-            <form action="{{route('admin.part.store', $exam->id)}}" method="POST">
+            <form action="{{ route('admin.part.update', ['exam_id' => $exam->id, 'id' => $part->id])}}" method="POST">
                 @csrf
                 <!-- Tiêu đề -->
                 <h1 class="my-2 text-xl font-semibold text-primary"> Đề thi: {{$exam->name}}</h1>
@@ -32,16 +32,23 @@
                     <!-- Tên phần thi -->
                     <div class="flex-grow">
                         <input type="text" placeholder="Nhập tên phần thi" class="font-semibold w-full text-2xl form-control py-1"
-                               value="Part {{$part_number}}" name="part_name" readonly/>
-                        <input id="part-attachment" class="form-control hidden" type="text" name="part_attachment">
+                               value="Part {{$part->number}}" name="part_name" readonly/>
+                        @php
+                            $partAttachments = json_decode($part->attached_file);
+                            $partAttachments_str = join(',', $partAttachments);
+                        @endphp
+                        <input id="part-attachment" class="form-control hidden" type="text" name="part_attachment" value="{{$partAttachments_str}}">
                     </div>
 
 
                     <div class="flex justify-end items-center gap-3">
                         <!-- File đính kèm-->
                         <button type="button"  onclick="chooseFile(this,'part-attachment')"
-                                class="font-bold text-xl tooltip choose-file relative" data-theme="light" title="Đính kèm file">
+                                class="font-bold text-xl tooltip choose-file relative" data-theme="light" title="Đính kèm file: {{$partAttachments_str}}">
                             <i class="fa-solid fa-paperclip"></i>
+                            @if(count($partAttachments) > 0)
+                                <span class="absolute bottom-0 left-2 bg-gray-300 text-primary rounded-full w-4 h-4 text-xs">{{count($partAttachments)}}</span>
+                            @endif
                         </button>
                       {{--  <!-- Tổng số câu hỏi của phần -->
                         <div class="flex justify-start items-center gap-1">
@@ -65,10 +72,10 @@
                                 <i class="fa-solid fa-bars-staggered"></i>
                             </label>
                             <select id="part-type-select" name="part_type" class="form-select w-32" required>
-                                <option value="reading">Reading</option>
-                                <option value="listening">Listening</option>
-                                <option value="writing">Writing</option>
-                                <option value="speaking">Speaking</option>
+                                <option value="reading" {{$part->part_type == 'reading' ? "selected" : ''}}>Reading</option>
+                                <option value="listening" {{$part->part_type == 'listening' ? "selected" : ''}}>Listening</option>
+                                <option value="writing" {{$part->part_type == 'writing' ? "selected" : ''}}>Writing</option>
+                                <option value="speaking" {{$part->part_type == 'speaking' ? "selected" : ''}}>Speaking</option>
                             </select>
                         </div>
 
@@ -77,7 +84,7 @@
                             <label for="part-total-time-input" class="font-bold text-xl tooltip" data-theme="light" title="Tổng thời gian làm bài (phút)">
                                 <i class="fa-regular fa-clock"></i>
                             </label>
-                            <input id="part-total-time-input" name="part_time" type="number" min="0" max="720" class="w-20 form-control" required/>
+                            <input id="part-total-time-input" name="part_time" value="{{$part->time}}" type="number" min="0" max="720" class="w-20 form-control" required/>
                         </div>
                     </div>
                 </div>
@@ -86,14 +93,14 @@
                 <div class="flex items-center gap-4 mt-4 part-content">
                     <textarea type="text" class="form-control w-full text-sm" rows="2"
                               name="part_description" placeholder="Nhập các yêu cầu đề bài của phần thi"
-                    ></textarea>
+                    >{!! $part->description !!}</textarea>
                 </div>
 
                 <!-- Nội dung phần thi -->
                 <div class="flex items-center gap-4 mt-4 part-content">
                     <textarea type="text" class="form-control content-editor w-full text-sm" rows="3"
                               name="part_content" placeholder="Nhập nội dung phần thi, ví dụ như bài đọc, đoạn hội thoại, bài nghe, bài viết... "
-                    ></textarea>
+                    >{!! $part->content !!}</textarea>
                 </div>
 
                 <!-- Nhóm câu hỏi -->
@@ -123,7 +130,7 @@
         <!-- Summary Exam -->
         <div class="col-span-3 box">
             <div id="preview-part-exam" class="bg-white w-[19%] fixed">
-                <h3 class="font-bold text-lg text-primary border-b border-gray-200 py-5 px-5"> Part {{$part_number}}</h3>
+                <h3 class="font-bold text-lg text-primary border-b border-gray-200 py-5 px-5"> Part {{$part->name}}</h3>
                 <div class="p-2" id="preview-part-content">
 
                 </div>

@@ -14,7 +14,9 @@ class QuestionGroup extends Model
     protected $fillable = [
         'part_id',
         'name',
+        'description',
         'content',
+        'answer_content',
         'attached_file',
         'answer_inside_content'
     ];

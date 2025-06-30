@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('part_id')->constrained('parts')->onDelete('cascade');
             $table->string('name',255)->nullable()->comment('Tên nhóm câu hỏi');
-            $table->longText('content')->nullable()->comment('Nội dung mô tả nhóm câu hỏi');
+            $table->string('description',500)->nullable()->comment('Mô tả ngắn về nhóm câu hỏi, ví dụ: Mô tả nội dung hoặc mục tiêu của nhóm.');
+            $table->longText('content')->nullable()->comment('Nội dung của nhóm câu hỏi, có thể là văn bản, câu hỏi, hoặc hướng dẫn.');
+            $table->longText('answer_content')->nullable()->comment('Nội dung của phiếu trả lời của nhóm câu hỏi');
             $table->longText('attached_file')->nullable()->comment('File đính kèm nhóm câu hỏi, có thể là file docx, pdf, hình ảnh...');
             $table->boolean('answer_inside_content')->default(false)->comment('Trạng thái hiển thị đáp án trong nội dung nhóm câu hỏi');
             $table->timestamps();

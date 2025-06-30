@@ -40,9 +40,10 @@ class PartController extends Controller
         return json_encode($input);
     }
 
-    public function store($exam_id, Request $request){
+    public function store($exam_id, Request $request): RedirectResponse
+    {
         $input = $request->all();
-       /* echo "<pre>";
+     /*   echo "<pre>";
         print_r($input);
         echo "</pre>";
         exit;*/
@@ -53,6 +54,9 @@ class PartController extends Controller
             'exam_id' => $exam_id,
             'number' => $this->splitNumberFromName($input['part_name']),
             'name' => $input['part_name'],
+            'description' => $input['part_description'] ?? null,
+            'time' => $input['part_time'] ?? null,
+            'part_type' => $input['part_type'] ?? null,
             'content' => $input['part_content'] ?? null,
             'attached_file' => $this->handleAttachedFiles($input['part_attachment'] ?? null)
         ]);
@@ -62,8 +66,10 @@ class PartController extends Controller
             $questionGroup = $part->questionGroups()->create([
                 'name' => $questionGroupInput['name'],
                 'content' => $questionGroupInput['content'] ?? null,
+                'description' => $questionGroupInput['description'] ?? null,
                 'attached_file' => $this->handleAttachedFiles($questionGroupInput['attachment'] ?? null),
-                'answer_inside_content' => isset($questionGroupInput['answer_inside_content'])
+                'answer_inside_content' => isset($questionGroupInput['answer_inside_content']),
+                'answer_content' => $questionGroupInput['answer_content'] ?? null
             ]);
             $questions = $questionGroupInput['questions'] ?? [];
             foreach ($questions as $questionInput) {
@@ -81,6 +87,7 @@ class PartController extends Controller
                 switch ($question['input_type']) {
                     case 'radio':
                     case 'checkbox':
+                    case 'select':
                         foreach ($answers as $answer) {
                             $question->answers()->create([
                                 'label' => $answer['label'] ?? null,
@@ -108,6 +115,22 @@ class PartController extends Controller
        return redirect()->route('admin.exam.detail', ['id' => $exam_id])
             ->with('success', 'Đã thêm phần "' . $part->name . '" thành công.');
 
+    }
+
+    public function edit($exam_id, $id): View|RedirectResponse
+    {
+        $part = Part::find($id);
+        if (!$part) {
+            return redirect()->route('admin.exam.detail', ['id' => $exam_id])
+                ->with('error', 'Phần không tồn tại hoặc đã bị xóa trước đó.');
+        }
+
+        $part->load('questionGroups.questions.answers'); // Eager load relationships
+        $data['part'] = $part;
+        $data['exam'] = Exam::find($exam_id);
+        $data['questionTypes'] = QuestionType::with('configKeys')->get();
+
+        return view('admin.content.part.edit', $data);
     }
 
     public function destroy($exam_id, Request $request): RedirectResponse
