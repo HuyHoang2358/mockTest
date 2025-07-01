@@ -197,7 +197,7 @@
 
         <!-- Modal Preview -->
         <div id="preview_modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div id="modalContent" class="bg-white p-20 rounded-2xl shadow-lg w-[800px] relative transition-all duration-300 transform opacity-0 translate-y-10">
+            <div id="modalContent" class="bg-white p-12 rounded-2xl shadow-lg w-[1200px] relative transition-all duration-300 transform opacity-0 translate-y-10">
                 <!-- Close Button (X) -->
                 <button class="closePreview absolute duration-150 text-3xl top-5 right-8 text-gray-500 hover:text-gray-700">
                     &times;

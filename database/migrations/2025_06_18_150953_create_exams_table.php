@@ -22,6 +22,10 @@ return new class extends Migration
             $table->string('password',6)->nullable();
             $table->bigInteger('price')->default(0);
             $table->boolean('is_payment')->default(false);
+            $table->longText('url_excer')->nullable();
+            $table->longText('url_todo')->nullable();
+            $table->longText('qr_code_excer')->nullable();
+            $table->longText('qr_code_todo')->nullable();
             $table->integer('number_of_todo')->default(1);
             $table->timestamps();
         });

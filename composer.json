@@ -10,6 +10,7 @@
         "ext-xlswriter": "*",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "unisharp/laravel-filemanager": "^2.10"
     },
     "require-dev": {
