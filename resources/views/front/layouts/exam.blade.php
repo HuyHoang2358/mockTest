@@ -31,10 +31,9 @@
 </head>
 
 <body>
-    <!-- Top Bar -->
     <div class="h-screen flex flex-col justify-start">
         @include('front.partials.topExam')
-        <div class="flex-grow h-full overflow-y-scroll">
+        <div class="flex-grow overflow-y-auto">
             <!-- Content -->
             @yield('content')
         </div>

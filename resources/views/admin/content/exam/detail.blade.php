@@ -255,10 +255,141 @@
         <div class="col-span-3 box p-5">
             <h2 class="text-lg font-semibold mb-4">Thông tin đề thi, bài tập</h2>
 
+            <div class="font-semibold flex flex-col gap-2">
+                <h3 class="text-[17px] text-primary">Tên đề thi: <span class="text-gray-500 text-base font-medium">{{ $exam->folder?->name ?? 'Không có folder' }}</span></h3>
+                <h3 class="text-[17px] text-primary">Bài thi: <span class="text-gray-500 text-base font-medium">{{ $exam->name }}</span></h3>
+                <h3 class="text-[17px] text-primary">Mật khẩu: <span class="text-gray-500 text-base font-medium">{{ $exam->password ?? 'Không có mật khẩu' }}</span></h3>
+                <h3 class="text-[17px] text-primary">Giá: <span class="text-gray-500 text-base font-medium">{{ $exam->price }} đ</span></h3>
+                <h3 class="text-[17px] text-primary">Số lần thi: <span class="text-gray-500 text-base font-medium">{{ $exam->number_of_todo }}</span></h3>
+                <h3 class="text-[17px] text-primary">Thời gian bắt đầu: <span class="text-gray-500 text-base font-medium">{{ $exam->start_time }}</span></h3>
+                <h3 class="text-[17px] text-primary">Thời gian kết thúc: <span class="text-gray-500 text-base font-medium">{{ $exam->end_time }}</span></h3>
+            </div>
 
+            <div  class="rounded-full mt-10 pt-2 pb-4" style="border: 1px dashed; border-image: repeating-linear-gradient(45deg, #9ca3af 0, #9ca3af 6px, transparent 6px, transparent 12px) 1;">
+                <div class="intro-y">
+                    <div class="box p-2">
+                        <ul class="nav nav-pills" role="tablist">
+                            <li id="ticket-tab" class="nav-item flex-1" role="presentation">
+                                <button class="nav-link w-full py-2 active" data-tw-toggle="pill" data-tw-target="#ticket" type="button" role="tab" aria-controls="ticket" aria-selected="true"> Kiểm tra </button>
+                            </li>
+                            <li id="details-tab" class="nav-item flex-1" role="presentation">
+                                <button class="nav-link w-full py-2" data-tw-toggle="pill" data-tw-target="#details" type="button" role="tab" aria-controls="details" aria-selected="false"> Luyện tập </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-content">
+                    <div id="ticket" class="tab-pane active px-2" role="tabpanel" aria-labelledby="ticket-tab" style="width: 334px;">
+                        <div class="grid grid-cols-5 mt-3">
+                            <div class="col-span-2 flex flex-col items-center">
+                                <div>
+                                    @if ($exam->qr_code_excer)
+                                        <img id="qrImage" class="w-24" src="{{ $exam->qr_code_excer }}" alt="QR Code của bài kiểm tra" />
+                                    @endif
+                                </div>
+                                <div class="flex flex-col items-center gap-2 pt-3 text-[#124d59] cursor-pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
+                                    <p onclick="downloadQR()" class="text-sm">Tải xuống mã QR</p>
+                                </div>
+                            </div>
+                            <div class="col-span-3 text-center font-medium text-[#124d59] text-base pt-2">
+                                <p>Hoặc<br><span class="text-gray-500 ">Copy link bên dưới để tham gia bài kiểm tra</span></p>
+                                <div id="copySourceExcer" class="text-gray-400 text-sm py-2">
+                                    @if ($exam->url_excer)
+                                        <p id="copySource" class=" truncate overflow-hidden whitespace-nowrap">
+                                            <a href="{{ $exam->url_excer }}" target="_blank">{{ $exam->url_excer }}</a>
+                                        </p>
+                                    @endif
+                                </div>
+                                <button onclick="copyURL('copySourceExcer')" class="border-2 border-[#129eaf] rounded-xl font-medium px-7 py-1 cursor-pointer"> Sao chép </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="details" class="tab-pane px-2" role="tabpanel" aria-labelledby="details-tab" style="">
+                        <div class="grid grid-cols-5 mt-3">
+                            <div class="col-span-2 flex flex-col items-center">
+                                <div>
+                                    @if ($exam->qr_code_todo)
+                                        <img id="qrImage" class="w-24" src="{{ $exam->qr_code_todo }}" alt="QR Code của bài luyện tập" />
+                                    @endif
+                                </div>
+                                <div class="flex flex-col items-center gap-2 pt-3 text-[#124d59] cursor-pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" key="ih7n3h"></path><polyline points="7 10 12 15 17 10" key="2ggqvy"></polyline><line x1="12" x2="12" y1="15" y2="3" key="1vk2je"></line></svg>
+                                    <p onclick="downloadQR()" class="text-sm">Tải xuống mã QR</p>
+                                </div>
+                            </div>
+                            <div class="col-span-3 text-center font-medium text-[#124d59] text-base pt-2">
+                                <p>Hoặc<br><span class="text-gray-500 ">Copy link bên dưới để tham gia bài luyện tập</span></p>
+                                <div id="copySourceTodo" class="text-gray-400 text-sm py-2">
+                                    @if ($exam->url_todo)
+                                        <p id="copySource" class=" truncate overflow-hidden whitespace-nowrap">
+                                            <a href="{{ $exam->url_todo }}" target="_blank">{{ $exam->url_todo }}</a>
+                                        </p>
+                                    @endif
+                                </div>
+                                <button onclick="copyURL('copySourceTodo')" class="border-2 border-[#129eaf] rounded-xl font-medium px-7 py-1 cursor-pointer"> Sao chép </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <script>
+        // Sao chép URL và tải xuống mã QR
+        function copyURL(id) {
+            const anchor = document.querySelector(`#${id} a`);
+            if (!anchor) {
+                alert("Không tìm thấy URL để sao chép");
+                return;
+            }
+
+            const url = anchor.href;
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url)
+                    .then(() => alert("Đã sao chép: " + url))
+                    .catch(err => {
+                        console.error(err);
+                        fallbackCopyText(url);
+                    });
+            } else {
+                fallbackCopyText(url);
+            }
+        }
+
+        function fallbackCopyText(text) {
+            const tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand("copy");
+                alert("Đã sao chép: " + text);
+            } catch (err) {
+                alert("Không thể sao chép");
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        function downloadQR() {
+            const qrImg = document.getElementById("qrImage");
+            if (!qrImg || !qrImg.src) {
+                alert("Không tìm thấy ảnh mã QR");
+                return;
+            }
+
+            const link = document.createElement("a");
+            link.href = qrImg.src;
+            link.download = "qr-code.svg"; // Tên file khi tải xuống
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 @endsection
+
 
 @section('customJs')
 

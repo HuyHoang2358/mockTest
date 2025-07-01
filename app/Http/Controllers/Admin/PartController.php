@@ -54,7 +54,8 @@ class PartController extends Controller
             'number' => $this->splitNumberFromName($input['part_name']),
             'name' => $input['part_name'],
             'content' => $input['part_content'] ?? null,
-            'attached_file' => $this->handleAttachedFiles($input['part_attachment'] ?? null)
+            'attached_file' => $this->handleAttachedFiles($input['part_attachment'] ?? null),
+            'part_type' =>'----'
         ]);
 
         $questionGroups = $input['question_groups'] ?? [];
