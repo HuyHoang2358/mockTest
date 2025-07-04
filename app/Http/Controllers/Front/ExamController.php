@@ -16,7 +16,12 @@ class ExamController extends Controller
         if (!$exam) return redirect()->back()->with('error', '404 Not Found');
 
         $data['exam'] = $exam;
+        $exam->load('parts');
         $data['leftTime'] = $exam->time * 60; // Convert time to seconds
+      /*  echo "<pre>";
+        print_r($data);
+        echo "</pre>";
+        exit;*/
         return view('front.content.exam.detail', $data);
     }
 
