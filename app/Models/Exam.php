@@ -29,7 +29,8 @@ class Exam extends Model
         'qr_code_excer',
         'qr_code_todo',
         'is_payment',
-        'number_of_todo'
+        'number_of_todo',
+        'status'
     ];
 
     protected $appends = ['time'];

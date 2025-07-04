@@ -50,6 +50,7 @@ Route::prefix('admin')->group(function () {
             Route::post('/store', [ExamController::class, 'store'])->name('admin.exam.store');
             Route::post('/update/{id}', [ExamController::class, 'update'])->name('admin.exam.update');
             Route::post('/delete', [ExamController::class, 'destroy'])->name('admin.exam.destroy');
+            Route::get('/{id}/update-status', [ExamController::class, 'updateStatus'])->name('admin.exam.update-status');
 
             Route::prefix('{exam_id}/part')->group(function () {
                 Route::get('/', [PartController::class, 'index'])->name('admin.part.index');
