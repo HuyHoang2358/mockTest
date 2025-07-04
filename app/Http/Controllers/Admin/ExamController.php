@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 
 class ExamController extends Controller
@@ -24,7 +25,6 @@ class ExamController extends Controller
     }
 
     public function index(){
-
 
     }
 
@@ -48,11 +48,12 @@ class ExamController extends Controller
         $input = $request->all();
         // Validate and process the input data
 
+        $codes =  $this->generateExamCode();
 
         $exam = Exam::create([
             'folder_id' => $input['exam_folder_id'],
             'name' => $input['exam_name'],
-            'code' => $this->generateExamCode(),
+            'code' => $codes,
             'exam_total_time' => $input['exam_total_time'] ?? null,
             'start_time' => $input['exam_start_time'] ?? null,
             'end_time' => $input['exam_end_time'] ?? null,
@@ -61,6 +62,24 @@ class ExamController extends Controller
             'is_payment' => ($input['exam_price'] ?? 0) > 0,
             'number_of_todo' => $input['exam_number_of_todo'] ?? 1,
         ]);
+
+        $url_excer = route('user.exam.exercise',$codes);
+        $url_todo = route('user.exam.todo', $codes);
+
+        // Tạo mã QR dạng base64
+        $qrExcer = QrCode::format('svg')->size(100)->generate($url_excer);
+        $qrTodo = QrCode::format('svg')->size(100)->generate($url_todo);
+        $base64Excer = base64_encode($qrExcer);
+        $base64Todo = base64_encode($qrTodo);
+        $qrBase64Excer = 'data:image/svg+xml;base64,' . $base64Excer;
+        $qrBase64Todo = 'data:image/svg+xml;base64,' . $base64Todo;
+
+        // Lưu QR vào lớp học
+        $exam->url_excer = $url_excer;
+        $exam->url_todo = $url_todo;
+        $exam->qr_code_excer = $qrBase64Excer;
+        $exam->qr_code_todo = $qrBase64Todo;
+        $exam->save();
 
         return redirect()->route('admin.exam.detail', $exam->id)->with('success', 'Thêm mới bài tập, đề thi thành công');
     }

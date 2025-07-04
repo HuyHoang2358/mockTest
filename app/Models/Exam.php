@@ -24,6 +24,10 @@ class Exam extends Model
         'end_time',
         'password',
         'price',
+        'url_excer',
+        'url_todo',
+        'qr_code_excer',
+        'qr_code_todo',
         'is_payment',
         'number_of_todo'
     ];
