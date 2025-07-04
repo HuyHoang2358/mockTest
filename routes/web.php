@@ -33,3 +33,5 @@ Route::prefix('exam/{code}')->group(function () {
     Route::get('/reading', [ExamController::class, 'read'])->name('exam.read');
 });
 
+Route::get('/exam/auth', [ExamController::class, 'auth'])->name('exam.auth');
+

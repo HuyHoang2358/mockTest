@@ -82,7 +82,7 @@
                    'manage-exam' => [
                        'display' => 'Đề thi',
                        'icon' => 'file-text',
-                       'route' => 'admin.folder.index',
+                       'route' => 'admin.folder.listExam',
                    ],
                ]
            ],
