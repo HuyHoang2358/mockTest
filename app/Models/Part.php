@@ -11,6 +11,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @method static create(array $array)
  * @method static find(mixed $input)
+ * @method static updateOrCreate(array $array, array $array1)
+ * @property mixed $id
+ * @property mixed $name
+ * @property mixed $number
+ * @property mixed $description
+ * @property mixed $time
+ * @property mixed $content
+ * @property mixed $attached_file
+ * @property mixed $part_type
+ * @property mixed $questionGroups
  */
 class Part extends Model
 {

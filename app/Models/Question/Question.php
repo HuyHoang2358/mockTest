@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @method static find($question_id)
+ * @method static create(array $data)
+ * @method static whereIn(string $string, array $questionIdsToDelete)
+ */
 class Question extends Model
 {
     protected $table = 'questions';
@@ -29,6 +34,10 @@ class Question extends Model
     public function answers() :HasMany
     {
         return $this->hasMany(Answer::class, 'question_id');
+    }
+    public function questionType() :BelongsTo
+    {
+        return $this->belongsTo(QuestionType::class, 'question_type_id');
     }
 
 }

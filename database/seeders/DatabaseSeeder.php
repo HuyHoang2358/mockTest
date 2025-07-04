@@ -30,8 +30,8 @@ class DatabaseSeeder extends Seeder
                 'birthday' => '2000-01-01',
             ]
         );
-        /*$this->call(FolderSeeder::class);
-        $this->call(QuestionTypeSeeder::class);*/
+       // $this->call(FolderSeeder::class);
+        $this->call(QuestionTypeSeeder::class);
         $this->call(AdminSeeder::class);
     }
 }

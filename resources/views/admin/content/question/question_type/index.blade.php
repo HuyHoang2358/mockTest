@@ -109,10 +109,10 @@
                                                         @if(is_bool($keyValue))
                                                             @php $keyValue = $keyValue ? 'True' : 'False'; @endphp
                                                         @endif
-                                                            <button type="button" class="px-4 py-1 rounded-lg w-20" style="border:1px solid blue"> {{$keyValue}} </button>
+                                                            <button type="button" class="px-4 py-1 rounded-lg w-24" style="border:1px solid blue"> {{$keyValue}} </button>
                                                     @endforeach
                                                 @else
-                                                    <button type="button" class="p-2 rounded-lg w-20" style="border:1px solid blue"> Input </button>
+                                                    <button type="button" class="px-4 py-1 rounded-lg w-24" style="border:1px solid blue"> Input </button>
                                                 @endif
                                             </div>
                                         </div>

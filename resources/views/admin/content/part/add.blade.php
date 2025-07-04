@@ -229,7 +229,7 @@
                                 <input type="text" class="form-control text-md font-semibold text-primary" placeholder="Nhập tên nhóm câu hỏi"
                                        name="question_groups[${questionGroupId}][name]" required oninput="updateGroupNamePreview(this, '${questionGroupId}')">
                             </div>
-                             <input id="question_groups-${questionGroupId}-attachment" class="form-control hidden" type="text" name="question_groups[1][attachment]">
+                             <input id="question_groups-${questionGroupId}-attachment" class="form-control hidden" type="text" name="question_groups[${questionGroupId}][attachment]">
                             <!-- Files, Điểm, thời gian, câu hỏi -->
                             <div class="flex justify-end items-center gap-3">
                                 <button type="button" class="font-bold text-xl tooltip relative"  onclick="chooseFile(this,'question_groups-${questionGroupId}-attachment')"
@@ -295,7 +295,7 @@
                             <div class="mt-2 pl-5 w-full flex justify-start items-center gap-2">
                                 <input type="checkbox" class="form-check-input"  onchange="toggleAnswerContent(this, ${questionGroupId})"
                                     id="question-group-${questionGroupId}-answer-inside-content" name="question_groups[${questionGroupId}][answer_inside_content]" />
-                                <p class="italic"> Phiếu trả lời dành cho cả nhóm câu hỏi</p>
+                                <p class="italic"> Hiển thị phiếu trả lời dành cho cả nhóm câu hỏi</p>
                             </div>
                             <div  id="question-group-${questionGroupId}-answer-content" class="hidden mt-2">
                                 <textarea type="text" class="form-control content-editor" placeholder="Nhập nội dung của phiếu trả lời. Vị trí các câu hỏi sẽ được đánh dấu bằng [1], [2], [3]..."
@@ -378,10 +378,13 @@
         function updateQuestionNamePreview(input, questionId) {
             const questionName = input.value.trim() || `Question ${questionId}`;
             // get num question from questionName in number end
-            const num = questionName.match(/\d+$/);
+            // Tìm số hoặc khoảng số ở cuối chuỗi, ví dụ: "1", "1-2", "10–12"
+            const match = questionName.match(/\d+(?:\s*[-–]\s*\d+)?$/);
 
             const previewQuestionButton = document.getElementById(`preview-question-${questionId}`);
-            if (previewQuestionButton) previewQuestionButton.textContent = num;
+            if (previewQuestionButton) {
+                previewQuestionButton.textContent = match ? match[0].replace(/\s+/g, '') : '';
+            }
         }
 
         function removeQuestionGroup(questionGroupId) {
@@ -590,7 +593,15 @@
         function render_answer_config(configList, answerId, questionId) {
             const container = document.getElementById(answerId);
             let html = `
-                <input type="text" class="form-control w-full mt-2" name="question_groups[${selectingQuestionGroupId}][questions][${questionId}][content]" value=""  placeholder="Nhập nội dung câu hỏi"/>
+            <div class="flex justify-between items-center gap-4">
+                <input type="text" class="form-control w-full" value=""  placeholder="Nhập nội dung câu hỏi"
+                    name="question_groups[${selectingQuestionGroupId}][questions][${questionId}][content]" />
+                <!--<button class="btn btn-secondary tooltip" type="button"
+                        data-theme="light" title="Thêm  option cho đáp án"
+                        onclick="addAnswerOption(this)">
+                  <i class="fa-solid fa-plus"></i>
+                </button>-->
+            </div>
             `;
             configList.forEach((item, index) => {
                 const input_type = item.input_type || 'text'; // Mặc định là text nếu không có input_type
@@ -606,12 +617,18 @@
                                     <div class="flex-grow">
                                         <input type="text" class="form-control" name="question_groups[${selectingQuestionGroupId}][questions][${questionId}][answer][${index}][text]" placeholder="`+ `${input_type === 'select'? "Nhập đáp án cách nhau dấu ','" : "Nhập nội dung đáp án..." }`+`" />
                                     </div>
-
-                                    <button class="btn btn-secondary tooltip" type="button"
-                                            data-theme="light" title="Thêm ghi chú cho đáp án"
-                                            onclick="toggleAnswerNote(this)">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
+                                    <div class="flex justify-end items-center rounded gap-2">
+                                        <button class="btn btn-secondary tooltip" type="button"
+                                                data-theme="light" title="Thêm ghi chú cho đáp án"
+                                                onclick="toggleAnswerNote(this)">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                        <button class="btn btn-danger-soft tooltip" type="button"
+                                                data-theme="light" title="Xóa đáp án"
+                                                onclick="deleteAnswerConfigItem(this)">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div class="answer-note hidden mt-2">
@@ -636,14 +653,19 @@
                                            ${item.label === null ? 'readonly' : ''}
                                            placeholder="Nhập nội dung đáp án..." />
                                 </div>
-
-                                <button class="btn btn-secondary tooltip" type="button"
-                                        data-theme="light" title="Thêm ghi chú cho đáp án"
-                                        onclick="toggleAnswerNote(this)">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
+                                <div class="flex justify-end items-center rounded gap-2">
+                                    <button class="btn btn-secondary tooltip" type="button"
+                                            data-theme="light" title="Thêm ghi chú cho đáp án"
+                                            onclick="toggleAnswerNote(this)">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <button class="btn btn-danger-soft tooltip" type="button"
+                                            data-theme="light" title="Xóa đáp án"
+                                            onclick="deleteAnswerConfigItem(this)">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
                             </div>
-
                             <div class="answer-note hidden mt-2">
                                 <label class="form-label">Giải thích</label>
                                 <textarea name="question_groups[${selectingQuestionGroupId}][questions][${questionId}][answer][${index}][note]" class="form-control" rows="2" placeholder="Giải thích cho đáp án..."></textarea>
@@ -737,5 +759,11 @@
 
         }
 
+        function deleteAnswerConfigItem(button){
+            const answerItem = button.closest('.answer-config-item');
+            if (answerItem) {
+                answerItem.remove();
+            }
+        }
     </script>
 @endsection
