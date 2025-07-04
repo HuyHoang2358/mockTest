@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static orderBy(string $string, string $string1)
  * @method static find(mixed $input)
  * @method static get()
+ * @method static updateOrCreate(array $array, array $array1)
  */
 class QuestionType extends Model
 {

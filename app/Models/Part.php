@@ -11,12 +11,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @method static create(array $array)
  * @method static find(mixed $input)
+ * @method static updateOrCreate(array $array, array $array1)
+ * @property mixed $id
+ * @property mixed $name
+ * @property mixed $number
+ * @property mixed $description
+ * @property mixed $time
+ * @property mixed $content
+ * @property mixed $attached_file
+ * @property mixed $part_type
+ * @property mixed $questionGroups
  */
 class Part extends Model
 {
 
     protected $table = 'parts';
-    protected $fillable = ['exam_id', 'name', 'number', 'time', 'content', 'attached_file', 'part_type'];
+    protected $fillable = ['exam_id', 'name', 'number', 'description', 'time', 'content', 'attached_file', 'part_type'];
 
 
     public function exam() :BelongsTo

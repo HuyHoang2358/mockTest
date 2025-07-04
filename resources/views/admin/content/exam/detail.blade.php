@@ -39,11 +39,11 @@
                                 >
                                     {{$part->name}}
                                 </button>
-                                <button type="button" class="absolute right-1.5 top-0.5 text-gray-500 cursor-pointer hover:text-red-500 text-sm"
+                               {{-- <button type="button" class="absolute right-1.5 top-0.5 text-gray-500 cursor-pointer hover:text-red-500 text-sm"
                                         data-tw-target="#delete-object-confirm-form" data-tw-toggle="modal"
                                       onclick="openConfirmDeleteObjectForm('{{ $part->name}}', '{{ $part->id }}')">
                                     <i class="fa-solid fa-xmark"></i>
-                                </button>
+                                </button>--}}
                             </li>
                         @endforeach
                     </ul>
@@ -60,7 +60,7 @@
             <!-- Part content -->
             <div class="tab-content border-l border-r border-b bg-white rounded-bl-lg rounded-br-lg">
                 @foreach($exam->parts as $part)
-                    <div id="part-{{$part->id}}" class="tab-pane leading-relaxed p-5 {{$loop->index == 1 ? 'active' : ''}}" role="tabpanel" aria-labelledby="part-{{$part->id}}-tab">
+                    <div id="part-{{$part->id}}" class="tab-pane leading-relaxed p-5 {{$loop->index == 0 ? 'active' : ''}}" role="tabpanel" aria-labelledby="part-{{$part->id}}-tab">
                         <div class="flex justify-between items-center">
                             <!-- Danh sách file đính kèm -->
                             <div class="mt-2 flex justify-start items-center gap-2">
@@ -69,6 +69,7 @@
                                 </button>
                                 @php
                                     $partAttachments = json_decode($part->attached_file);
+                                    $files = $partAttachments;
                                     // remove path only keep file names
                                     if(is_array($partAttachments)){
                                         $partAttachments = array_map(function($item) {
@@ -78,10 +79,13 @@
                                         $partAttachments = [];
                                     }
                                 @endphp
-                                @if($partAttachments == '')
+                                @if($partAttachments == '' ||  $files == null || count($files) == 0  )
                                     <span> Chưa có file đính kèm</span>
                                 @else
                                     <span class="flex items">{{join(",",$partAttachments)}}</span>
+                                    <audio controls>
+                                        <source src="{{ asset($files[0]) }}" type="audio/mpeg">
+                                    </audio>
                                 @endif
                             </div>
 
@@ -111,6 +115,19 @@
                                     </label>
                                     <input id="part-1-total-time-input" name="part_total_time[]" type="number" value="{{$part->time}}" class="w-20 form-control" readonly/>
                                 </div>
+
+                                <!-- Buttons: Edit Part -->
+                                <a href="{{route('admin.part.edit', ['exam_id' => $exam->id, 'id' => $part->id])}}">
+                                    <button type="button" class="btn btn-warning">
+                                        <i class="fa-solid fa-pen-to-square mr-2"></i> Sửa
+                                    </button>
+                                </a>
+
+                                <!-- Button: Delete Part -->
+                                <button type="button" class="btn btn-danger"  data-tw-target="#delete-object-confirm-form" data-tw-toggle="modal"
+                                        onclick="openConfirmDeleteObjectForm('{{ $part->name}}', '{{ $part->id }}')">
+                                    <i class="fa-solid fa-trash mr-2"></i> Xóa
+                                </button>
 
                             </div>
                         </div>
@@ -190,7 +207,7 @@
                                                         <button type="button" for="answers[' . $number . ']" class="btn btn-primary font-bold text-md w-6 h-6 rounded-full text-center">' . $number . '</button>
                                                         <input type="text" name="answers[' . $number . ']" value="'.$ans[$number].'" class="form-control form-control-sm small w-32 ml-2" readonly/>
                                                     ';
-                                                }, $questionGroup->content);
+                                                }, $questionGroup->answer_content);
                                                 @endphp
 
 

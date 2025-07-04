@@ -7,9 +7,9 @@
         }, 3000); // 3 seconds
 
         // handle click close button
-        document.querySelector('.toast-close').addEventListener('click', function() {
+       /* document.querySelector('.toast-close').addEventListener('click', function() {
             document.querySelector('.toastify').style.display = 'none';
-        });
+        });*/
     </script>
 
     <div class="toastify on  toastify-right toastify-top success-msg" style="transform: translate(0px, 0px); top: 100px;">

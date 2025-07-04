@@ -14,11 +14,13 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 20; $i++) {
-            $admin = Admin::create([
-                'name' => 'Admin ' . $i,
-                'email' => 'admin' . $i . '@example.com',
-                'password' => Hash::make('password123'), // Hoặc bcrypt('password123')
+        for ($i = 1; $i <= 5; $i++) {
+            $admin = Admin::updateOrCreate(
+                [ 'email' => 'admin' . $i . '@example.com',],
+                [
+                    'name' => 'Giáo viên ' . $i,
+                    'email' => 'admin' . $i . '@example.com',
+                    'password' => Hash::make('password123'), // Hoặc bcrypt('password123')
             ]);
             $admin->profile()->updateOrCreate(
                 ['admin_id' => $admin->id],

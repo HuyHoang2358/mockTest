@@ -6,7 +6,7 @@
             <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Trang Quản trị viên</a></li>
             <li class="breadcrumb-item"><a href="{{route('admin.folder.index').'?folder_id='.$exam->folder->id}}">{{$exam->folder->name}}</a></li>
             <li class="breadcrumb-item"><a  href="{{route('admin.exam.detail',$exam->id)}}">{{$exam->name}}</a></li>
-            <li class="breadcrumb-item active" aria-current="page"><a href="#">Thêm mới part</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="#">Chỉnh sửa thông tin part {{$part->name}}</a></li>
         </ol>
     </nav>
 @endsection
@@ -24,7 +24,7 @@
     <div class="grid grid-cols-12 gap-2 mt-4">
         <!-- Left side: Exam information -->
         <div class="col-span-9 border-l border-r border-b bg-white rounded-bl-lg rounded-br-lg p-5">
-            <form action="{{route('admin.part.store', $exam->id)}}" method="POST">
+            <form action="{{ route('admin.part.update', ['exam_id' => $exam->id, 'id' => $part->id])}}" method="POST">
                 @csrf
                 <!-- Tiêu đề -->
                 <h1 class="my-2 text-xl font-semibold text-primary"> Đề thi: {{$exam->name}}</h1>
@@ -32,16 +32,23 @@
                     <!-- Tên phần thi -->
                     <div class="flex-grow">
                         <input type="text" placeholder="Nhập tên phần thi" class="font-semibold w-full text-2xl form-control py-1"
-                               value="Part {{$part_number}}" name="part_name" readonly/>
-                        <input id="part-attachment" class="form-control hidden" type="text" name="part_attachment">
+                               value="Part {{$part->number}}" name="part_name" readonly/>
+                        @php
+                            $partAttachments = json_decode($part->attached_file, true) ?? [];
+                            $partAttachments_str = join(',', $partAttachments);
+                        @endphp
+                        <input id="part-attachment" class="form-control hidden" type="text" name="part_attachment" value="{{$partAttachments_str}}">
                     </div>
 
 
                     <div class="flex justify-end items-center gap-3">
                         <!-- File đính kèm-->
                         <button type="button"  onclick="chooseFile(this,'part-attachment')"
-                                class="font-bold text-xl tooltip choose-file relative" data-theme="light" title="Đính kèm file">
+                                class="font-bold text-xl tooltip choose-file relative" data-theme="light" title="Đính kèm file: {{$partAttachments_str}}">
                             <i class="fa-solid fa-paperclip"></i>
+                            @if(count($partAttachments) > 0)
+                                <span class="absolute bottom-0 left-2 bg-gray-300 text-primary rounded-full w-4 h-4 text-xs">{{count($partAttachments)}}</span>
+                            @endif
                         </button>
                       {{--  <!-- Tổng số câu hỏi của phần -->
                         <div class="flex justify-start items-center gap-1">
@@ -65,10 +72,10 @@
                                 <i class="fa-solid fa-bars-staggered"></i>
                             </label>
                             <select id="part-type-select" name="part_type" class="form-select w-32" required>
-                                <option value="reading">Reading</option>
-                                <option value="listening">Listening</option>
-                                <option value="writing">Writing</option>
-                                <option value="speaking">Speaking</option>
+                                <option value="reading" {{$part->part_type == 'reading' ? "selected" : ''}}>Reading</option>
+                                <option value="listening" {{$part->part_type == 'listening' ? "selected" : ''}}>Listening</option>
+                                <option value="writing" {{$part->part_type == 'writing' ? "selected" : ''}}>Writing</option>
+                                <option value="speaking" {{$part->part_type == 'speaking' ? "selected" : ''}}>Speaking</option>
                             </select>
                         </div>
 
@@ -77,7 +84,7 @@
                             <label for="part-total-time-input" class="font-bold text-xl tooltip" data-theme="light" title="Tổng thời gian làm bài (phút)">
                                 <i class="fa-regular fa-clock"></i>
                             </label>
-                            <input id="part-total-time-input" name="part_time" type="number" min="0" max="720" class="w-20 form-control" required/>
+                            <input id="part-total-time-input" name="part_time" value="{{$part->time}}" type="number" min="0" max="720" class="w-20 form-control" required/>
                         </div>
                     </div>
                 </div>
@@ -86,20 +93,230 @@
                 <div class="flex items-center gap-4 mt-4 part-content">
                     <textarea type="text" class="form-control w-full text-sm" rows="2"
                               name="part_description" placeholder="Nhập các yêu cầu đề bài của phần thi"
-                    ></textarea>
+                    >{!! $part->description !!}</textarea>
                 </div>
 
                 <!-- Nội dung phần thi -->
                 <div class="flex items-center gap-4 mt-4 part-content">
                     <textarea type="text" class="form-control content-editor w-full text-sm" rows="3"
                               name="part_content" placeholder="Nhập nội dung phần thi, ví dụ như bài đọc, đoạn hội thoại, bài nghe, bài viết... "
-                    ></textarea>
+                    >{!! $part->content !!}</textarea>
                 </div>
 
                 <!-- Nhóm câu hỏi -->
                 <div class="part-content-detail">
                     <!-- Danh sách các nhóm câu hỏi -->
                     <div class="question-group">
+                        @foreach($part->questionGroups as $questionGroup)
+                            <div class="question-group-item mt-2 border-t-4 border-primary py-2" id="question-group-{{$questionGroup->id}}">
+                                <!-- Title Question Group  -->
+                                <div class="flex justify-between items-center gap-4">
+                                    <!-- Tên nhóm câu hỏi -->
+                                    <div class="flex-grow">
+                                        <input type="text" class="form-control text-md font-semibold text-primary" placeholder="Nhập tên nhóm câu hỏi"
+                                               name="question_groups[{{$questionGroup->id}}][name]"  value="{{$questionGroup->name}}"
+                                               required oninput="updateGroupNamePreview(this, '{{$questionGroup->id}}')">
+                                    </div>
+                                    @php
+                                        $questionGroupAttachments = json_decode($questionGroup->attached_file, true);
+                                        $questionGroupAttachments_str = ($questionGroupAttachments && count($questionGroupAttachments)) > 0 ? join(',', $questionGroupAttachments) : '';
+                                    @endphp
+                                    <input id="question_groups-{{$questionGroup->id}}-attachment" class="form-control hidden" type="text"
+                                           name="question_groups[{{$questionGroup->id}}][attachment]" value="{{$questionGroupAttachments_str}}">
+                                    <!-- Files, Điểm, thời gian, câu hỏi -->
+                                    <div class="flex justify-end items-center gap-3">
+                                        <button type="button" class="font-bold text-xl tooltip relative"  onclick="chooseFile(this,'question_groups-{{$questionGroup->id}}-attachment')"
+                                                data-theme="light" title="Đính kèm file">
+                                            <i class="fa-solid fa-paperclip"></i>
+                                            @if($questionGroupAttachments && count($questionGroupAttachments) > 0)
+                                                <span class="absolute bottom-0 left-2 bg-gray-300 text-primary rounded-full w-4 h-4 text-xs">{{count($questionGroupAttachments)}}</span>
+                                            @endif
+                                        </button>
+
+                                        <!-- Tổng số câu hỏi của nhóm câu hỏi -->
+                                        <div class="flex justify-start items-center gap-1">
+                                            <label for="question-group-1-number-question-input" class="font-bold text-xl tooltip" data-theme="light" title="Tổng số câu hỏi của nhóm" >
+                                                <i class="fa-regular fa-circle-question"></i>
+                                            </label>
+                                            <input id="question-group-1-number-question-input" value="{{$questionGroup->num_question}}" name="question_groups[{{$questionGroup->id}}][number_of_questions]" type="number" min=0 max= 100 class="w-16 form-control" readonly/>
+                                        </div>
+
+                                        <!-- Tổng số điểm của nhóm câu hỏi -->
+                                        <div class="flex justify-start items-center gap-1">
+                                            <label for="part-1-total-score-input" class="font-bold text-xl tooltip" data-theme="light" title="Tổng điểm của phần (point)">
+                                                <i class="fa-regular fa-file-lines"></i>
+                                            </label>
+                                            <input id="part-1-total-score-input" value="{{$questionGroup->score}}}" name="question_groups[{{$questionGroup->id}}][score]" type="number" min=0 max= 100 class="w-20 form-control" readonly/>
+                                        </div>
+
+
+                                        <!-- Delete Actions -->
+                                        <div class="flex justify-start items-center gap-1">
+                                            <button type="button" class="text-xl tooltip text-red-300 hover:text-red-500"
+                                                    data-theme="light" title="Xóa nhóm câu hỏi"
+                                                    onclick="removeQuestionGroup('{{$questionGroup->id}}')"
+                                            >
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Mô tả các yêu cầu của nhóm câu hỏi -->
+                                <div class="flex items-center gap-4 mt-4 part-content">
+                            <textarea type="text" class="form-control w-full text-sm" rows="2"
+                                      name="question_groups[{{$questionGroup->id}}][description]" placeholder="Nhập các yêu cầu nhóm câu hỏi"
+                            >{!! $questionGroup->description !!}</textarea>
+                                </div>
+
+
+                                <!-- Content Question Group -->
+                                <div class="mt-2 pl-5 relative w-full">
+                            <textarea type="text" class="form-control content-editor" placeholder="Nhập nội dung nhóm câu hỏi.  Đoạn văn, bài đọc, đoạn hội thoại, bài viết... "
+                                      id="question-group-{{$questionGroup->id}}-content" name="question_groups[{{$questionGroup->id}}][content]">{!! $questionGroup->content !!}</textarea>
+                                </div>
+
+                                <!-- Checkbox để xác định câu trả lời nằm trong nội dung -->
+
+                                <!-- Phiếu trả lời của nhóm câu hỏi-->
+                                <div class="mt-2 pl-5 relative w-full">
+                                    <div class="mt-2 pl-5 w-full flex justify-start items-center gap-2">
+                                        <input type="checkbox" {{$questionGroup->answer_inside_content ? 'checked' : ''}} class="form-check-input" onchange="toggleAnswerContent(this, {{$questionGroup->id}})"
+                                               id="question-group-{{$questionGroup->id}}-answer-inside-content" name="question_groups[{{$questionGroup->id}}][answer_inside_content]" />
+                                        <p class="italic"> Hiển thị phiếu trả lời dành cho cả nhóm câu hỏi</p>
+                                    </div>
+                                    <div  id="question-group-{{$questionGroup->id}}-answer-content" class="{{$questionGroup->answer_inside_content ? '' : 'hidden'}} mt-2">
+                                <textarea type="text" class="form-control content-editor" placeholder="Nhập nội dung của phiếu trả lời. Vị trí các câu hỏi sẽ được đánh dấu bằng [1], [2], [3]..."
+                                          id="question-group-{{$questionGroup->id}}-answer-content-input" name="question_groups[{{$questionGroup->id}}][answer_content]">{!! $questionGroup->answer_content !!}</textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Handle Question List -->
+                                <div class="mt-2 pl-5">
+                                    <div class="flex justify-between items-center gap-4">
+                                        <h3 class="font-semibold text-primary text-md">Danh sách các câu hỏi</h3>
+                                        <div class="flex justify-end items-center gap-2">
+                                            <!-- Thêm mới câu hỏi -->
+                                            <button type="button" class="btn btn-primary tooltip"
+                                                    data-theme="light" title="Thêm câu hỏi"
+                                                    data-tw-toggle="modal" data-tw-target="#add-question-modal"
+                                                    onclick="selectCurrentQuestionGroup('{{$questionGroup->id}}')"
+                                            >
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                            <!-- Trích danh sách câu hỏi từ content -->
+                                            <button type="button" class="btn btn-primary tooltip hidden"
+                                                    id="btn-extract-questions-{{$questionGroup->id}}"
+                                                    data-theme="light" title="Thêm câu hỏi từ vị trí trong đề"
+                                                    onclick="handleExtractQuestions('{{$questionGroup->id}}')"
+                                            >
+                                                <i class="fa-solid fa-file-export"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-2 pl-5" id="question-list-{{$questionGroup->id}}">
+                                        @foreach($questionGroup->questions as $question)
+                                            <div class="question-item border rounded p-3 my-3 flex justify-start items-start gap-2" id="question-{{$question->id}}">
+                                                <!-- Nút toggle ẩn/hiện -->
+                                                <button type="button" onclick="toggleQuestionVisibility(this)" class="text-lg mt-1">
+                                                    <i class="fa-regular fa-square-check"></i>
+                                                </button>
+
+                                                <!-- Nội dung câu hỏi -->
+                                                <div class="flex-grow">
+                                                    <div class="flex justify-between items-center gap-4">
+                                                        <input type="text" class="form-control w-48" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][label]" value="{{$question->name}}"  oninput="updateQuestionNamePreview(this, '{{$question->id}}')"/>
+                                                        <div class="flex items-center gap-4">
+                                                            <!-- Loại câu hỏi -->
+                                                            <div class="flex items-center gap-1">
+                                                                <i class="fa-solid fa-bars-staggered text-primary tooltip" data-theme="light" title="Loại câu hỏi"></i>
+                                                                <input type="text" class="form-control " name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][question_type]" value="{{$question->questionType->name}}" readonly/>
+                                                                <input type="text" class="form-control hidden " name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][question_type_id]" value="{{$question->questionType->id}}" readonly/>
+                                                            </div>
+
+                                                            <div class="flex items-center gap-1">
+                                                                <i class="fa-solid fa-bars-staggered text-primary tooltip" data-theme="light" title="Loại câu hỏi"></i>
+                                                                <input type="text" class="form-control" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][input_type]" value="{{$question->input_type}}" readonly />
+                                                            </div>
+                                                            <!-- Điểm -->
+                                                            <div class="flex items-center gap-1">
+                                                                <i class="fa-regular fa-file-lines text-primary" title="Điểm"></i>
+                                                                <input type="number" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][score]" min="0" max="100" value="{{$question->score}}" class="form-control w-16" />
+                                                            </div>
+
+                                                            <!-- Delete Actions -->
+                                                            <div class="flex justify-start items-center gap-1">
+                                                                <button type="button" class="text-xl tooltip text-red-300 hover:text-red-500"
+                                                                        data-theme="light" title="Xóa nhóm câu hỏi"
+                                                                        onclick="removeQuestion('{{$question->id}}')"
+                                                                >
+                                                                    <i class="fa-solid fa-trash-can"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Nội dung bên trong câu hỏi -->
+                                                    <div id="question-item-{{$question->id}}" class="pl-4 mt-2">
+                                                        <input type="text" class="form-control w-full mt-2" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][content]" value="{{$question->content}}"  placeholder="Nhập nội dung câu hỏi"/>
+                                                        @if($question->input_type == 'text' || $question->input_type == 'textarea')
+                                                            <div class="answer-config-item border rounded p-3 my-2">
+                                                                <div class="flex justify-start items-center rounded gap-4">
+                                                                    <input type="checkbox" class="form-check-input" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}[answer][1}][is_correct]" checked readonly/>
+                                                                    <input type="text" class="form-control w-12 font-semibold hidden" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][answer][1][label]" value="{{$question->content}}" readonly />
+
+                                                                    <div class="flex-grow">
+                                                                        <input type="text" class="form-control" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][answer][1][text]" value="" placeholder="Nhập đáp án cách nhau dấu" />
+                                                                    </div>
+
+                                                                    <button class="btn btn-secondary tooltip" type="button"
+                                                                            data-theme="light" title="Thêm ghi chú cho đáp án"
+                                                                            onclick="toggleAnswerNote(this)">
+                                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                                                    </button>
+                                                                </div>
+
+                                                                <div class="answer-note hidden mt-2">
+                                                                    <label class="form-label">Giải thích</label>
+                                                                    <textarea name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][answer][1][note]" class="form-control" rows="2" placeholder="Giải thích cho đáp án..."></textarea>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            @foreach($question->answers as $answer)
+                                                                <div class="answer-config-item border rounded p-3 my-2">
+                                                                    <div class="flex justify-start items-center rounded gap-4">
+                                                                        <input type="checkbox" class="form-check-input" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][answer][{{$answer->id}}][is_correct]" {{$answer->is_correct ? 'checked' : ''}} />
+
+                                                                        <input type="text" class="form-control w-12 font-semibold text-center" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][answer][{{$answer->id}}][label]" value="{{$answer->label}}" readonly />
+
+                                                                        <div class="flex-grow">
+                                                                            <input type="text" class="form-control" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][answer][{{$answer->id}}][text]"
+                                                                                   value="{{$answer->value}}"
+                                                                            placeholder="Nhập nội dung đáp án..." />
+                                                                        </div>
+
+                                                                        <button class="btn btn-secondary tooltip" type="button"
+                                                                                data-theme="light" title="Thêm ghi chú cho đáp án"
+                                                                                onclick="toggleAnswerNote(this)">
+                                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <div class="answer-note hidden mt-2">
+                                                                        <label class="form-label">Giải thích</label>
+                                                                        <textarea name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][answer][{{$answer->id}}][note]" class="form-control" rows="2" placeholder="Giải thích cho đáp án..."></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div class="flex justify-start items-center gap-2 mt-8">
@@ -123,8 +340,20 @@
         <!-- Summary Exam -->
         <div class="col-span-3 box">
             <div id="preview-part-exam" class="bg-white w-[19%] fixed">
-                <h3 class="font-bold text-lg text-primary border-b border-gray-200 py-5 px-5"> Part {{$part_number}}</h3>
+                <h3 class="font-bold text-lg text-primary border-b border-gray-200 py-5 px-5"> Part {{$part->name}}</h3>
                 <div class="p-2" id="preview-part-content">
+                    @foreach($part->questionGroups as $questionGroup)
+                        <div class="rounded border border-gray-200 px-5 py-2 mt-2" id="preview-question-group-{{$questionGroup->id}}">
+                            <a href="{{url('#question-group-'.$questionGroup->id)}}" >
+                                <h4 class="py-2 font-semibold" id="preview-question-group-{{$questionGroup->id}}-name"> {{$questionGroup->name}}</h4>
+                            </a>
+                            <div class="grid grid-cols-4 gap-2" id="preview-question-group-{{$questionGroup->id}}-questions">
+                                @foreach($questionGroup->questions as $question)
+                                    <a href="{{url('#question-'.$question->id)}}" ><button type="button" class="btn btn-secondary" id="preview-question-{{$question->id}}">{{$question->number}}</button> </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
 
                 </div>
             </div>
@@ -211,8 +440,8 @@
     @include('admin.components.stand_alone_lfm_js')
     <script>
         let selectingQuestionType = ''; // Loại câu hỏi đang được chọn
-        let questionCounter = 0; // Số lượng câu hỏi đã thêm
-        let questionGroupIndex = 0; // Nhóm câu hỏi hiện tại, bắt đầu từ 1
+        let questionCounter = {{$max_question_id}}; // Số lượng câu hỏi đã thêm
+        let questionGroupIndex = {{$max_question_group_id}}; // Nhóm câu hỏi hiện tại, bắt đầu từ 1
         let selectingQuestionGroupId = null; // ID của nhóm câu hỏi đang được chọn để thêm câu hỏi
 
         function selectCurrentQuestionGroup(questionGroupId){
@@ -367,8 +596,6 @@
             previewContainer.insertAdjacentHTML('beforeend',previewDiv);
         }
 
-        addQuestionGroup();
-
         function updateGroupNamePreview(input, questionGroupId) {
             const groupName = input.value.trim() || `Nhóm câu hỏi ${questionGroupId}`;
             const previewGroupName = document.getElementById(`preview-question-group-${questionGroupId}-name`);
@@ -378,7 +605,6 @@
         function updateQuestionNamePreview(input, questionId) {
             const questionName = input.value.trim() || `Question ${questionId}`;
             // get num question from questionName in number end
-            // Tìm số hoặc khoảng số ở cuối chuỗi, ví dụ: "1", "1-2", "10–12"
             const match = questionName.match(/\d+(?:\s*[-–]\s*\d+)?$/);
 
             const previewQuestionButton = document.getElementById(`preview-question-${questionId}`);
@@ -593,15 +819,7 @@
         function render_answer_config(configList, answerId, questionId) {
             const container = document.getElementById(answerId);
             let html = `
-            <div class="flex justify-between items-center gap-4">
-                <input type="text" class="form-control w-full" value=""  placeholder="Nhập nội dung câu hỏi"
-                    name="question_groups[${selectingQuestionGroupId}][questions][${questionId}][content]" />
-                <!--<button class="btn btn-secondary tooltip" type="button"
-                        data-theme="light" title="Thêm  option cho đáp án"
-                        onclick="addAnswerOption(this)">
-                  <i class="fa-solid fa-plus"></i>
-                </button>-->
-            </div>
+                <input type="text" class="form-control w-full mt-2" name="question_groups[${selectingQuestionGroupId}][questions][${questionId}][content]" value=""  placeholder="Nhập nội dung câu hỏi"/>
             `;
             configList.forEach((item, index) => {
                 const input_type = item.input_type || 'text'; // Mặc định là text nếu không có input_type
@@ -617,18 +835,12 @@
                                     <div class="flex-grow">
                                         <input type="text" class="form-control" name="question_groups[${selectingQuestionGroupId}][questions][${questionId}][answer][${index}][text]" placeholder="`+ `${input_type === 'select'? "Nhập đáp án cách nhau dấu ','" : "Nhập nội dung đáp án..." }`+`" />
                                     </div>
-                                    <div class="flex justify-end items-center rounded gap-2">
-                                        <button class="btn btn-secondary tooltip" type="button"
-                                                data-theme="light" title="Thêm ghi chú cho đáp án"
-                                                onclick="toggleAnswerNote(this)">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button class="btn btn-danger-soft tooltip" type="button"
-                                                data-theme="light" title="Xóa đáp án"
-                                                onclick="deleteAnswerConfigItem(this)">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
+
+                                    <button class="btn btn-secondary tooltip" type="button"
+                                            data-theme="light" title="Thêm ghi chú cho đáp án"
+                                            onclick="toggleAnswerNote(this)">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
                                 </div>
 
                                 <div class="answer-note hidden mt-2">
@@ -653,19 +865,14 @@
                                            ${item.label === null ? 'readonly' : ''}
                                            placeholder="Nhập nội dung đáp án..." />
                                 </div>
-                                <div class="flex justify-end items-center rounded gap-2">
-                                    <button class="btn btn-secondary tooltip" type="button"
-                                            data-theme="light" title="Thêm ghi chú cho đáp án"
-                                            onclick="toggleAnswerNote(this)">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button class="btn btn-danger-soft tooltip" type="button"
-                                            data-theme="light" title="Xóa đáp án"
-                                            onclick="deleteAnswerConfigItem(this)">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
+
+                                <button class="btn btn-secondary tooltip" type="button"
+                                        data-theme="light" title="Thêm ghi chú cho đáp án"
+                                        onclick="toggleAnswerNote(this)">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
                             </div>
+
                             <div class="answer-note hidden mt-2">
                                 <label class="form-label">Giải thích</label>
                                 <textarea name="question_groups[${selectingQuestionGroupId}][questions][${questionId}][answer][${index}][note]" class="form-control" rows="2" placeholder="Giải thích cho đáp án..."></textarea>
@@ -759,11 +966,5 @@
 
         }
 
-        function deleteAnswerConfigItem(button){
-            const answerItem = button.closest('.answer-config-item');
-            if (answerItem) {
-                answerItem.remove();
-            }
-        }
     </script>
 @endsection

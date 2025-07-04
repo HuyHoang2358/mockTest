@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable()->comment('Tên câu hỏi, có thể là tên của câu hỏi hoặc mô tả ngắn gọn');
-            $table->integer('number')->default(0)->comment('Số thứ tự của câu hỏi trong nhóm');
+            $table->string('number')->default('')->comment('Số thứ tự của câu hỏi trong nhóm');
             $table->foreignId('question_group_id')->constrained('question_groups')->onDelete('cascade');
             $table->double('score', 8, 2)->default(0)->comment('Điểm của câu hỏi');
             $table->longText('content')->nullable()->comment('Nội dung câu hỏi');

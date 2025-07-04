@@ -7,6 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @method static find(mixed $idToDelete)
+ * @method static create(array $data)
+ * @method static whereIn(string $string, array $idsToDelete)
+ * @property mixed $questions
+ * @property mixed $id
+ * @property mixed $part_id
+ * @property mixed $name
+ * @property mixed $description
+ * @property mixed $content
+ * @property mixed $answer_content
+ * @property mixed $attached_file
+ * @property mixed $answer_inside_content
+ */
 class QuestionGroup extends Model
 {
     protected $table = 'question_groups';
@@ -14,7 +28,9 @@ class QuestionGroup extends Model
     protected $fillable = [
         'part_id',
         'name',
+        'description',
         'content',
+        'answer_content',
         'attached_file',
         'answer_inside_content'
     ];
@@ -38,9 +54,14 @@ class QuestionGroup extends Model
         return json_decode($value, true);
     }
 
-    public function getScoreAttribute(): int
+    public function getScoreAttribute() :int
     {
-        return $this->questions()->sum('score');
+        $questions = $this->questions()->get();
+        $totalScore = 0;
+        foreach ($questions as $question) $totalScore += $question->score;
+
+        return $totalScore;
+
     }
     public function getNumQuestionAttribute(): int
     {
