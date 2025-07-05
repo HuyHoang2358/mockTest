@@ -748,7 +748,7 @@
                 });
                 // Thêm câu hỏi
 
-                document.getElementById("modal-question-type-id").value = 5;
+                document.getElementById("modal-question-type-id").value = 4;
                 addQuestion();
             }
 

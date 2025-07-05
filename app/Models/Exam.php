@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static pluck(string $string)
  * @method static find($id)
  * @method static where(string $string, $id)
+ * @property mixed $name
+ * @property mixed $status
  */
 class Exam extends Model
 {

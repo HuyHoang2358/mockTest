@@ -14,6 +14,24 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
+        $admin = Admin::updateOrCreate(
+            ['email' => 'admin@gmail.com'],
+            [
+                'name' => "Quản trị viên",
+                'email' => 'admin@gmail.com',
+                'password' => Hash::make('123456789'),
+            ]
+        );
+        $admin->profile()->updateOrCreate(
+            ['admin_id' => $admin->id],
+            [
+                'avatar' => 'https://ui-avatars.com/api/?name=Admin&background=random&color=fff',
+                'phone' => '0123456789',
+                'address' => 'Hà Nội',
+                'birthday' => '2000-01-01',
+            ]
+        );
+
         for ($i = 1; $i <= 5; $i++) {
             $admin = Admin::updateOrCreate(
                 [ 'email' => 'admin' . $i . '@example.com',],

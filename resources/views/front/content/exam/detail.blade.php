@@ -10,6 +10,10 @@
         .content-detail {
             line-height: 3;
         }
+        .question-group-content-item p{
+            text-indent: 20px;
+            margin-top: 5px;
+        }
     </style>
 @endsection
 @section('content')
@@ -87,80 +91,134 @@
                 </div>
             @endif
 
+
             <!-- Nội dung phần Exam -->
-                <div class="flex resizable-container {{ $part->part_type == 'listening' ? 'pt-12' : '' }}" style="height: calc(100vh - 140px)">
-                <!-- Left pane -->
-                <div class="leftPane bg-green-50 w-1/2 min-w-[100px] max-w-[90%] overflow-auto p-10 ">
+            <div class="flex resizable-container {{ $part->part_type == 'listening' ? 'pt-12' : '' }}" style="height: calc(100vh - 140px)">
+            <!-- Left pane -->
+            <div class="leftPane bg-green-50 w-1/2 min-w-[100px] max-w-[90%] overflow-auto p-4">
+                <!-- Part title and description -->
+                <div class="bg-[#f1f2ec] p-4">
                     <h1 class="font-bold text-lg text-primary">{{ $part->name }}</h1>
-                    @if($part->content)
-                        <div class="p-8">
-                            {!! $part->content !!}
+                    @if($part->description)
+                        <div class="">
+                            {!! $part->description !!}
                         </div>
                     @endif
-                    <p class=" {{ $part->part_type == 'listening' ? '' : 'hidden' }}">xin chao</p>
                 </div>
+                @if($part->content)
+                    <div class="question-group-content-item font-normal text-base p-4" id="part-content-{{ $part->id }}">
+                        {!! $part->content !!}
+                    </div>
+                @endif
+                @foreach($part->questionGroups as $questionGroup)
+                    <div class="question-group-content-item font-normal text-base p-4" id="question-group-content-{{ $questionGroup->id }}">
+                        {!! $questionGroup->content !!}
+                    </div>
+                @endforeach
+            </div>
 
-                <!-- Resizer -->
-                <div class="resizer w-[6px] h-full cursor-col-resize bg-gray-200 hover:bg-gray-300 transition-all"></div>
+            <!-- Resizer -->
+            <div class="resizer w-[6px] h-full cursor-col-resize bg-gray-200 hover:bg-gray-300 transition-all"></div>
 
-                <!-- Right pane -->
-                <div class="rightPane bg-white flex-1 overflow-auto p-10">
-                    @foreach($part->questionGroups as $questionGroup)
-                        <div>
-                            <h2 class="font-semibold text-lg text-primary">{{ $questionGroup->name }}</h2>
-                            <div class="pl-5">
-                                @if($questionGroup->answer_inside_content)
-                                    @php
-                                        $newContent = preg_replace_callback('/\[(\d+)\]/', function ($matches) {
-                                            $number = $matches[1];
-                                            return '
-                                                <div class="flex gap-2 items-center question-item">
-                                                    <button type="button" for="answers[' . $number . ']" class="btn btn-primary font-bold text-md w-6 h-6 rounded-full text-center">' . $number . '</button>
-                                                    <input type="text" name="answers[' . $number . ']" class="preview-input form-control form-control-sm small w-32 ml-2"/>
-                                                </div>
-                                            ';
-                                        }, $questionGroup->content);
-                                    @endphp
-                                    <div class="text-md content-detail">
-                                        {!! $newContent !!}
-                                    </div>
-                                @else
-                                    @foreach($questionGroup->questions as $question)
-                                        <div class="mt-2">
-                                            <h3 class="font-semibold text-md">{{ $question->name }}</h3>
-                                            <div class="pl-5">
-                                                {!! $question->content !!}
-                                                <div class="question-item grid grid-cols-1 gap-4 mt-4">
+            <!-- Right pane -->
+            <div class="rightPane bg-white flex-1 overflow-auto p-4">
+                @foreach($part->questionGroups as $questionGroup)
+                    <div class="question-group-item mt-2" id="question-group-{{ $questionGroup->id }}">
+                        <h2 class="font-semibold text-base text-primary">{{ $questionGroup->name }}</h2>
+                        @if($questionGroup->description)
+                            <div class="text-sm text-gray-600 mt-1">
+                                {!! $questionGroup->description !!}
+                            </div>
+                        @endif
+                        <div class="pl-4">
+                            @if($questionGroup->answer_inside_content)
+                                @php
+                                    $question = $questionGroup->questions;
+                                    // create map key is number in content, value is question id
+
+                                    $questionMap = [];
+                                    foreach ($question as $q) $questionMap[$q->number] = $q->id;
+
+
+                                    $newContent = preg_replace_callback('/\[(\d+)\]/', function ($matches) use ($questionMap) {
+                                        $number = $matches[1];
+                                        return '
+                                            <span class="question-item ml-2 mr-2"  data-question="'.$questionMap[$number].'">
+                                                <button type="button" for="answers[' . $number . ']" class="btn btn-primary font-bold text-md w-6 h-6 rounded-full text-center">' . $number . '</button>
+                                                <input type="text" name="answers[' . $number . ']" class="inline-block preview-input form-control form-control-sm w-32 ml-1" data-index="'.$questionMap[$number] .'"/>
+                                            </span>
+                                        ';
+                                    }, $questionGroup->answer_content);
+                                @endphp
+                                <div class="text-md content-detail">
+                                    {!! $newContent !!}
+                                </div>
+                            @else
+                                @foreach($questionGroup->questions as $question)
+                                    <div class="mt-4 text-sm">
+                                        <p><span class="font-semibold test-sm">{{ $question->name }}:</span> {!! $question->content !!}</p>
+                                        <div class="pl-4">
+                                            <div class="question-item grid grid-cols-1 gap-1 mt-2" data-question="{{$question->id}}">
+                                                @if($question->input_type == 'select')
+                                                    <div class="answer-config-item border rounded p-3 hover:bg-green-200">
+                                                        <div class="flex justify-start items-center rounded gap-4">
+                                                            <select name="answers[{{ $question->id }}]" class="preview-input form-select form-select-sm text-sm" data-index="{{$question->id}}">
+                                                                <option value="">-- Chọn đáp án --</option>
+                                                                @foreach($question->answers as $answer)
+                                                                    <option value="{{ $answer->id }}">{{ ($answer->label ?? '') .'. '. ($answer->value ?? '') }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                @elseif ($question->input_type == 'textarea')
+                                                    <div class="answer-config-item mt-4">
+                                                        <textarea name="answers[{{ $question->id }}]" class="answer-textarea preview-input form-control form-control-sm w-full text-base"
+                                                                  rows="16" data-index="{{$question->id}}"
+                                                        ></textarea>
+                                                        <div class="word-count font-normal text-right text-sm text-gray-400 mt-2 ml-2">0 từ</div>
+                                                    </div>
+                                                @elseif ($question->input_type == 'text')
+                                                    <div class="answer-config-item mt-2">
+                                                        <input  type="text" name="answers[{{ $question->id }}]" class="preview-input form-control form-control-sm w-full text-base"
+                                                               data-index="{{$question->id}}" placeholder="Nhập đáp án vào chỗ trống"/>
+                                                    </div>
+                                                @else
                                                     @foreach($question->answers as $answer)
-                                                        <div class="answer-config-item border rounded p-3">
-                                                            <div class="flex justify-start items-center rounded gap-4">
-                                                                <input
-                                                                    type="{{ $question->input_type == 'radio' ? 'radio' : 'checkbox' }}"
-                                                                    name="answers[{{ $question->id }}]{{ $question->input_type == 'checkbox' ? '[]' : '' }}"
-                                                                    value="{{ $answer->value }}"
-                                                                    class="preview-input {{ $question->input_type == 'radio' ? 'form-radio' : 'form-checkbox' }} h-4 w-4 text-primary"
-                                                                />
-                                                                @if($answer->label)
-                                                                    <p>{{ $answer->label }}</p>
-                                                                @endif
-                                                                <p>{{ $answer->value }}</p>
-                                                            </div>
+                                                        <div class="answer-config-item border rounded p-3 hover:bg-green-200">
+                                                            <label class="flex items-center gap-2 cursor-pointer">
+                                                                <div class="flex justify-start items-center rounded gap-4">
+                                                                    <input
+                                                                        type="{{ $question->input_type == 'radio' ? 'radio' : 'checkbox' }}"
+                                                                        name="answers[{{ $question->id }}]{{ $question->input_type == 'checkbox' ? '[]' : '' }}"
+                                                                        value="{{ $answer->value }}"
+                                                                        class="preview-input {{ $question->input_type == 'radio' ? 'form-radio' : 'form-checkbox' }}
+                                                                        h-4 w-4 text-primary form-control"
+                                                                        data-index="{{$question->id}}"
+                                                                    />
+                                                                    @if($answer->label)
+                                                                        <span>{{ $answer->label }}</span>
+                                                                    @endif
+                                                                    <span>{{ $answer->value }}</span>
+                                                                </div>
+                                                            </label>
                                                         </div>
                                                     @endforeach
-                                                </div>
+                                                @endif
                                             </div>
                                         </div>
-                                    @endforeach
-                                @endif
-                            </div>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
             </div>
         </div>
+    </div>
     @endforeach
+@endsection
 
-
+@section('customJs')
     <script>
         const playPauseBtn = document.getElementById('playPauseBtn');
         const forwardBtn = document.getElementById('forwardBtn');
@@ -176,7 +234,7 @@
         const iconPause = document.getElementById('icon-pause');
 
         // Phát / Tạm dừng
-        playPauseBtn.addEventListener('click', () => {
+        playPauseBtn?.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
                 iconPlay.classList.add('hidden');
@@ -188,44 +246,44 @@
             }
         });
         // Đồng bộ icon khi audio tự chạy hoặc dừng
-        audio.addEventListener('play', () => {
+        audio?.addEventListener('play', () => {
             iconPlay.classList.add('hidden');
             iconPause.classList.remove('hidden');
         });
-        audio.addEventListener('pause', () => {
+        audio?.addEventListener('pause', () => {
             iconPause.classList.add('hidden');
             iconPlay.classList.remove('hidden');
         });
 
         // Tua nhanh / lùi
-        forwardBtn.addEventListener('click', () => {
+        forwardBtn?.addEventListener('click', () => {
             audio.currentTime += 5;
         });
 
-        backwardBtn.addEventListener('click', () => {
+        backwardBtn?.addEventListener('click', () => {
             audio.currentTime -= 5;
         });
 
         // Cập nhật progress bar & thời gian
-        audio.addEventListener('timeupdate', () => {
+        audio?.addEventListener('timeupdate', () => {
             progressBar.value = audio.currentTime;
             updateTimeDisplay();
         });
 
-        audio.addEventListener('loadedmetadata', () => {
+        audio?.addEventListener('loadedmetadata', () => {
             progressBar.max = audio.duration;
             updateTimeDisplay();
         });
 
         // Tua khi kéo progress bar
-        progressBar.addEventListener('input', () => {
+        progressBar?.addEventListener('input', () => {
             audio.currentTime = progressBar.value;
         });
 
         // Âm lượng
         // Thiết lập âm lượng mặc định
-        audio.volume = 1;
-        audio.muted = false;
+        if (audio) audio.volume = 1;
+        if (audio)  audio.muted = false;
 
         // Cập nhật icon dựa trên trạng thái mute
         function updateVolumeIcon() {
@@ -239,7 +297,7 @@
         }
 
         // Bắt sự kiện thay đổi volume
-        volumeBar.addEventListener('input', () => {
+        volumeBar?.addEventListener('input', () => {
             const volume = parseFloat(volumeBar.value);
             audio.volume = volume;
 
@@ -253,7 +311,7 @@
         });
 
         // Bắt sự kiện click vào icon mute
-        muteBtn.addEventListener('click', () => {
+        muteBtn?.addEventListener('click', () => {
             audio.muted = !audio.muted;
 
             // Nếu mute thì giữ nguyên volumeBar, nếu unmute thì khôi phục volume trước đó hoặc ít nhất là 0.1
@@ -263,6 +321,7 @@
             }
             updateVolumeIcon();
         });
+
 
         // Hiển thị thời gian
         function updateTimeDisplay() {
@@ -274,5 +333,19 @@
             const remaining = (audio.duration || 0) - audio.currentTime;
             timeDisplay.textContent = `-${format(remaining)}`;
         }
+
+        // TODO: Count words
+        function countWords(text) {
+            return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+        }
+
+        document.querySelectorAll('.answer-textarea').forEach(textarea => {
+            const wordCountDiv = textarea.parentElement.querySelector('.word-count');
+
+            textarea.addEventListener('input', function () {
+                const wordCount = countWords(this.value);
+                wordCountDiv.textContent = `${wordCount} từ`;
+            });
+        });
     </script>
 @endsection
