@@ -6,15 +6,25 @@ use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ExamController extends Controller
 {
+    private function checkAccess(Exam $exam): bool
+    {
+        if (!$exam->status) return false;
+        return true;
+    }
+
     public function exercise($code) :View|RedirectResponse
     {
         $exam = Exam::where('code', $code)->first();
         if (!$exam) return redirect()->back()->with('error', '404 Not Found');
-
+        $ok = $this->checkAccess($exam);
+        if (!$ok) {
+            return view('front.content.exam.error', ['exam' => $exam]);
+        }
         $data['exam'] = $exam;
         $exam->load('parts');
         $data['leftTime'] = $exam->time * 60; // Convert time to seconds

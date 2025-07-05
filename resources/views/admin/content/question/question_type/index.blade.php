@@ -28,7 +28,7 @@
     @endphp
 
 
-    <div class="intro-y flex items-center mt-8">
+    <div class="intro-y flex items-center mt-2">
         <h2 class="text-lg font-medium mr-auto">
             Danh mục các loại câu hỏi
         </h2>
@@ -66,20 +66,20 @@
                                 <h2 class="font-medium text-base mr-auto text-primary">
                                    Loại: {{$question_type->name}}
                                 </h2>
-                                <div class="flex justify-end items-center gap-2">
+                                <div class="flex justify-end items-center gap-1">
                                     <a href="{{route('admin.question-type.edit', $question_type->id)}}">
-                                        <button type="button" class="text-green-500 hover:text-green-800 text-md tooltip"
+                                        <button type="button" class="btn btn-primary-soft text-sm tooltip"
                                                 data-id="92"
-                                                data-theme="light"
+                                                data-theme="light" disabled
                                                 title="Chỉnh sửa thông tin loại câu hỏi này">
                                             <i class="fa-regular fa-pen-to-square"></i>
                                         </button>
                                     </a>
                                     <button type="button"
                                             data-tw-toggle="modal" data-tw-target="#delete-object-confirm-form"
-                                            class="text-red-500 hover:text-red-800 text-xs tooltip"
+                                            class="btn btn-danger-soft text-sm tooltip"
                                             data-theme="light"
-                                            title="Xóa loại câu hỏi này"
+                                            title="Xóa loại câu hỏi này" disabled
                                             onclick='openConfirmDeleteObjectForm("{{ $question_type->name}}", {{ $question_type->id }})'
                                     >
                                         <i class="fa-solid fa-trash-can"></i>
@@ -93,7 +93,7 @@
                             <div class="my-2 text-gray-400 text-sm pl-5">
                                 {{$question_type->description}}
                             </div>
-                            <div class="flex justify-between items-center">
+                            <div class="flex justify-between items-center mt-4">
                                 <h3 class="font-semibold"> Thông số cấu hình</h3>
                             </div>
 
@@ -109,10 +109,10 @@
                                                         @if(is_bool($keyValue))
                                                             @php $keyValue = $keyValue ? 'True' : 'False'; @endphp
                                                         @endif
-                                                            <button type="button" class="px-4 py-1 rounded-lg w-24" style="border:1px solid blue"> {{$keyValue}} </button>
+                                                            <button type="button" class="btn-rounded btn btn-sm btn-outline-primary w-24"> {{$keyValue}} </button>
                                                     @endforeach
                                                 @else
-                                                    <button type="button" class="px-4 py-1 rounded-lg w-24" style="border:1px solid blue"> Input </button>
+                                                    <button type="button" class="btn-rounded btn btn-sm btn-outline-primary w-24" > Input </button>
                                                 @endif
                                             </div>
                                         </div>

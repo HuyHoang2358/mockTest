@@ -269,82 +269,128 @@
                 </div>
             @endif
         </div>
-        <div class="col-span-3 box p-5">
-            <h2 class="text-lg font-semibold mb-4">Thông tin đề thi, bài tập</h2>
 
-            <div class="font-semibold flex flex-col gap-2">
-                <h3 class="text-[17px] text-primary">Tên đề thi: <span class="text-gray-500 text-base font-medium">{{ $exam->folder?->name ?? 'Không có folder' }}</span></h3>
-                <h3 class="text-[17px] text-primary">Bài thi: <span class="text-gray-500 text-base font-medium">{{ $exam->name }}</span></h3>
-                <h3 class="text-[17px] text-primary">Mật khẩu: <span class="text-gray-500 text-base font-medium">{{ $exam->password ?? 'Không có mật khẩu' }}</span></h3>
-                <h3 class="text-[17px] text-primary">Giá: <span class="text-gray-500 text-base font-medium">{{ $exam->price }} đ</span></h3>
-                <h3 class="text-[17px] text-primary">Số lần thi: <span class="text-gray-500 text-base font-medium">{{ $exam->number_of_todo }}</span></h3>
-                <h3 class="text-[17px] text-primary">Thời gian bắt đầu: <span class="text-gray-500 text-base font-medium">{{ $exam->start_time }}</span></h3>
-                <h3 class="text-[17px] text-primary">Thời gian kết thúc: <span class="text-gray-500 text-base font-medium">{{ $exam->end_time }}</span></h3>
+
+        <!-- Right side: Exam information -->
+        <div class="col-span-3 box p-5">
+            <h2 class="text-base font-semibold mb-4">Thông tin đề thi, bài tập</h2>
+
+            <div class="font-semibold flex flex-col gap-2 text-sm border border-gray-300 p-2 rounded-lg">
+                <div class="flex justify-between items-center gap-2 font-normal text-gray-500">
+                    <h4 class="font-semibold text-primary">Trạng thái</h4>
+                    <a href="{{route('admin.exam.update-status',  $exam->id)}}">
+                        <button type="button" class="btn btn-sm  py-1  tooltip {{ $exam->status ? 'btn-success-soft' : 'btn-danger-soft'}}"
+                        data-theme="light" title="{{ $exam->status ? 'Click để đóng bài thi, đề thi' : 'Click để mở bài thi, đề thi'}}">
+                            {{ $exam->status ? 'đang mở' : 'đã đóng'}}
+                        </button>
+                    </a>
+                </div>
+                <div class="flex justify-between items-center gap-2 font-normal text-gray-500">
+                    <h4 class="font-semibold text-primary">Đề thi</h4>
+                    <p>{{ $exam->name }}</p>
+                </div>
+                <div class="flex justify-between items-center gap-2 font-normal text-gray-500">
+                    <h4 class="font-semibold text-primary">Folder</h4>
+                    <p>{{ $exam->folder?->name ?? '' }}</p>
+                </div>
+
+
+
+                <div class="flex justify-between items-center gap-2 font-normal text-gray-500">
+                    <h4 class="font-semibold text-primary">Mật khẩu</h4>
+                    <p>{{ $exam->password ?? 'Chưa cài đặt' }}</p>
+                </div>
+
+                @if($exam->price >0)
+                    <div class="flex justify-between items-center gap-2 font-normal text-gray-500">
+                        <h4 class="font-semibold text-primary">Giá tiền</h4>
+                        <p>{{ $exam->price }} đ</p>
+                    </div>
+                @endif
+
+                <div class="flex justify-between items-center gap-2 font-normal text-gray-500">
+                    <h4 class="font-semibold text-primary">Số lần thi</h4>
+                    <p>{{ number_format($exam->number_of_todo) }} lần</p>
+                </div>
+
+                <div class="flex justify-between items-center gap-2 font-normal text-gray-500">
+                    <h4 class="font-semibold text-primary">Start Time</h4>
+                    <p>{{ $exam->start_time ?? 'chưa có'}}</p>
+                </div>
+
+                <div class="flex justify-between items-center gap-2 font-normal text-gray-500">
+                    <h4 class="font-semibold text-primary">End time</h4>
+                    <p>{{ $exam->end_time ?? 'chưa có'}}</p>
+                </div>
             </div>
 
-            <div  class="rounded-full mt-10 pt-2 pb-4" style="border: 1px dashed; border-image: repeating-linear-gradient(45deg, #9ca3af 0, #9ca3af 6px, transparent 6px, transparent 12px) 1;">
+            <div  class="border border-gray-300 p-2 rounded-lg mt-2">
                 <div class="intro-y">
                     <div class="box p-2">
                         <ul class="nav nav-pills" role="tablist">
-                            <li id="ticket-tab" class="nav-item flex-1" role="presentation">
-                                <button class="nav-link w-full py-2 active" data-tw-toggle="pill" data-tw-target="#ticket" type="button" role="tab" aria-controls="ticket" aria-selected="true"> Kiểm tra </button>
+                            <li id="exam-tab" class="nav-item flex-1" role="presentation">
+                                <button class="nav-link w-full py-2 active" type="button"
+                                        data-tw-toggle="pill" data-tw-target="#exam"  role="tab"
+                                        aria-controls="exam" aria-selected="true"> Kiểm tra </button>
                             </li>
-                            <li id="details-tab" class="nav-item flex-1" role="presentation">
-                                <button class="nav-link w-full py-2" data-tw-toggle="pill" data-tw-target="#details" type="button" role="tab" aria-controls="details" aria-selected="false"> Luyện tập </button>
+                            <li id="exercise-tab" class="nav-item flex-1" role="presentation">
+                                <button class="nav-link w-full py-2" type="button"  role="tab"
+                                        data-tw-toggle="pill" data-tw-target="#exercise"
+                                        aria-controls="exercise" aria-selected="false"> Luyện tập </button>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="tab-content">
-                    <div id="ticket" class="tab-pane active px-2" role="tabpanel" aria-labelledby="ticket-tab" style="width: 334px;">
-                        <div class="grid grid-cols-5 mt-3">
-                            <div class="col-span-2 flex flex-col items-center">
+                    <div id="exam" class="tab-pane active px-2 w-full" role="tabpanel" aria-labelledby="exam-tab">
+                        <div class="grid grid-cols-2 gap-2 mt-3">
+                            <div class="col-span-1 flex flex-col items-center">
                                 <div>
                                     @if ($exam->qr_code_excer)
                                         <img id="qrImage" class="w-24" src="{{ $exam->qr_code_excer }}" alt="QR Code của bài kiểm tra" />
                                     @endif
                                 </div>
                                 <div class="flex flex-col items-center gap-2 pt-3 text-[#124d59] cursor-pointer">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
-                                    <p onclick="downloadQR()" class="text-sm">Tải xuống mã QR</p>
+                                    <p onclick="downloadQR()" class="text-sm"> <i class="fa-solid fa-download"></i> Tải mã QR</p>
                                 </div>
                             </div>
-                            <div class="col-span-3 text-center font-medium text-[#124d59] text-base pt-2">
-                                <p>Hoặc<br><span class="text-gray-500 ">Copy link bên dưới để tham gia bài kiểm tra</span></p>
+                            <div class="col-span-1 text-center text-[#124d59] text-xs">
+                                <p class="font-semibold text-sm">Hoặc</p>
+                                <p class="text-gray-500 ">Copy link bên dưới để tham gia bài kiểm tra</p>
                                 <div id="copySourceExcer" class="text-gray-400 text-sm py-2">
                                     @if ($exam->url_excer)
-                                        <p id="copySource" class=" truncate overflow-hidden whitespace-nowrap">
+                                        <p id="copySource" class=" truncate overflow-hidden whitespace-nowrap text-xs">
                                             <a href="{{ $exam->url_excer }}" target="_blank">{{ $exam->url_excer }}</a>
                                         </p>
                                     @endif
                                 </div>
-                                <button onclick="copyURL('copySourceExcer')" class="border-2 border-[#129eaf] rounded-xl font-medium px-7 py-1 cursor-pointer"> Sao chép </button>
+                                <button onclick="copyURL('copySourceExcer')" class="btn btn-small btn-success-soft"> <i class="fa-solid fa-copy mr-2"></i> Sao chép </button>
                             </div>
                         </div>
                     </div>
-                    <div id="details" class="tab-pane px-2" role="tabpanel" aria-labelledby="details-tab" style="">
-                        <div class="grid grid-cols-5 mt-3">
-                            <div class="col-span-2 flex flex-col items-center">
+                    <div id="exercise" class="tab-pane px-2 w-full" role="tabpanel" aria-labelledby="exam-tab">
+                        <div class="grid grid-cols-2 gap-2 mt-3">
+                            <div class="col-span-1 flex flex-col items-center">
                                 <div>
                                     @if ($exam->qr_code_todo)
-                                        <img id="qrImage" class="w-24" src="{{ $exam->qr_code_todo }}" alt="QR Code của bài luyện tập" />
+                                        <img id="qrImage" class="w-24" src="{{ $exam->qr_code_todo }}" alt="QR Code của bài kiểm tra" />
                                     @endif
                                 </div>
-                                <div class="flex flex-col items-center gap-2 pt-3 text-[#124d59] cursor-pointer">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" key="ih7n3h"></path><polyline points="7 10 12 15 17 10" key="2ggqvy"></polyline><line x1="12" x2="12" y1="15" y2="3" key="1vk2je"></line></svg>
-                                    <p onclick="downloadQR()" class="text-sm">Tải xuống mã QR</p>
+                                <div class="flex flex-col items-center gap-2 pt-3 text-primary cursor-pointer">
+                                    <p onclick="downloadQR()" class="text-sm"> <i class="fa-solid fa-download"></i> Tải mã QR</p>
                                 </div>
                             </div>
-                            <div class="col-span-3 text-center font-medium text-[#124d59] text-base pt-2">
-                                <p>Hoặc<br><span class="text-gray-500 ">Copy link bên dưới để tham gia bài luyện tập</span></p>
-                                <div id="copySourceTodo" class="text-gray-400 text-sm py-2">
+                            <div class="col-span-1 text-center text-[#124d59] text-xs">
+                                <p class="font-semibold text-sm">Hoặc</p>
+                                <p class="text-gray-500 ">Copy link bên dưới để tham gia bài kiểm tra</p>
+                                <div id="copySourceExcer" class="text-gray-400 text-sm py-2">
                                     @if ($exam->url_todo)
-                                        <p id="copySource" class=" truncate overflow-hidden whitespace-nowrap">
+                                        <p id="copySource" class=" truncate overflow-hidden whitespace-nowrap text-xs">
                                             <a href="{{ $exam->url_todo }}" target="_blank">{{ $exam->url_todo }}</a>
                                         </p>
                                     @endif
                                 </div>
-                                <button onclick="copyURL('copySourceTodo')" class="border-2 border-[#129eaf] rounded-xl font-medium px-7 py-1 cursor-pointer"> Sao chép </button>
+                                <button onclick="copyURL('copySourceExcer')" class="btn btn-small btn-success-soft text-primary"> <i class="fa-solid fa-copy mr-2"></i> Sao chép </button>
                             </div>
                         </div>
                     </div>

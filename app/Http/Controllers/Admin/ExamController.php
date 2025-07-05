@@ -61,6 +61,7 @@ class ExamController extends Controller
             'price' => $input['exam_price'] ?? 0,
             'is_payment' => ($input['exam_price'] ?? 0) > 0,
             'number_of_todo' => $input['exam_number_of_todo'] ?? 1,
+            'status' => false
         ]);
 
         $url_excer = route('user.exam.exercise',$codes);
@@ -122,5 +123,16 @@ class ExamController extends Controller
             ->with('error', 'Đề thi không tồn tại, hoặc đã bị xóa trước đó.');
     }
 
+    public function updateStatus($examId): RedirectResponse
+    {
+        $exam = Exam::find($examId);
+        if (!$exam) return redirect()->back()->with('error', 'Bài tập, đề thi không tồn tại');
+
+
+        $exam->status = !$exam->status;
+        $exam->save();
+
+        return redirect()->back()->with('success', 'Cập nhật trạng thái bài tập, đề thi thành công');
+    }
 
 }

@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 /**
  * @method static create(array $array)
  * @method static find($id)
+ * @method static updateOrCreate(string[] $array, array $array1)
  */
 class User extends Authenticatable
 {
