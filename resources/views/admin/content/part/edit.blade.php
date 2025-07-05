@@ -84,7 +84,7 @@
                             <label for="part-total-time-input" class="font-bold text-xl tooltip" data-theme="light" title="Tổng thời gian làm bài (phút)">
                                 <i class="fa-regular fa-clock"></i>
                             </label>
-                            <input id="part-total-time-input" name="part_time" value="{{$part->time}}" type="number" min="0" max="720" class="w-20 form-control" required/>
+                            <input id="part-total-time-input" name="part_time" value="{{$part->time}}" type="number" min="0" max="720" class="w-20 form-control"/>
                         </div>
                     </div>
                 </div>
@@ -262,11 +262,14 @@
                                                         @if($question->input_type == 'text' || $question->input_type == 'textarea')
                                                             <div class="answer-config-item border rounded p-3 my-2">
                                                                 <div class="flex justify-start items-center rounded gap-4">
-                                                                    <input type="checkbox" class="form-check-input" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}[answer][1}][is_correct]" checked readonly/>
-                                                                    <input type="text" class="form-control w-12 font-semibold hidden" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][answer][1][label]" value="{{$question->content}}" readonly />
+                                                                    <input type="checkbox" class="form-check-input" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][answer][1}][is_correct]" checked readonly/>
+                                                                    <input type="text" class="form-control w-12 font-semibold hidden" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][answer][1][label]" value="{{$question->answers->first()->label}}" readonly />
 
                                                                     <div class="flex-grow">
-                                                                        <input type="text" class="form-control" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][answer][1][text]" value="" placeholder="Nhập đáp án cách nhau dấu" />
+                                                                        @php
+                                                                            $values = json_decode($question->answers->first()->value, true) ?? [];
+                                                                        @endphp
+                                                                        <input type="text" class="form-control" name="question_groups[{{$questionGroup->id}}][questions][{{$question->id}}][answer][1][text]" value="{{join(',', $values)}}" placeholder="Nhập đáp án cách nhau dấu" />
                                                                     </div>
 
                                                                     <button class="btn btn-secondary tooltip" type="button"

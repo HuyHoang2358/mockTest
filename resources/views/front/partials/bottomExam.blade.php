@@ -1,12 +1,23 @@
-<div id="mainContent" class="p-3 flex justify-between items-stretch text-sm bg-white border-t-2 border-gray-300 w-full">
+<div id="mainContent" class="p-3 flex justify-start gap-2 items-stretch text-sm bg-white w-full">
     @foreach($exam->parts as $part)
         <div id="preview-part-{{$part->id}}" data-total="{{$part->num_question}}" class="partQuestion grid-cols-1 flex justify-center items-center border py-2 px-5 rounded-xl cursor-pointer
-            {{$loop->index == 0 ? 'border-green-700' : 'border-gray-300'}}">
-            <h3 class="text-lg font-medium w-16 text-green-700">{{$part->name}}</h3>
+            {{$loop->index == 0 ? 'border-primary' : 'border-gray-300'}}">
+            <h3 class="text-lg font-medium w-16 text-primary">{{$part->name}}</h3>
             <div class="info italic {{$loop->index == 0 ? 'hidden' : ''}} ">
                 <span>0</span> / <span class="numQuestion">{{$part->num_question}}</span> câu hỏi đã hoàn thành
             </div>
             <div class="questionContainer flex gap-1 {{$loop->index == 0 ? 'block' : 'hidden'}}">
+                @foreach($part->questiongroups as $questionGroup)
+                    @foreach($questionGroup->questions as $question)
+                        <button
+                            class="{{$question->myAnswer ? 'bg-[#d6e4da] text-green-700' : 'bg-white border-gray-300' }}
+                            preview_status w-8 h-8 flex justify-center items-center border rounded-full
+                            hover:border-primary hover:text-primary cursor-pointer transition-all duration-500 ease-in-out"
+                            data-preview="{{ $question->id }}">
+                            {{ $question->number }}
+                        </button>
+                    @endforeach
+                @endforeach
             </div>
         </div>
     @endforeach
@@ -34,32 +45,7 @@
         });
 
 
-        // Xử lý sự kiện đánh số và click cho từng phần câu hỏi ở bottom
-        let startIndex = 1;
-
-        // Render các nút preview
-        document.querySelectorAll('.partQuestion').forEach(block => {
-            const num = parseInt(block.querySelector('.numQuestion')?.textContent || 0);
-            const container = block.querySelector('.questionContainer');
-
-            for (let i = 0; i < num; i++) {
-                const p = document.createElement('p');
-                p.textContent = startIndex + i;
-                p.className = "preview_status w-8 h-8 flex justify-center items-center border rounded-full border-gray-300 hover:border-green-700 hover:text-green-700 cursor-pointer transition-all duration-500 ease-in-out";
-                p.setAttribute('data-preview', startIndex + i); // sửa lại đúng số câu
-                container.appendChild(p);
-            }
-
-            startIndex += num;
-        });
-
-        document.querySelectorAll('.preview-input').forEach((el, index) => {
-            el.setAttribute('data-index', index + 1);
-        });
-        document.querySelectorAll('.question-item').forEach((el, index) => {
-            el.setAttribute('data-question', index + 1);
-        });
-
+        // Xử lý sự kiện click vào từng phần câu hỏi
         const partBlocks = document.querySelectorAll('.partQuestion');
         partBlocks.forEach(block => {
             block.addEventListener('click', () => {
@@ -120,10 +106,11 @@
         // Gắn sự kiện change + input cho tất cả các input
         document.querySelectorAll('.preview-input').forEach(input => {
             input.addEventListener('change', handleInputChange);
-            input.addEventListener('input', handleInputChange);
+            //input.addEventListener('input', handleInputChange);
         });
 
         function handleInputChange(e) {
+            //console.log('Input changed:', e.target.value);
             const input = e.target;
             const questionItem = input.closest('.question-item');
             const questionId = questionItem?.getAttribute('data-question');
@@ -133,15 +120,24 @@
             const preview = document.querySelector(`.preview_status[data-preview="${questionId}"]`);
             if (!preview) return;
 
-            const allInputs = questionItem.querySelectorAll('input');
+            const allInputs = questionItem.querySelectorAll('input, select, textarea');
             let isAnswered = false;
 
+
+            let answerText = '';
             allInputs.forEach(inp => {
+                console.log('Input type:', inp.type, 'Value:', inp.value);
                 if ((inp.type === 'radio' || inp.type === 'checkbox') && inp.checked) {
+                    answerText =  answerText !== '' ? answerText + "||" + inp.value : inp.value;
                     isAnswered = true;
                 }
-                if (inp.type === 'text' && inp.value.trim() !== '') {
+                if ((inp.type === 'text' || inp.type === 'textarea') && inp.value.trim() !== '') {
                     isAnswered = true;
+                    answerText = inp.value.trim();
+                }
+                if (inp.type === 'select-one' && inp.value !== '') {
+                    isAnswered = true;
+                    answerText = inp.value;
                 }
             });
 
@@ -154,7 +150,41 @@
             }
 
             updateCompletedCount();
+
+
+
+            // submit answers
+            // submit đáp án lên server
+            let url = `/exam/{{ $exam->code }}/${questionId}/submit-answer`;
+            let data = { answer: answerText };
+
+            console.log("Submitting answer for question:", questionId, "Answer:", answerText);
+            document.getElementById("request-pending").classList.remove('hidden');
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                document.getElementById("request-pending").classList.add('hidden');
+                if (response.ok) {
+                    document.getElementById("request-success").classList.remove('hidden');
+                    console.log("Đã gửi đáp án thành công!");
+                } else {
+                    document.getElementById("request-success").classList.remove('hidden');
+                    console.error("Lỗi khi gửi đáp án!");
+                }
+
+                // setime lại trạng thái sau 2 giây
+                setTimeout(() => {
+                    document.getElementById("request-success").classList.add('hidden');
+                    document.getElementById("request-error").classList.add('hidden');
+                }, 2000);
+            });
         }
+
 
         // Xử lý scroll đến câu hỏi khi click vào preview_status
         document.querySelectorAll('.preview_status').forEach(preview => {

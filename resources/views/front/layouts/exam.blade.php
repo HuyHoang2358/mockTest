@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') | Bài thi</title>
     <link href="{{asset('assets/dist/images/logo.svg')}}" rel="admin icon">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- NO SEO -->
     <meta name="robots" content="noindex, nofollow">
@@ -25,8 +26,6 @@
     <!-- BEGIN: Javascript Assets-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- TinyMCE -->
-    <script src="https://cdn.tiny.cloud/1/gg1e9n4g1buqmn8sl1h7l4l1q35tdtxjb9lv09mqfxwb7i7v/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-
     @yield('head')
 </head>
 
@@ -39,6 +38,12 @@
         </div>
         @include('front.partials.bottomExam')
     </div>
+
+    <!-- JS Assets-->
+    @include('admin.components.bodyJs')
+
+    <!-- Custom JS -->
+    @yield('customJs')
 </body>
 
 </html>

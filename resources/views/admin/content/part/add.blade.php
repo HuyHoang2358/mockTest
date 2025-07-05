@@ -77,7 +77,7 @@
                             <label for="part-total-time-input" class="font-bold text-xl tooltip" data-theme="light" title="Tổng thời gian làm bài (phút)">
                                 <i class="fa-regular fa-clock"></i>
                             </label>
-                            <input id="part-total-time-input" name="part_time" type="number" min="0" max="720" class="w-20 form-control" required/>
+                            <input id="part-total-time-input" name="part_time" type="number" min="0" max="720" class="w-20 form-control"/>
                         </div>
                     </div>
                 </div>
@@ -748,7 +748,7 @@
                 });
                 // Thêm câu hỏi
 
-                document.getElementById("modal-question-type-id").value = 5;
+                document.getElementById("modal-question-type-id").value = 4;
                 addQuestion();
             }
 
