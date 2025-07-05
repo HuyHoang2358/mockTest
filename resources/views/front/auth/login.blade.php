@@ -57,14 +57,14 @@
                 </div>
                 <!-- Social Login Form -->
                 <div id="social-login-form" class="flex gap-3 text-light-gray mt-4">
-                    <form id="sign-on-google" method="GET" action="#" class="w-full">
+                    <a id="sign-on-google"  href="{{ route('google.login') }}" class="w-full">
                         <input class="role" name="role" type="text" hidden="">
                         <input type="hidden" name="redirect" value="#">
                         <button type="submit" class="w-full flex gap-2 hover:scale-105 transition-transform shadow-[0px_1px_5.3px_rgba(0,0,0,0.3)] py-2 px-10 rounded-lg items-center justify-center">
                             <img class="max-w-6" src="{{asset('assets/dist/icons/logo-google.png')}}" alt="google-logo">
                             Đăng nhập bằng tài khoản Google
                         </button>
-                    </form>
+                    </a>
                 </div>
             </div>
 

@@ -5,11 +5,14 @@ use App\Http\Controllers\Front\ExamController;
 use App\Http\Controllers\Front\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\ProfileUserController;
+use App\Http\Controllers\GoogleController;
 use Illuminate\Support\Facades\Route;
 
 /* Import routes for authentication in role user*/
 require __DIR__.'/auth.php';
 
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 /* Khai báo các route cho người dùng user */
 Route::middleware('auth:web')->group(function () {
     Route::get('/logout', [AuthenticatedSessionController::class, 'userLogout'])->name('user.logout');
