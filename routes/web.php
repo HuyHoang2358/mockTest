@@ -26,10 +26,12 @@ Route::middleware('auth:web')->group(function () {
 
 
     Route::prefix('exam/{code}')->group(function () {
+        Route::get('/', [ExamController::class, 'index'])->name('user.exam.index'); // Chế độ kiểm tra
         Route::get('/exercise', [ExamController::class, 'exercise'])->name('user.exam.exercise'); // Chế độ kiểm tra
         Route::get('/todo', [ExamController::class, 'todo'])->name('user.exam.todo'); // Chế độ tự luyện
-        Route::get('/listening', [ExamController::class, 'listen'])->name('exam.listen');
-        Route::get('/reading', [ExamController::class, 'read'])->name('exam.read');
+        Route::post('/{questionId}/submit-answer', [ExamController::class, 'answerHistory'])->name('user.exam.answer'); // Lưu đáp án
+        Route::get('/finish', [ExamController::class, 'finishExam'])->name('user.exam.finish'); // Kết thúc bài thi
+        Route::get('/view/answer', [ExamController::class, 'viewAnswer'])->name('user.exam.view-answer'); // Xem đáp án đã làm
     });
 });
 

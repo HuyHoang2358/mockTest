@@ -2,9 +2,11 @@
 
 namespace App\Models\Question;
 
+use App\Models\UserAnswerHistory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @method static find($question_id)
@@ -38,6 +40,11 @@ class Question extends Model
     public function questionType() :BelongsTo
     {
         return $this->belongsTo(QuestionType::class, 'question_type_id');
+    }
+
+    public function myAnswer(): HasOne
+    {
+        return $this->hasOne(UserAnswerHistory::class, 'question_id');
     }
 
 }

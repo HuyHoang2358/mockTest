@@ -38,7 +38,6 @@ Route::prefix('admin')->group(function () {
         Route::prefix('folders')->group(function () {
             Route::get('/', [FolderController::class, 'index'])->name('admin.folder.index');
             Route::post('/', [FolderController::class, 'store'])->name('admin.folder.store');
-            Route::get('/list-exam', [FolderController::class, 'listExam'])->name('admin.folder.listExam');
             Route::post('/update', [FolderController::class, 'update'])->name('admin.folder.update');
             Route::post('/delete', [FolderController::class, 'destroy'])->name('admin.folder.destroy');
             Route::get('/copy/{id}', [FolderController::class, 'copy'])->name('admin.folder.copy');

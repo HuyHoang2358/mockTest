@@ -9,7 +9,6 @@
     </nav>
 @endsection
 @section('content')
-
     <div class="intro-y box">
         <!-- Table title -->
         @include('admin.common.titleTable', [
@@ -24,17 +23,16 @@
                     <table  class="table table-hover table-bordered">
                         <thead class="table-dark">
                         <tr class=" text-center">
-                            <th class="whitespace-nowrap w-8">STT</th>
+                            <th class="whitespace-nowrap w-4">STT</th>
+                            <th class="whitespace-nowrap">Folder</th>
                             <th class="whitespace-nowrap">Tên bài thi</th>
-                            <th class="whitespace-nowrap">Tên folder</th>
-                            <th class="whitespace-nowrap w-32">Code</th>
-                            <th class="whitespace-nowrap w-32">Tổng thời gian</th>
-                            <th class="whitespace-nowrap w-32">Thời gian bắt đầu</th>
-                            <th class="whitespace-nowrap w-32">Thời gian kết thúc</th>
-                            <th class="whitespace-nowrap w-32">Mật khẩu</th>
-                            <th class="whitespace-nowrap w-32">Giá</th>
-                            <th class="whitespace-nowrap w-32">Số lượt thi</th>
-                            <th class="whitespace-nowrap text-center w-24">Thao Tác</th>
+                            <th class="whitespace-nowrap">Mã đề</th>
+                            <th class="whitespace-nowrap ">Tổng thời gian</th>
+                            <th class="whitespace-nowrap">Thời gian bắt đầu</th>
+                            <th class="whitespace-nowrap">Thời gian kết thúc</th>
+                            <th class="whitespace-nowrap">Số lượt thi</th>
+                            <th class="whitespace-nowrap">Số lượng</th>
+                            <th class="whitespace-nowrap text-center">Thao Tác</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -45,34 +43,31 @@
                                     <td>{{ $item->folder ? $item->folder->name : 'Không có thư mục' }}</td>
                                     <td>{{$item -> name}}</td>
                                     <td class="text-center">{{$item -> code}}</td>
-                                    <td class="text-center">{{$item -> total_time}}</td>
+                                    <td class="text-center">{{$item -> time}} phút</td>
                                     <td class="text-center">{{$item -> start_time}}</td>
                                     <td class="text-center">{{$item -> end_time}}</td>
-                                    <td class="text-center">{{$item -> password ? '' : 'Không'}} </td>
-                                    <td class="text-center">{{$item -> price}}</td>
-                                    <td class="text-center">{{$item -> number_of_todo}}</td>
+                                    <td class="text-center">{{$item -> number_of_todo}} lượt</td>
+                                    <td class="text-center">
+                                        <button data-theme="light" title="Số lượng bài đã chấm"  data-placement="top" type="button"
+                                            class="tooltip font-semibold {{count($item->checkedUserExamHistories) == count($item -> userExamHistories) ? 'text-green-600' : 'text-red-500'}}">
+                                            {{count($item->checkedUserExamHistories)}}
+                                        </button>
+                                        /
+                                        <button data-theme="light" title="Tổng số bài" data-placement="top"  type="button"
+                                              class="tooltip  font-semibold text-green-600">
+                                            {{count($item -> userExamHistories)}}
+                                        </button>
+                                    </td>
                                     <td>
                                         <div class="flex gap-2 justify-center items-center">
-                                            <form action="{{ route('admin.user.reset', $item->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn đặt lại mật khẩu học sinh này không?')">
-                                                @csrf
-                                                @method('PUT')
-                                                <div class="text-center"> <a href="javascript:;" data-theme="light" class="tooltip pt-2" title="Đặt lại mật khẩu">
-                                                        <button type="submit" class="btn btn-outline-success p-1 w-8 h-8">
-                                                            <i class="fas fa-redo-alt mr-1"></i>
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </form>
                                             <!-- Edit button -->
-                                            @include('admin.common.editButton', [
-                                                'routeEdit' => route('admin.user.edit', ['id' => $item->id])
-                                            ])
-
-                                            <!-- Delete button -->
-                                            @include('admin.common.deleteButton', [
-                                                'deleteObjectName' => $item->name,
-                                                'deleteObjectId' => $item->id
-                                            ])
+                                            <div data-theme="light" class="tooltip" title="Xem thông tin chi tiết">
+                                                <a href="{{ route('admin.exam.detail', $item->id) }}">
+                                                    <button type="button" class="btn btn-outline-success p-1 w-8 h-8">
+                                                        <i class="fa-solid fa-circle-info"></i>
+                                                    </button>
+                                                </a>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>

@@ -338,7 +338,7 @@
                                                         <label for="exam-total-time-input">Tổng thời gian</label>
                                                         <button type="button" class="tooltip" data-theme="light" title="Nếu để trống hệ thống sẽ tự cộng tổng các bài con"><i class="fa-regular fa-circle-question"></i></button>
                                                     </div>
-                                                    <input id="exam-total-time-input" type="number" class="form-control" placeholder="Nhập tổng thời gian (phút)" name="exam_total_time" value="{{$exam->total_time}}">
+                                                    <input id="exam-total-time-input" type="number" class="form-control" placeholder="Nhập tổng thời gian (phút)" name="exam_total_time" value="{{$exam->time}}">
                                                 </div>
 
                                                 <!-- Thời gian bắt đầu mở thi -->
