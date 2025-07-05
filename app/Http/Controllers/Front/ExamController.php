@@ -18,10 +18,7 @@ class ExamController extends Controller
         $data['exam'] = $exam;
         $exam->load('parts');
         $data['leftTime'] = $exam->time * 60; // Convert time to seconds
-      /*  echo "<pre>";
-        print_r($data);
-        echo "</pre>";
-        exit;*/
+
         return view('front.content.exam.detail', $data);
     }
 
@@ -47,6 +44,15 @@ class ExamController extends Controller
         return view('front.content.exam.read',
             [
                 'page' => 'exam.read',
+            ]
+        );
+    }
+
+    public function auth()
+    {
+        return view('front.content.exam.auth',
+            [
+                'page' => 'exam.auth',
             ]
         );
     }
