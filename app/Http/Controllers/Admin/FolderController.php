@@ -137,12 +137,4 @@ class FolderController extends Controller
         }
     }
 
-    public function listExam(Request $request): View
-    {
-        $exams = Exam::orderBy('created_at', 'desc')->paginate(10);
-        $exams->load('folder');
-        $data['exams'] = $exams;
-        $data['page'] = 'manage-exam';
-        return view('admin.content.folders.listExam', $data);
-    }
 }

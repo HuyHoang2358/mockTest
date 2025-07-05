@@ -4,7 +4,7 @@
     </h2>
     <div class="w-full sm:w-auto flex items-center gap-2 mt-4 sm:mt-0">
         <!-- BEGIN: Search -->
-        <div class="intro-x relative mr-3 sm:mr-6">
+       {{-- <div class="intro-x relative mr-3 sm:mr-6">
             <form method="GET" action="{{ route('teacher.index') }}" class="search hidden sm:block">
                 <input
                     value="{{ request('search') }}"
@@ -29,7 +29,7 @@
             <button class="notification notification--light sm:hidden hover:cursor-pointer">
                 <i class="fa fa-search notification__icon dark:text-slate-500"></i>
             </button>
-        </div>
+        </div>--}}
         <!-- END: Search -->
 
         @if (isset($routeAdd))

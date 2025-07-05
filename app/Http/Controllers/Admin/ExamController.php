@@ -24,8 +24,16 @@ class ExamController extends Controller
         return $code;
     }
 
-    public function index(){
-
+    public function index() :View
+    {
+        $exams = Exam::orderBy('created_at', 'desc')->paginate(10);
+        $exams->load('folder');
+        $exams->load('userExamHistories');
+        $exams->load('checkedUserExamHistories');
+        $exams->load('checkingUserExamHistories');
+        $data['exams'] = $exams;
+        $data['page'] = 'manage-exam';
+        return view('admin.content.exam.index', $data);
     }
 
     public function detail($id): RedirectResponse|View
@@ -54,7 +62,7 @@ class ExamController extends Controller
             'folder_id' => $input['exam_folder_id'],
             'name' => $input['exam_name'],
             'code' => $codes,
-            'exam_total_time' => $input['exam_total_time'] ?? null,
+            'time' => $input['exam_total_time'] ?? null,
             'start_time' => $input['exam_start_time'] ?? null,
             'end_time' => $input['exam_end_time'] ?? null,
             'password' => $input['exam_password'] ?? null,
@@ -98,7 +106,7 @@ class ExamController extends Controller
         $exam->update([
             'folder_id' => $input['exam_folder_id'],
             'name' => $input['exam_name'],
-            'exam_total_time' => $input['exam_total_time'] ?? null,
+            'time' => $input['exam_total_time'] ?? null,
             'start_time' => $input['exam_start_time'] ?? null,
             'end_time' => $input['exam_end_time'] ?? null,
             'password' => $input['exam_password'] ?? null,

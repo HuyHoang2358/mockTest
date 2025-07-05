@@ -5,7 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class UserExamHistories extends Model
+/**
+ * @method static where(string $string, int $param)
+ * @method static create(array $array)
+ * @method static find($userExamHistoryId)
+ */
+class UserExamHistory extends Model
 {
     protected $table = 'user_exam_histories';
 

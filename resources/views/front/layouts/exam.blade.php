@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') | Bài thi</title>
     <link href="{{asset('assets/dist/images/logo.svg')}}" rel="admin icon">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- NO SEO -->
     <meta name="robots" content="noindex, nofollow">

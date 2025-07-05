@@ -1,9 +1,19 @@
 <div class="grid grid-cols-3 h-16 bg-white items-center px-10 w-full border-b-2 border-gray-200">
     <!-- logo -->
-    <div class="col-span-1">
+    <div class="col-span-1 flex justify-start items-center gap-2">
         <a href="#">
             <span class="logo__text text-[#124d59] text-xl font-semibold ml-3"> MockTest </span>
         </a>
+        <div class="text-orange-500 text-xl hidden tooltip" id="request-pending" data-theme="light" title="Đang lưu ...">
+            <i class="fa-solid fa-spinner fa-spin-pulse"></i>
+        </div>
+        <div class="text-green-500 text-xl hidden tooltip" id="request-success" data-theme="light" title="Đã lưu">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <div class="text-red-500 text-xl hidden tooltip" id="request-error" data-theme="light" title="Lưu lỗi">
+            <i class="fa-solid fa-bug"></i>
+        </div>
+
     </div>
 
     <!-- Time left -->
@@ -56,15 +66,17 @@
 
 
         <!-- review -->
-        <button id="openPreview" class="flex justify-start gap-2 font-normal items-center btn btn-secondary text-base rounded-full text-gray-500 hover:text-[#124d59]">
+        <button id="openPreview" class="flex justify-start gap-2 font-normal items-center btn btn-secondary text-base btn-rounded text-gray-500 hover:text-[#124d59]">
             <i class="fa-solid fa-list-check"></i>
             <span>Xem lại</span>
         </button>
 
-        <div class="flex justify-start gap-2 items-center rounded-full text-base btn btn-primary">
-            <p>Nộp bài</p>
-            <i class="fa-solid fa-paper-plane text-sm"></i>
-        </div>
+        <a href="{{route('user.exam.finish', $exam->code)}}">
+            <button type="button" class="btn btn-primary text-base btn-rounded tooltip"  data-theme="light" title="Kết thúc bài thi">
+                Nộp bài
+                <i class="fa-solid fa-paper-plane text-xs ml-2"></i>
+            </button>
+        </a>
 
         <!-- Preview answer modal -->
         <div id="preview_modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
